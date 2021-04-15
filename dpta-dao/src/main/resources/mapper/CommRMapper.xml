@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqjtu.dpta.dao.mapper.CommRMapper">
+    <select id="bindSort" resultType="com.cqjtu.dpta.dao.entity.CommR">
+        select t1.R_COMM_ID, R_COMM_NM, STATE, TYPE, VALUE
+        from t_comm_r t1
+                 LEFT OUTER join (
+            select count(COMM_ID) comm_count, R_COMM_ID
+            from t_paf_comm
+            group by R_COMM_ID)
+            as t2 on t1.R_COMM_ID = t2.R_COMM_ID
+        ORDER BY comm_count desc
+    </select>
+</mapper>

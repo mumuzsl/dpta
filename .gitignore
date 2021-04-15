@@ -1,0 +1,7 @@
+# Project exclude paths
+/dpta-api/target/
+/dpta-common/target/
+/dpta-dao/target/
+/dpta-service/target/
+/dpta-web/target/
+/start/target/

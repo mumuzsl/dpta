@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqjtu.dpta.dao.mapper.DealMapper">
+    <select id="selectBySuppAndDistr" resultType="com.cqjtu.dpta.dao.entity.Deal">
+        select t2.DEAL_ID, t2.COMM_ID, COUNT, AMOUNT, DISTR_ID, PRICE
+        from (select COMM_ID
+              from t_paf_comm
+              where SUPP_ID = #{supp_id}) as t1
+                 inner join
+             (select DEAL_ID, COMM_ID, COUNT, AMOUNT, DISTR_ID, PRICE
+              from t_deal
+              where DISTR_ID = #{distr_id}) as t2
+             on t1.COMM_ID = t2.COMM_ID
+    </select>
+</mapper>

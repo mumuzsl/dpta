@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqjtu.dpta.dao.mapper.RefundRMapper">
+    <select id="bindSort" resultType="com.cqjtu.dpta.dao.entity.RefundR">
+        select t1.REFUND_ID, REFUND_NM, STATE, TYPE, RESERVE_TM, `CONDITION`
+        from t_refund_r t1
+                 LEFT OUTER join (
+            select count(COMM_ID) comm_count, REFUND_ID
+            from t_paf_comm
+            group by REFUND_ID)
+            as t2 on t1.REFUND_ID = t2.REFUND_ID
+        ORDER BY comm_count desc
+    </select>
+</mapper>

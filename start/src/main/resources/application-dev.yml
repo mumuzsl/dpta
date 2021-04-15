@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 132135138zsl
+#    url: jdbc:mysql://10.61.54.95:3306/dpta?serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/dpta?serverTimezone=Asia/Shanghai
+  redis:
+    host: 10.61.54.95
+server:
+  port: 8080
+

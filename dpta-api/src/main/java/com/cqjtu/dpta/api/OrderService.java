@@ -1,0 +1,20 @@
+package com.cqjtu.dpta.api;
+
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cqjtu.dpta.dao.entity.Order;
+import com.cqjtu.dpta.api.support.CrudService;
+import org.springframework.data.domain.Pageable;
+
+/**
+ * <p>
+ * 订单表 服务类
+ * </p>
+ *
+ * @author mumu
+ * @since 2021-04-06
+ */
+public interface OrderService extends CrudService<Order> {
+
+
+    IPage<Order> search(Pageable pageable, String keyword, Integer option);
+}
