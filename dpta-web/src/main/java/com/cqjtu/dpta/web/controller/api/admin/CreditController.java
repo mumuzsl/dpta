@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.api.CreditService;
 import com.cqjtu.dpta.api.DealService;
+import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.dao.entity.Credit;
@@ -43,6 +44,7 @@ public class CreditController {
 
     private static final String[] COLUMNS = {"SUPP_ID", "DISTR_ID", "STATE","CREDIT_ID"};
 
+    // 通过授信编码查看对象的授信明细
     @GetMapping("detail/{id}")
     public Result detail(@PageableDefault Pageable pageable,
                          @PathVariable Long id) {
@@ -56,6 +58,7 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    // 查看授信对应的交易明细
     @GetMapping("deal/{id}")
     public Result deal(@PageableDefault Pageable pageable,
                        @PathVariable Long id) {
@@ -67,6 +70,7 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    // 通过授信编码改变对应授信的状态
     @GetMapping("state/{id}/{state}")
     public Result state(@PathVariable Long id,
                         @PathVariable Integer state) {
@@ -79,6 +83,7 @@ public class CreditController {
         return Result.ok(b);
     }
 
+    // 通过供应商名称或分销商名称搜索通过审核的授信
     @GetMapping("applied/search")
     public Result applied(@PageableDefault Pageable pageable,
                           @RequestParam("keyword") String keyword,
@@ -88,13 +93,14 @@ public class CreditController {
         }
         IPage<Credit> page = null;
         if (option == 0) {
-            page = creditService.applyBySuppNm(pageable, keyword, 1);
+            page = creditService.applyBySuppNm(pageable, keyword, Const.ADOPT);
         } else {
-            page = creditService.applyByDistrNm(pageable, keyword, 1);
+            page = creditService.applyByDistrNm(pageable, keyword, Const.ADOPT);
         }
         return Result.ok(page);
     }
 
+    // 通过供应商名称搜索未审核的授信
     @GetMapping("apply/search")
     public Result apply(@PageableDefault Pageable pageable,
                         @RequestParam("keyword") String keyword) {
@@ -102,11 +108,13 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    // 获得所有未审核的授信
     @GetMapping("apply")
     public Result apply(@PageableDefault Pageable pageable) {
         return byState(pageable, 0);
     }
 
+    // 获得所有通过审核的授信
     @GetMapping("applied")
     public Result applied(@PageableDefault Pageable pageable) {
         return byState(pageable, 1);

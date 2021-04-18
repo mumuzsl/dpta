@@ -17,4 +17,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class CreditDServiceImpl extends ServiceImpl<CreditDMapper, CreditD> implements CreditDService {
 
+    @Override
+    public Boolean addCreditD(CreditD creditD) {
+        if (creditD == null) {
+            return false;
+        }
+        this.save(creditD);
+        return true;
+    }
 }
