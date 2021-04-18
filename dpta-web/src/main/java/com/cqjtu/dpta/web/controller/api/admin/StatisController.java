@@ -16,7 +16,7 @@ import java.util.List;
  * date: 2021/4/13
  */
 @RestController
-@RequestMapping("/api/statisz/{id}")
+@RequestMapping("/api/statisz")
 public class StatisController {
 
     @Resource

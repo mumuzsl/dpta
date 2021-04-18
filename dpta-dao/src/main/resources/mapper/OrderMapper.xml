@@ -9,13 +9,17 @@
     </select>
 
     <select id="selectByComm" resultType="com.cqjtu.dpta.dao.entity.Order">
-        select ID, SHOP_ID, DATM, STATE, PROFIT, VERIFY_TM, AMOUNT
-        from t_order
-        where ID in (
-            select t1.ORDER_ID
-            from t_order_d t1
-                     inner join t_paf_comm tpc on t1.COMM_ID = tpc.COMM_ID
-                and tpc.COMM_NM like concat('%', #{pg.keyword}, '%'))
+        select t1.ID, SHOP_ID, DATM, STATE, PROFIT, VERIFY_TM, AMOUNT
+        from t_order t1
+                 inner join (
+            select tod.ORDER_ID
+            from t_order_d tod
+                     inner join (
+                select COMM_ID
+                from t_paf_comm
+                where COMM_NM like concat('%', #{pg.keyword}, '%')
+            ) as t2 on tod.COMM_ID = t2.COMM_ID
+        ) as t3 on t1.ID = t3.ORDER_ID
     </select>
 
     <select id="selectByState" resultType="com.cqjtu.dpta.dao.entity.Order">

@@ -1,8 +1,8 @@
 package com.cqjtu.dpta.web.controller.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.DealService;
-import com.cqjtu.dpta.dao.entity.Deal;
+import com.cqjtu.dpta.api.DistrUserService;
+import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.common.result.Result;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,40 +14,40 @@ import java.util.List;
 
 /**
  * <p>
- * 交易明细表 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author mumu
  * @since 2021-04-15
  */
 @RestController
-@RequestMapping("/api/deal")
-public class DealController {
+@RequestMapping("/api/data/distr-user")
+public class DistrUserController {
 
     @Resource
-    private DealService dealService;
+    private DistrUserService distrUserService;
 
     @GetMapping
     public Result page(@PageableDefault Pageable pageable) {
-        IPage<Deal> page = dealService.page(pageable);
+        IPage<DistrUser> page = distrUserService.page(pageable);
         return Result.ok(page);
     }
 
     @PostMapping("modif")
-    public Result modif(@RequestBody Deal deal) {
-        boolean result = dealService.updateById(deal);
+    public Result modif(@RequestBody DistrUser distrUser) {
+        boolean result = distrUserService.updateById(distrUser);
         return Result.judge(result);
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody Deal deal) {
-        boolean result = dealService.save(deal);
+    public Result add(@RequestBody DistrUser distrUser) {
+        boolean result = distrUserService.save(distrUser);
         return Result.judge(result);
     }
 
     @PostMapping("del")
     public Result del(@RequestBody List ids) {
-        boolean result = dealService.removeByIds(ids);
+        boolean result = distrUserService.removeByIds(ids);
         return Result.judge(result);
     }
 

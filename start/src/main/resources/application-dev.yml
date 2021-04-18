@@ -9,4 +9,3 @@ spring:
     host: 10.61.54.95
 server:
   port: 8080
-

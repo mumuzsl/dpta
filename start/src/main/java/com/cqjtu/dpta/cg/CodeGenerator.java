@@ -60,11 +60,11 @@ public class CodeGenerator {
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setTablePrefix("t_");
 //        strategy.setInclude("t_comm_r");
+        strategy.setInclude("t_distr_user");
 
         Map<String, String> map = new HashMap<>();
-        map.put(ConstVal.ENTITY_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\entity");
-//        map.put(ConstVal.MAPPER_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\mapper");
-//        map.put(ConstVal.XML_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\resources\\mapper");
+        map.put(ConstVal.MAPPER_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\mapper");
+//        map.put(ConstVal.ENTITY_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\entity");
 //        map.put(ConstVal.SERVICE_PATH, projectPath + "\\dpta-api\\src\\main\\java\\com\\cqjtu\\dpta\\api");
 //        map.put(ConstVal.SERVICE_IMPL_PATH, projectPath + "\\dpta-service\\src\\main\\java\\com\\cqjtu\\dpta\\service");
 //        map.put(ConstVal.CONTROLLER_PATH, projectPath + "\\dpta-web\\src\\main\\java\\com\\cqjtu\\dpta\\web\\controller\\api");

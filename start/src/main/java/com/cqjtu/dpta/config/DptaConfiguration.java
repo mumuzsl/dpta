@@ -2,6 +2,8 @@ package com.cqjtu.dpta.config;
 
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
+import com.cqjtu.dpta.web.support.DistrUserFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -25,4 +27,10 @@ public class DptaConfiguration {
         return redisTemplate;
     }
 
+//    @Bean
+    public FilterRegistrationBean<DistrUserFilter> distrUserFilterFilterRegistrationBean() {
+        FilterRegistrationBean<DistrUserFilter> bean = new FilterRegistrationBean<>();
+        bean.setFilter(new DistrUserFilter());
+        return bean;
+    }
 }
