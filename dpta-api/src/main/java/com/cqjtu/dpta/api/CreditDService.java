@@ -13,4 +13,10 @@ import com.cqjtu.dpta.api.support.CrudService;
  */
 public interface CreditDService extends CrudService<CreditD> {
 
+    /**
+     * 向数据库插入一条授信明细
+     * @param creditD
+     * @return
+     */
+    Boolean addCreditD(CreditD creditD);
 }
