@@ -58,5 +58,6 @@ public class Credit implements Serializable {
     @TableField("STATE")
     private Integer state;
 
-
+    @TableField(exist = false)
+    private BigDecimal enCredit;
 }

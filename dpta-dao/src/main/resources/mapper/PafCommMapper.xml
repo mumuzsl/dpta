@@ -2,4 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqjtu.dpta.dao.mapper.PafCommMapper">
 
+    <select id="getByCommIdAndSkuId" resultType="com.cqjtu.dpta.dao.entity.PafSkuStock">
+        SELECT
+        *
+        FROM
+        t_paf_sku_stock
+        WHERE
+        comm_id = #{comm_id}
+        AND sku_id = #{sku_id}
+    </select>
 </mapper>

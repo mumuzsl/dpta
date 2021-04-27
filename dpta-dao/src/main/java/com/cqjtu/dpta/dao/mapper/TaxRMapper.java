@@ -2,6 +2,9 @@ package com.cqjtu.dpta.dao.mapper;
 
 import com.cqjtu.dpta.dao.entity.TaxR;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.math.BigDecimal;
 
 /**
  * <p>
@@ -13,4 +16,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface TaxRMapper extends BaseMapper<TaxR> {
 
+    /**
+     * 根据个人所得获取对应的税费规则
+     * @param amount
+     * @return
+     */
+    TaxR getTaxR (@Param("amount") BigDecimal amount);
 }

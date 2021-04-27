@@ -25,8 +25,15 @@ public interface Const {
     int ADOPT = 1;       // 审核通过
     int FORBIDDEN = 2;   // 禁用
 
-    // 授信明细状态
-    int PAYMENT = 1;   // 使用授信付款
-    int REPAYMENT = 2; // 还款恢复授信
+    int PAYMENT = 1;   // 使用授信/预备金付款
+    int REPAYMENT = 2; // 还款恢复授信或使用预备金还款
 
+
+    int RECHARGE = 3;    // 充值预备金
+    int CASH_OUT = 4;    // 预备金提现
+    int COMMISSION = 5;  // 佣金划入
+
+    int PAID = 1;     // 已付款
+    int VERIFY = 2;   // 已核销
+    int SETTLE = 3;   // 已结算
 }

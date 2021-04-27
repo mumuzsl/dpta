@@ -58,6 +58,12 @@ public class OrderD implements Serializable {
     private Integer count;
 
     /**
+     * 是否退款（0：不退；1：已退；）
+     */
+    @TableField("STATE")
+    private Integer state;
+
+    /**
      * 分润金额
      */
     @TableField("PROFIT")

@@ -12,5 +12,9 @@ import com.cqjtu.dpta.api.support.CrudService;
  * @since 2021-04-06
  */
 public interface ResveDService extends CrudService<ResveD> {
-
+    /**
+     * 获取插入时的ID
+     * @return
+     */
+    public Long getInsertId();
 }

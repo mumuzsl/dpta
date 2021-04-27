@@ -12,4 +12,12 @@
               where DISTR_ID = #{distr_id}) as t2
              on t1.COMM_ID = t2.COMM_ID
     </select>
+    <select id="getDealDByDealId" resultType="com.cqjtu.dpta.dao.entity.DealD">
+        SELECT
+        *
+        FROM
+        t_deal_d
+        WHERE
+        deal_id = #{deal_id}
+    </select>
 </mapper>

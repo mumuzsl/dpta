@@ -1,11 +1,9 @@
 package com.cqjtu.dpta.dao.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cqjtu.dpta.common.extension.SearchPage;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.cqjtu.dpta.dao.entity.Deal;
 import org.apache.ibatis.annotations.Param;
 
 /**
@@ -34,6 +32,4 @@ public interface CreditMapper extends BaseMapper<Credit> {
      * @return
      */
     IPage<Credit> applyByDistrNm(SearchPage<?> page, @Param("state") Integer state);
-
-
 }

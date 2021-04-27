@@ -62,7 +62,13 @@ public class Order implements Serializable {
     private LocalDateTime verifyTm;
 
     /**
-     * 总金额
+     * 核销本金
+     */
+    @TableField("BASE_P")
+    private BigDecimal baseP;
+
+    /**
+     * 核销总金额
      */
     @TableField("AMOUNT")
     private BigDecimal amount;

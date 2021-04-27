@@ -57,5 +57,11 @@ public interface OrderMapper extends BaseMapper<Order> {
      */
     IPage<Order> selectByDistr(@Param("pg") SearchPage<?> page);
 
+    /**
+     * 根据分销商编码获取分销商名下店铺的所有已核销订单
+     * @param distr_id 分销商编码
+     * @return
+     */
+    List<Order> getOrderListByDistrId(@Param("distr_id") Long distr_id);
 
 }

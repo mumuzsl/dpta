@@ -77,6 +77,17 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
         }
     }
 
+    /**
+     * 根据分销商编码获取分销商名下店铺的所有已核销订单
+     *
+     * @param distr_id 分销商编码
+     * @return
+     */
+    @Override
+    public List<Order> getOrderListByDistrId(Long distr_id) {
+        return baseMapper.getOrderListByDistrId(distr_id);
+    }
+
     @Override
     @Transactional
     public void create(OrderVo vo) {

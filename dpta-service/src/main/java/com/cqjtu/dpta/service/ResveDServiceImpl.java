@@ -6,6 +6,8 @@ import com.cqjtu.dpta.api.ResveDService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+
 /**
  * <p>
  * 预备金明细表 服务实现类
@@ -16,5 +18,11 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ResveDServiceImpl extends ServiceImpl<ResveDMapper, ResveD> implements ResveDService {
-
+    /**
+     * 获取插入时的ID
+     * @return
+     */
+    public Long getInsertId() {
+        return baseMapper.getInsertId();
+    }
 }

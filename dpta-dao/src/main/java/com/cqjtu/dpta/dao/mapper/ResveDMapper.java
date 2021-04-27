@@ -12,5 +12,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-04-06
  */
 public interface ResveDMapper extends BaseMapper<ResveD> {
-
+    /**
+     * 获取插入时的ID
+     * @return
+     */
+    public Long getInsertId();
 }

@@ -36,10 +36,20 @@ public class TaxR implements Serializable {
     private BigDecimal pStart;
 
     /**
+     * 征税上限
+     */
+    @TableField("P_END")
+    private BigDecimal pEnd;
+
+    /**
      * 起征比例
      */
     @TableField("RATE")
     private BigDecimal rate;
 
-
+    /**
+     * 速算扣除数
+     */
+    @TableField("DEDUCTION")
+    private BigDecimal deduction;
 }

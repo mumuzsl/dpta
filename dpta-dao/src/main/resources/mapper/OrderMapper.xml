@@ -43,4 +43,20 @@
             and td.DISTR_NM like concat('%', #{pg.keyword}, '%')
     </select>
 
+    <select id="getOrderListByDistrId" resultType="com.cqjtu.dpta.dao.entity.Order">
+        SELECT
+        *
+        FROM
+        t_order
+        WHERE
+        shop_id IN (
+        SELECT
+        shop_id
+        FROM
+        t_shop
+        WHERE
+        distr_id = #{distr_id}
+        )
+        AND state = 2
+    </select>
 </mapper>

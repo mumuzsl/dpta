@@ -7,12 +7,14 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  * @author mumu
  * @date 2021/3/3 22:28
  */
 @SpringBootApplication(scanBasePackages = {"com.cqjtu"})
+@EnableScheduling
 public class DptaApplication {
     public static void main(String[] args) {
         ConfigurableApplicationContext run = SpringApplication.run(DptaApplication.class, args);

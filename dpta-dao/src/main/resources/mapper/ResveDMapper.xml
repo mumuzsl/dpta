@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqjtu.dpta.dao.mapper.ResveDMapper">
-
+    <select id="getInsertId" resultType="Long">
+        SELECT  max(D_RES_ID)+1 from t_resve_d;
+    </select>
 </mapper>

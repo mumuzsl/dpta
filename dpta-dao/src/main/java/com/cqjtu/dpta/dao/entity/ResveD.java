@@ -1,6 +1,8 @@
 package com.cqjtu.dpta.dao.entity;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
@@ -27,7 +29,7 @@ public class ResveD implements Serializable {
     /**
      * 流水编码
      */
-    @TableId("D_RES_ID")
+    @TableId(value = "D_RES_ID", type = IdType.AUTO)
     private Long dResId;
 
     /**
@@ -37,7 +39,7 @@ public class ResveD implements Serializable {
     private Long distrId;
 
     /**
-     * 类型(1: 付款；2：充值；3：还款）
+     * 类型(1: 付款；2：还款；3：充值；4：提现；5：佣金划入）
      */
     @TableField("TYPE")
     private Integer type;
@@ -57,8 +59,8 @@ public class ResveD implements Serializable {
     /**
      * 订单编码
      */
-    @TableField("ORD_ID")
-    private Long ordId;
+    @TableField("DEAL_ID")
+    private Long dealId;
 
     /**
      * 创建日期

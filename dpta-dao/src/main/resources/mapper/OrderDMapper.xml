@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqjtu.dpta.dao.mapper.OrderDMapper">
+    <select id="outRefundTime" resultType="Long">
+        SELECT
+        t1.comm_id
+        FROM
+        t_paf_comm t1,
+        t_refund_r t2
+        WHERE
+        t1.comm_id = #{comm_id}
+        AND t1.refund_id = t2.refund_id
+        AND TIMESTAMPDIFF(
+        DAY,
+        #{time},
+        DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%S')
+        ) >= t2.reserve_tm
+    </select>
 
+    <select id="getCommR" resultType="com.cqjtu.dpta.dao.entity.CommR">
+        SELECT
+        t2.*
+        FROM
+        t_paf_comm t1,
+        t_comm_r t2
+        WHERE
+        t1.comm_id = #{comm_id}
+        AND t1.r_comm_id = t2.r_comm_id
+    </select>
 </mapper>
