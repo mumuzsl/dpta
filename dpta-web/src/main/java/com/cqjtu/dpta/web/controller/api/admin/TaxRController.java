@@ -21,7 +21,7 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/api/tax-rule")
+@RequestMapping("/platform/api/tax-rule")
 public class TaxRController {
 
     @Resource

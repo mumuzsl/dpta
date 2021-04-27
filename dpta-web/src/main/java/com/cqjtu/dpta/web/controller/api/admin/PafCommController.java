@@ -23,7 +23,7 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/api/paf-comm")
+@RequestMapping("/platform/api/paf-comm")
 public class PafCommController {
 
     @Resource
@@ -31,14 +31,21 @@ public class PafCommController {
 
     private static final String[] COLUMNS = {"COMM_NM", "TYPE", "STATE"};
 
+    /**
+     * 模糊搜索
+     * @param pageable
+     * @param keyword
+     * @param type     商品类型
+     * @return
+     */
     @GetMapping("search")
     public Result search(@PageableDefault Pageable pageable,
                          @RequestParam("keyword") String keyword,
                          @RequestParam(value = "type", required = false, defaultValue = "") String type) {
         QueryWrapper<PafComm> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(COLUMNS[0], keyword);
-        if (!StringUtils.isBlank(keyword)) {
-            queryWrapper.like(COLUMNS[1], keyword);
+        if (!StringUtils.isBlank(type)) {
+            queryWrapper.like(COLUMNS[1], type);
         }
         IPage<PafComm> page = pafCommService.page(pageable, queryWrapper);
         return Result.ok(page);

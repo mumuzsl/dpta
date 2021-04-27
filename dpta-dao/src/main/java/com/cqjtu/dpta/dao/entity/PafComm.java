@@ -1,14 +1,10 @@
 package com.cqjtu.dpta.dao.entity;
 
-import java.math.BigDecimal;
-
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
-
 import java.io.Serializable;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author mumu
- * @since 2021-04-13
+ * @since 2021-04-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -52,28 +48,10 @@ public class PafComm implements Serializable {
     private Long suppId;
 
     /**
-     * 供货价
-     */
-    @TableField("SUPP_PRICE")
-    private BigDecimal suppPrice;
-
-    /**
-     * 推荐售价
-     */
-    @TableField("RECOM_PRICE")
-    private BigDecimal recomPrice;
-
-    /**
      * 销售量
      */
     @TableField("SALES_VOLUME")
     private Integer salesVolume;
-
-    /**
-     * 库存
-     */
-    @TableField("STOCK")
-    private Integer stock;
 
     /**
      * 商品详情
@@ -87,12 +65,17 @@ public class PafComm implements Serializable {
     @TableField("R_COMM_ID")
     private Long rCommId;
 
+    /**
+     * 退款规则
+     */
     @TableField("REFUND_ID")
     private Long refundId;
 
     /**
-     * 上下架状态，0是下架，1是上架
+     * 上下架状态
      */
     @TableField("STATE")
     private Integer state;
+
+
 }

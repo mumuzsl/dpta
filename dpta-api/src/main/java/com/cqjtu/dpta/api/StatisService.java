@@ -1,6 +1,6 @@
 package com.cqjtu.dpta.api;
 
-import com.cqjtu.dpta.common.vo.CommVo;
+import com.cqjtu.dpta.common.vo.CommStatisVo;
 
 import java.util.List;
 
@@ -9,5 +9,5 @@ import java.util.List;
  * date: 2021/4/13
  */
 public interface StatisService {
-    List<CommVo> topComm(Integer num);
+    List<CommStatisVo> topComm(Integer num);
 }

@@ -2,44 +2,118 @@ package com.cqjtu.dpta.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.annotation.Resource;
 
-@Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Resource
-    private UserDetailsService userDetailsService;
+@EnableWebSecurity
+public class SecurityConfiguration {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    public static class Support extends WebSecurityConfigurerAdapter {
+        UserDetailsService userDetailsService;
+        PasswordEncoder passwordEncoder;
+
+        public Support(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+            this.userDetailsService = userDetailsService;
+            this.passwordEncoder = passwordEncoder;
+        }
+
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(userDetailsService)
+                    .passwordEncoder(passwordEncoder);
+        }
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http.csrf().disable();
+            http.cors();
+
+            http.logout(logout ->
+                    logout
+                            .logoutRequestMatcher(new AntPathRequestMatcher("logout", "GET"))
+                            .permitAll()
+            );
+
+            customConfigure(http);
+        }
+
+        @Override
+        public void configure(WebSecurity web) throws Exception {
+            web.ignoring().antMatchers("/**");
+        }
+
+        protected void customConfigure(HttpSecurity http) throws Exception {
+        }
+
+        protected <T> T getBean(Class<T> requiredType) {
+            return getApplicationContext().getBean(requiredType);
+        }
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().anonymous();
-//        http.authorizeRequests().anyRequest().anonymous();
+    @Configuration
+    public static class DistrSecurityConfiguration extends Support {
+        public DistrSecurityConfiguration(UserDetailsService distrUserDetailsServiceImpl, PasswordEncoder passwordEncoder) {
+            super(distrUserDetailsServiceImpl, passwordEncoder);
+        }
+
+        @Override
+        protected void customConfigure(HttpSecurity http) throws Exception {
+            http
+//                    .antMatcher("/api/**")
+                    .authorizeRequests()
+                    .antMatchers("/api/**")
+//                    .anyRequest()
+                    .hasRole("DISTR")
+                    .and()
+                    .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/distr/login")
+                    .permitAll()
+            ;
+        }
     }
 
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.ignoring().mvcMatchers("/**");
-    }
+    @Configuration
+    @Order(1)
+    public static class AdminWebSecurityConfigurer extends Support {
+        public AdminWebSecurityConfigurer(UserDetailsService adminUserDetailsServiceImpl, PasswordEncoder passwordEncoder) {
+            super(adminUserDetailsServiceImpl, passwordEncoder);
+        }
 
+        @Override
+        protected void customConfigure(HttpSecurity http) throws Exception {
+            http.antMatcher("/platform/**");
+
+            http.authorizeRequests(authorizeRequests ->
+                    authorizeRequests
+                            .anyRequest().hasRole("ADMIN")
+            );
+
+            http.formLogin(formLogin ->
+                    formLogin
+                            .loginPage("/admin/login")
+                            .loginProcessingUrl("/platform/login")
+                            .permitAll()
+            );
+        }
+    }
 
 }

@@ -17,11 +17,44 @@ import java.util.List;
  * @since 2021-04-06
  */
 public interface OrderMapper extends BaseMapper<Order> {
+
+    /**
+     * 获取分销商id
+     */
+    Long getDistrId(Long id);
+
+    /**
+     * 根据商铺名称搜索
+     *
+     * @param page
+     * @return
+     */
     IPage<Order> selectByShop(@Param("pg") SearchPage<?> page);
 
+
+    /**
+     * 根据商品名称搜索
+     *
+     * @param page
+     * @return
+     */
     IPage<Order> selectByComm(@Param("pg") SearchPage<?> page);
 
+    /**
+     * 根据状态搜索
+     *
+     * @param page
+     * @return
+     */
     IPage<Order> selectByState(@Param("pg") SearchPage<?> page);
+
+
+    /**
+     * 根据分销商名称搜索
+     *
+     * @param page
+     * @return
+     */
     IPage<Order> selectByDistr(@Param("pg") SearchPage<?> page);
 
 

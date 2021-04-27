@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CommRService;
 import com.cqjtu.dpta.api.PafCommService;
+import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.util.ResultUtils;
@@ -29,7 +30,7 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/api/comm-rule")
+@RequestMapping("/platform/api/paf-comm-rule")
 public class CommRController {
 
     @Resource
@@ -41,17 +42,43 @@ public class CommRController {
     private static final String[] COLUMNS = {"R_COMM_NM", "TYPE", "STATE"};
     private static final Integer INSELL = Status.INSELL.value();
 
+    /**
+     * 根据商品id上架商品
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("insell/{id}")
     public Result insell(@PathVariable Long id) {
-        PafComm comm = pafCommService.getById(id);
-        if (comm == null) {
-            return ResultUtils.keyError();
-        }
-        comm.setState(INSELL);
-        boolean b = pafCommService.updateById(comm);
+        boolean b = inOrOutSell(id, Const.INSELL);
         return Result.ok(b);
     }
 
+    /**
+     * 根据商品id下架商品
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("outsell/{id}")
+    public Result outsell(@PathVariable Long id) {
+        boolean b = inOrOutSell(id, Const.OUTSELL);
+        return Result.ok(b);
+    }
+
+    private boolean inOrOutSell(Long id, int option) {
+        PafComm comm = pafCommService.getById(id);
+        comm.setState(option);
+        return pafCommService.updateById(comm);
+    }
+
+    /**
+     * 根据佣金规则id按页获取绑定了该佣金规则的商品数据
+     *
+     * @param id
+     * @param pageable
+     * @return
+     */
     @GetMapping("detail/{id}")
     public Result detail(@PathVariable Long id,
                          @PageableDefault Pageable pageable) {
@@ -65,6 +92,14 @@ public class CommRController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据佣金规则id修改佣金状态
+     * 当禁用佣金id时，下架绑定了该佣金规则的商品
+     *
+     * @param id
+     * @param state
+     * @return
+     */
     @GetMapping("state/{id}/{state}")
     public Result state(@PathVariable Long id,
                         @PathVariable Integer state) {
@@ -93,6 +128,14 @@ public class CommRController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据佣金规则名称、状态、类型模糊搜索
+     *
+     * @param pageable
+     * @param keyword
+     * @param option   0表示按名称模糊搜索，1表示按类型搜索，2表示按状态搜索
+     * @return
+     */
     @GetMapping("search")
     public Result search(@PageableDefault Pageable pageable,
                          @RequestParam("keyword") String keyword,
@@ -106,6 +149,11 @@ public class CommRController {
         return Result.ok(page);
     }
 
+    /**
+     * 获取所有商品规则
+     *
+     * @return
+     */
     @GetMapping("all")
     public Result all() {
         List<CommR> rs = commRService.list();

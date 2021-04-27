@@ -42,7 +42,8 @@ public enum ResultCodeEnum {
     HOSPITAL_LOCK(320, "医院被锁定，暂时不能访问"),
 
     KEY_ERROR(4001, "关键参数错误"),
-    ;
+    STOCK_ERROR(4002, "库存不足"),
+    OUT_SELL_ERROR(4003, "商品下架");
 
     private Integer code;
     private String message;

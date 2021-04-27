@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
  * @since 2021-04-06
  */
 public interface CreditService extends CrudService<Credit> {
+
     IPage<Credit> applyBySuppNm(Pageable pageable, String keyword, Integer state);
 
     IPage<Credit> applyByDistrNm(Pageable pageable, String keyword, Integer state);

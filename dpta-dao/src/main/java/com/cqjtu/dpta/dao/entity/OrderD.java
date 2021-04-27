@@ -1,11 +1,14 @@
 package com.cqjtu.dpta.dao.entity;
 
 import java.math.BigDecimal;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -61,4 +64,5 @@ public class OrderD implements Serializable {
     private BigDecimal profit;
 
 
+    private Long skuId;
 }

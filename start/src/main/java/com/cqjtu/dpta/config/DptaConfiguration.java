@@ -2,13 +2,16 @@ package com.cqjtu.dpta.config;
 
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
-import com.cqjtu.dpta.web.support.DistrUserFilter;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import com.cqjtu.dpta.web.security.DefaultUserChecker;
+import com.cqjtu.dpta.web.security.UserChecker;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import org.thymeleaf.templatemode.TemplateMode;
 
 
 /**
@@ -27,10 +30,9 @@ public class DptaConfiguration {
         return redisTemplate;
     }
 
-//    @Bean
-    public FilterRegistrationBean<DistrUserFilter> distrUserFilterFilterRegistrationBean() {
-        FilterRegistrationBean<DistrUserFilter> bean = new FilterRegistrationBean<>();
-        bean.setFilter(new DistrUserFilter());
-        return bean;
+    @Bean
+    public UserChecker defaultUserChecker() {
+        return new DefaultUserChecker();
     }
+
 }

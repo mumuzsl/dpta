@@ -14,5 +14,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2021-04-06
  */
 public interface CommRMapper extends BaseMapper<CommR> {
+    /**
+     * 更加绑定量排序
+     *
+     * @param page
+     * @return
+     */
     IPage<CommR> bindSort(Page<?> page);
 }

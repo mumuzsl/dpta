@@ -16,6 +16,7 @@
         <module>dpta-service</module>
         <module>dpta-api</module>
         <module>dpta-common</module>
+        <module>dpta-cms</module>
     </modules>
 
     <properties>
@@ -60,7 +61,14 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.72</version>
+                <version>1.2.76</version>
+                <type>jar</type>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>1.2.6</version>
                 <type>jar</type>
             </dependency>
         </dependencies>

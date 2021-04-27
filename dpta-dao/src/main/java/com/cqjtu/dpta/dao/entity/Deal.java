@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
 import lombok.Data;
@@ -15,7 +16,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author mumu
- * @since 2021-04-13
+ * @since 2021-04-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,18 +32,6 @@ public class Deal implements Serializable {
     private Long dealId;
 
     /**
-     * 商品编码
-     */
-    @TableField("COMM_ID")
-    private Long commId;
-
-    /**
-     * 数量
-     */
-    @TableField("COUNT")
-    private Integer count;
-
-    /**
      * 总金额
      */
     @TableField("AMOUNT")
@@ -55,10 +44,14 @@ public class Deal implements Serializable {
     private Long distrId;
 
     /**
-     * 单价
+     * 状态
      */
-    @TableField("PRICE")
-    private BigDecimal price;
+    private Integer state;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 
 
 }

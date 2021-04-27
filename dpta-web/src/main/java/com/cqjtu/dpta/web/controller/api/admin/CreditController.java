@@ -29,7 +29,7 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/api/credit")
+@RequestMapping("/platform/api/credit")
 public class CreditController {
 
     @Resource
@@ -41,8 +41,13 @@ public class CreditController {
     @Resource
     private CreditDService creditDService;
 
-    private static final String[] COLUMNS = {"SUPP_ID", "DISTR_ID", "STATE","CREDIT_ID"};
+    private static final String[] COLUMNS = {"SUPP_ID", "DISTR_ID", "STATE", "CREDIT_ID"};
 
+    /**
+     * @param pageable
+     * @param id
+     * @return
+     */
     @GetMapping("detail/{id}")
     public Result detail(@PageableDefault Pageable pageable,
                          @PathVariable Long id) {
@@ -56,6 +61,12 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据授信id按页获取相应的交易明细
+     * @param pageable
+     * @param id
+     * @return
+     */
     @GetMapping("deal/{id}")
     public Result deal(@PageableDefault Pageable pageable,
                        @PathVariable Long id) {
@@ -67,6 +78,12 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据授信id修改状态
+     * @param id
+     * @param state
+     * @return
+     */
     @GetMapping("state/{id}/{state}")
     public Result state(@PathVariable Long id,
                         @PathVariable Integer state) {
@@ -79,6 +96,13 @@ public class CreditController {
         return Result.ok(b);
     }
 
+    /**
+     * 根据分销商名称或供应商名称模糊搜索
+     * @param pageable
+     * @param keyword
+     * @param option 0表示按供应商名称模糊搜索，1表示按分销商名称模糊搜索
+     * @return
+     */
     @GetMapping("applied/search")
     public Result applied(@PageableDefault Pageable pageable,
                           @RequestParam("keyword") String keyword,
@@ -95,6 +119,12 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据供应商名称搜索授信申请，按页返回数据
+     * @param pageable
+     * @param keyword
+     * @return
+     */
     @GetMapping("apply/search")
     public Result apply(@PageableDefault Pageable pageable,
                         @RequestParam("keyword") String keyword) {
@@ -102,11 +132,22 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    /**
+     * 分页获取授信申请
+     * @param pageable
+     * @return
+     */
     @GetMapping("apply")
     public Result apply(@PageableDefault Pageable pageable) {
         return byState(pageable, 0);
     }
 
+    /**
+     * 分页获取已通过授信
+     *
+     * @param pageable
+     * @return
+     */
     @GetMapping("applied")
     public Result applied(@PageableDefault Pageable pageable) {
         return byState(pageable, 1);

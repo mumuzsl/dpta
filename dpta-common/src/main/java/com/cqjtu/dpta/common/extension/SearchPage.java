@@ -5,6 +5,8 @@ import lombok.Data;
 import org.springframework.data.domain.Pageable;
 
 /**
+ * 搜索分页类，继承至mybatis-plus的Page类，包含搜索时的关键字
+ * <p>
  * author: mumu
  * date: 2021/4/13
  */

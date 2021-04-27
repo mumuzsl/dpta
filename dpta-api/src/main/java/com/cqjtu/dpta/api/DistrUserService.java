@@ -6,12 +6,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author mumu
  * @since 2021-04-15
  */
 public interface DistrUserService extends CrudService<DistrUser> {
-
 }

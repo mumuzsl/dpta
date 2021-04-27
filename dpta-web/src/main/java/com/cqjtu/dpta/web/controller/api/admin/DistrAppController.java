@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/api/distr-app")
+@RequestMapping("/platform/api/distr-app")
 public class DistrAppController {
 
     @Resource
@@ -33,6 +33,11 @@ public class DistrAppController {
 
     private static final String[] COLUMNS = {"APP_ID"};
 
+    /**
+     * 根据分销应用id获取分销应用数据
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     public Result get(@PathVariable Long id) {
         DistrApp distrApp = distrAppService.getById(id);

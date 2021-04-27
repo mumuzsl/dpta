@@ -25,7 +25,7 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/api/distr-level")
+@RequestMapping("/platform/api/distr-level")
 public class DistrLevelController {
 
     @Resource
@@ -40,6 +40,12 @@ public class DistrLevelController {
         return Result.ok(distrLevel);
     }
 
+    /**
+     * 获取绑定了该等级规则的分销商数据
+     * @param id 等级规则id
+     * @param pageable
+     * @return
+     */
     @GetMapping("detail/{id}")
     public Result detail(@PathVariable Long id,
                          @PageableDefault Pageable pageable) {
@@ -53,6 +59,10 @@ public class DistrLevelController {
         return Result.ok(page);
     }
 
+    /**
+     * 获取所有等级规则
+     * @return
+     */
     @GetMapping("all")
     public Result all() {
         List<DistrLevel> list = distrLevelService.list();

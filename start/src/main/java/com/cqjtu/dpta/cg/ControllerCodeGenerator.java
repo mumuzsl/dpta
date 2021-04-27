@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.cqjtu.dpta.api.support.CrudService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class ControllerCodeGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setEntityLombokModel(true);
         strategy.setRestControllerStyle(true);
+        strategy.setSuperServiceClass(CrudService.class);
         strategy.setControllerMappingHyphenStyle(true);
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);

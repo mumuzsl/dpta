@@ -6,6 +6,7 @@ import com.cqjtu.dpta.api.OrderService;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.web.security.MinUser;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.parameters.P;
@@ -30,8 +31,10 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
+
+
     @GetMapping
-    public IPage<Order> page(@PageableDefault Pageable pageable) {
+    public IPage<Order> page(@PageableDefault Pageable pageable, MinUser minUser) {
         return orderService.page(pageable);
     }
 

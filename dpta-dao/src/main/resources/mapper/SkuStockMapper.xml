@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqjtu.dpta.dao.mapper.SkuStockMapper">
+
+    <select id="lockStock" resultType="java.lang.Integer">
+        update t_sku_stock
+        set locked_stock=locked_stock + #{num}
+        where id = #{id}
+    </select>
+
+    <select id="subtractStock" resultType="java.lang.Integer">
+        update t_sku_stock
+        set locked_stock=locked_stock - #{num},
+            stock=stock - #{num}
+        where paf_comm_id = #{pcid}
+          and sku_id = #{sid}
+    </select>
+
+    <select id="freeStock" resultType="java.lang.Integer">
+        update t_sku_stock
+        set locked_stock=locked_stock - #{num}
+        where paf_comm_id = #{pcid}
+          and sku_id = #{sid}
+    </select>
+
+</mapper>

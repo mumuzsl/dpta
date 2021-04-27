@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.generator.config.*;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
+import com.cqjtu.dpta.api.support.CrudService;
 
 import java.util.*;
 
@@ -59,12 +60,13 @@ public class CodeGenerator {
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
         strategy.setTablePrefix("t_");
-//        strategy.setInclude("t_comm_r");
-        strategy.setInclude("t_distr_user");
+        strategy.setSuperServiceClass(CrudService.class);
+//        strategy.setInclude("t_paf_sku_stock","t_distr","t_paf_comm","t_shop_comm","t_deal","t_deal_d","t_distr_sku_stock");
+        strategy.setInclude("t_shp_comm");
 
         Map<String, String> map = new HashMap<>();
-        map.put(ConstVal.MAPPER_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\mapper");
-//        map.put(ConstVal.ENTITY_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\entity");
+//        map.put(ConstVal.MAPPER_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\mapper");
+        map.put(ConstVal.ENTITY_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\entity");
 //        map.put(ConstVal.SERVICE_PATH, projectPath + "\\dpta-api\\src\\main\\java\\com\\cqjtu\\dpta\\api");
 //        map.put(ConstVal.SERVICE_IMPL_PATH, projectPath + "\\dpta-service\\src\\main\\java\\com\\cqjtu\\dpta\\service");
 //        map.put(ConstVal.CONTROLLER_PATH, projectPath + "\\dpta-web\\src\\main\\java\\com\\cqjtu\\dpta\\web\\controller\\api");
@@ -110,7 +112,7 @@ public class CodeGenerator {
             }
         });
         ic.setFileOutConfigList(focList);
-        mpg.setCfg(ic);
+//        mpg.setCfg(ic);
 
         mpg.setTemplateEngine(new FreemarkerTemplateEngine());
         mpg.setTemplate(tc);

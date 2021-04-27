@@ -1,6 +1,7 @@
 package com.cqjtu.dpta.config;
 
 import com.google.common.base.Predicates;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -18,9 +19,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableSwagger2
 public class Swagger2Configuration {
+
+    @Value("${swagger.enable}")
+    private boolean swaggerEnable;
+
     @Bean
     public Docket apiConfig() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(swaggerEnable)
                 .groupName("api")
                 .apiInfo(apiInfo())
                 .select()
@@ -32,6 +38,7 @@ public class Swagger2Configuration {
     @Bean
     public Docket AdminConfig() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .enable(swaggerEnable)
                 .groupName("admin")
                 .apiInfo(apiInfo())
                 .select()

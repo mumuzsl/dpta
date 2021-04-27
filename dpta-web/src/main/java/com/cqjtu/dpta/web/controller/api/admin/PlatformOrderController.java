@@ -10,19 +10,24 @@ import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.dao.entity.OrderD;
+import com.cqjtu.dpta.web.security.CheckParam;
+import com.cqjtu.dpta.web.security.DefaultUserChecker;
+import com.cqjtu.dpta.web.security.UserCheck;
+import com.cqjtu.dpta.web.support.UserIdChecker;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * author: mumu
  * date: 2021/4/13
  */
 @RestController
-@RequestMapping("/api/admin/order")
-public class OrderAdminController {
+@RequestMapping("/platform/api/order")
+public class PlatformOrderController {
 
     @Resource
     private OrderService orderService;
@@ -30,6 +35,14 @@ public class OrderAdminController {
     @Resource
     private OrderDService orderDService;
 
+    /**
+     * 根据订单id修改订单状态
+     *
+     * @param id    订单id
+     * @param state
+     * @return
+     */
+//    @CacheEvict(value = "order", key = "'order_page'")
     @GetMapping("state/{id}/{state}")
     public Result state(@PathVariable Long id,
                         @PathVariable Integer state) {
@@ -42,6 +55,14 @@ public class OrderAdminController {
         return Result.ok(b);
     }
 
+    /**
+     * 模糊搜索
+     *
+     * @param pageable
+     * @param keyword  关键字
+     * @param option   按条件搜索：0是商品名称，1是商铺名称，2是状态，3是分析商名称
+     * @return
+     */
     @GetMapping("search")
     public Result search(@PageableDefault Pageable pageable,
                          @RequestParam("keyword") String keyword,
@@ -54,14 +75,48 @@ public class OrderAdminController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据订单id获取订单详情
+     *
+     * @param id
+     * @param pageable
+     * @return
+     */
     @GetMapping("detail/{id}")
-    public Result detail(@PathVariable Long id,
-                         @PageableDefault Pageable pageable) {
+    public Result detail(@PathVariable @CheckParam Long id,
+                         @PageableDefault Pageable pageable,
+                         Object obj) {
         QueryWrapper<OrderD> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("ORDER_ID", id);
-        IPage<OrderD> page = orderDService.page(pageable, queryWrapper);
+        List<OrderD> list = orderDService.list(queryWrapper);
+        return Result.ok(list);
+    }
+
+
+    //        @Cacheable(value = "order", key = "'order_page'")
+    @GetMapping
+    public Result page(@PageableDefault Pageable pageable) {
+        IPage<Order> page = orderService.page(pageable);
         return Result.ok(page);
     }
 
+    //    @CacheEvict(value = "order", key = "'order_page'")
+    @PostMapping("modif")
+    public Result modif(@RequestBody Order order) {
+        boolean result = orderService.updateById(order);
+        return Result.judge(result);
+    }
+
+    @PostMapping("add")
+    public Result add(@RequestBody Order order) {
+        boolean result = orderService.save(order);
+        return Result.judge(result);
+    }
+
+    @PostMapping("del")
+    public Result del(@RequestBody List ids) {
+        boolean result = orderService.removeByIds(ids);
+        return Result.judge(result);
+    }
 
 }

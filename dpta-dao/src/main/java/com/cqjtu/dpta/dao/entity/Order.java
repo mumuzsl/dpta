@@ -40,7 +40,7 @@ public class Order implements Serializable {
     /**
      * 日期
      */
-    @TableField("DATM")
+    @TableField(value = "DATM")
     private LocalDateTime datm;
 
     /**

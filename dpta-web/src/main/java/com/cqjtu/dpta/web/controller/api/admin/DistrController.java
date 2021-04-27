@@ -30,7 +30,7 @@ import java.util.List;
  * @since 2021-04-14
  */
 @RestController
-@RequestMapping("/api/distr")
+@RequestMapping("/platform/api/distr")
 public class DistrController {
 
     @Resource
@@ -44,6 +44,13 @@ public class DistrController {
 
     private static final String[] COLUMNS = {"DISTR_ID", "STATE"};
 
+    /**
+     * 根据分销商id修改分析商状态
+     * 禁用分析商时，禁用分销商商铺，下架分销商商品
+     * @param id    分销商id
+     * @param state 0表示禁用，1表示启用
+     * @return
+     */
     @GetMapping("state/{id}/{state}")
     public Result state(@PathVariable Long id,
                         @PathVariable Integer state) {
@@ -64,7 +71,7 @@ public class DistrController {
             uw2
                     .eq(COLUMNS[0], id)
                     .set(COLUMNS[1], Const.OUTSELL);
-            ur1 = pafCommService.update(uw2);
+            ur2 = pafCommService.update(uw2);
         } else {
             distr.setState(Const.ENABLE);
         }
@@ -72,6 +79,12 @@ public class DistrController {
         return Result.ok(b && ur1 && ur2);
     }
 
+    /**
+     * 分销商关联商铺
+     * @param pageable
+     * @param id
+     * @return
+     */
     @GetMapping("shop/{id}")
     public Result get(@PageableDefault Pageable pageable,
                       @PathVariable Long id) {
@@ -85,6 +98,11 @@ public class DistrController {
         return Result.ok(page);
     }
 
+    /**
+     * 根据分销商id获取分销商数据
+     * @param id
+     * @return
+     */
     @GetMapping("{id}")
     public Result get(@PathVariable Long id) {
         Distr distr = distrService.getById(id);
@@ -94,6 +112,11 @@ public class DistrController {
         return Result.ok(distr);
     }
 
+    /**
+     * 按页获取分销商数据
+     * @param pageable
+     * @return
+     */
     @GetMapping
     public Result page(@PageableDefault Pageable pageable) {
         IPage<Distr> page = distrService.page(pageable);

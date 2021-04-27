@@ -32,4 +32,10 @@ public class ControllerExceptionHandler {
     public Result handleOptionException(OptionException e) {
         return Result.fail(e.getMessage());
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseBody
+    public Result handleOrderException(BadRequestException e) {
+        return Result.fail(e.getMessage());
+    }
 }

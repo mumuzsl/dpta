@@ -26,7 +26,7 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/api/refund-rule")
+@RequestMapping("/platform/api/refund-rule")
 public class RefundRController {
 
     @Resource
@@ -34,12 +34,24 @@ public class RefundRController {
 
     private static final String[] COLUMNS = {"REFUND_NM", "TYPE", "STATE"};
 
+    /**
+     * 根据绑定量排名
+     * @param pageable
+     * @return
+     */
     @GetMapping("sort")
     public Result sort(@PageableDefault Pageable pageable) {
         IPage<RefundR> page = refundRService.bindSort(pageable);
         return Result.ok(page);
     }
 
+    /**
+     * 模糊搜索
+     * @param pageable
+     * @param keyword
+     * @param option 按对应条件搜索：0是名称，1是类型，2是状态
+     * @return
+     */
     @GetMapping("search")
     public Result search(@PageableDefault Pageable pageable,
                          @RequestParam("keyword") String keyword,
@@ -53,6 +65,10 @@ public class RefundRController {
         return Result.ok(page);
     }
 
+    /**
+     * 获取全部数据
+     * @return
+     */
     @GetMapping("all")
     public Result all() {
         List<RefundR> list = refundRService.list();

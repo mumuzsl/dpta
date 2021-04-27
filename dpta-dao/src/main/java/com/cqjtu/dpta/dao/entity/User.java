@@ -3,7 +3,9 @@ package com.cqjtu.dpta.dao.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -43,5 +45,5 @@ public class User implements Serializable {
     @TableField("PASSWD")
     private String passwd;
 
-
+    private String username;
 }

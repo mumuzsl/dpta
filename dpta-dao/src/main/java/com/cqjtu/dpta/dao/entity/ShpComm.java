@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.dao.entity;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author mumu
- * @since 2021-04-13
+ * @since 2021-04-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -24,9 +24,15 @@ public class ShpComm implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * id
+     */
+    @TableId(value = "SHOP_COMM_ID", type = IdType.AUTO)
+    private Long shopCommId;
+
+    /**
      * 商品编码
      */
-    @TableId("COMM_ID")
+    @TableField("COMM_ID")
     private Long commId;
 
     /**
@@ -34,18 +40,6 @@ public class ShpComm implements Serializable {
      */
     @TableField("SHOP_ID")
     private Long shopId;
-
-    /**
-     * 售价
-     */
-    @TableField("PRICE")
-    private BigDecimal price;
-
-    /**
-     * 库存
-     */
-    @TableField("STOCK")
-    private Integer stock;
 
     /**
      * 状态

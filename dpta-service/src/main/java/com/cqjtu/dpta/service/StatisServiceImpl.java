@@ -1,10 +1,9 @@
 package com.cqjtu.dpta.service;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cqjtu.dpta.api.OrderDService;
 import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.StatisService;
-import com.cqjtu.dpta.common.vo.CommVo;
+import com.cqjtu.dpta.common.vo.CommStatisVo;
 import com.cqjtu.dpta.dao.mapper.StatisMapper;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,7 @@ public class StatisServiceImpl implements StatisService {
     private PafCommService pafCommService;
 
     @Override
-    public List<CommVo> topComm(Integer limit) {
+    public List<CommStatisVo> topComm(Integer limit) {
         return statisMapper.topComm(limit);
     }
 }

@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author mumu
- * @since 2021-04-13
+ * @since 2021-04-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -52,6 +52,8 @@ public class Distr implements Serializable {
      */
     @TableField("PHONE")
     private String phone;
+
+    private String payPwd;
 
 
 }
