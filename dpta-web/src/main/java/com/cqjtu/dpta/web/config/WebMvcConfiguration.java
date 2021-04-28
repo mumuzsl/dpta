@@ -7,6 +7,7 @@ import com.cqjtu.dpta.web.support.DistrUserInterceptor;
 import com.cqjtu.dpta.web.security.UniqueUserHandlerMethodArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -38,8 +39,17 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/").setViewName("mall/index");
+        registry.addViewController("/index").setViewName("mall/index");
+        registry.addViewController("/login").setViewName("mall/login");
+        registry.addViewController("/register").setViewName("mall/register");
+
+        registry.addViewController("/admin").setViewName("admin/index");
         registry.addViewController("/admin/login").setViewName("admin/login");
+
+        registry.addViewController("/Fxsadmin").setViewName("fxsadmin/index");
+
+        registry.addStatusController("error_404", HttpStatus.NOT_FOUND);
     }
 
     @Override

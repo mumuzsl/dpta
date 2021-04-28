@@ -77,7 +77,7 @@ public class SecurityConfiguration {
         @Override
         protected void customConfigure(HttpSecurity http) throws Exception {
             http
-//                    .antMatcher("/api/**")
+                    .antMatcher("/api/**")
                     .authorizeRequests()
                     .antMatchers("/api/**")
 //                    .anyRequest()
