@@ -5,6 +5,13 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.alibaba.fastjson.support.spring.JSONPResponseBodyAdvice;
 import com.cqjtu.dpta.web.support.DistrUserInterceptor;
 import com.cqjtu.dpta.web.security.UniqueUserHandlerMethodArgumentResolver;
+import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
+import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.ErrorPageRegistrar;
+import org.springframework.boot.web.server.ErrorPageRegistry;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -12,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
+import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -39,17 +47,25 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/").setViewName("mall/index");
-        registry.addViewController("/index").setViewName("mall/index");
-        registry.addViewController("/login").setViewName("mall/login");
-        registry.addViewController("/register").setViewName("mall/register");
-
-        registry.addViewController("/admin").setViewName("admin/index");
-        registry.addViewController("/admin/login").setViewName("admin/login");
-
-        registry.addViewController("/Fxsadmin").setViewName("fxsadmin/index");
-
-        registry.addStatusController("error_404", HttpStatus.NOT_FOUND);
+//        // 分销商商城
+//        registry.addViewController("/").setViewName("mall/index");
+//        registry.addViewController("/index").setViewName("mall/index");
+//        registry.addViewController("/login").setViewName("mall/login");
+//        registry.addViewController("/register").setViewName("mall/register");
+//
+//        // 管理员
+//        registry.addViewController("/admin").setViewName("admin/index");
+////        registry.addViewController("/admin/**").setViewName("admin/index");
+//
+//        // 分销商管理
+//        registry.addViewController("/Fxsadmin").setViewName("fxsadmin/index");
+//
+//        // 错误页
+//        registry.addViewController("/error/global").setViewName("error/error");
+//        registry.addViewController("/error/500").setViewName("error/error_5xx");
+//        registry.addViewController("/error/400").setViewName("error/error_400");
+//        registry.addViewController("/error/404").setViewName("error/error_404");
+//        registry.addRedirectViewController("/error", "/error/global");
     }
 
     @Override
@@ -82,5 +98,20 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
                 .maxAge(3600 * 24);
     }
 
+    @Bean
+    public ErrorPageRegistrar errorPageRegistrar() {
+        return new ErrorPageRegistrarImpl();
+    }
+
+    static class ErrorPageRegistrarImpl implements ErrorPageRegistrar {
+        @Override
+        public void registerErrorPages(ErrorPageRegistry registry) {
+            ErrorPage globalErrorPage = new ErrorPage("/error/global");
+            ErrorPage errorPage500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/5xx");
+            ErrorPage errorPage400 = new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400");
+            ErrorPage errorPage404 = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404");
+            registry.addErrorPages(errorPage400, errorPage404, errorPage500, globalErrorPage);
+        }
+    }
 }
 
