@@ -12,6 +12,10 @@ public interface MinUser {
 
     Object getDetail();
 
+    default Long longId() {
+        return (Long) getId();
+    }
+
     default boolean hasDetail() {
         return getDetail() != null;
     }
