@@ -1,0 +1,73 @@
+<!-- Copyright (c) 2019-2020 十三 all rights reserved. -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header th:replace="admin/header::header-fragment"></header>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="admin/header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="admin/sidebar::sidebar-fragment(${path})"></div>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- Main content -->
+        <div class="content">
+            <div class="card card-primary card-outline">
+                <div class="card-header">
+                    <h3 class="card-title">首页</h3>
+                </div> <!-- /.card-body -->
+                <div class="card-body">
+                    <div class="panel panel-default">
+                        <div style="padding: 10px 0 20px 10px;">
+                            <a href="https://github.com/mumuzsl/dpta" target="_blank">
+                                <img th:src="@{/admin/dist/img/lexianglvyou.png}" style="width: 480px;height: 240px;">
+<!--                                <p>乐享旅游项目是一套电商系统，包括乐享旅游商城系统及乐享旅游商城后台管理系统，基于 Spring Boot-->
+<!--                                    2.X-->
+<!--                                    及相关技术栈开发。-->
+<!--                                    前台商城系统包含首页门户、商品分类、新品上线、首页轮播、商品推荐、商品搜索、商品展示、购物车、订单结算、订单流程、个人订单管理、会员中心、帮助中心等模块。-->
+<!--                                    后台管理系统包含数据面板、轮播图管理、商品管理、订单管理、会员管理、分类管理、设置等模块。-->
+<!--                                    分销商管理系统包含分销管理、商铺管理等模块。-->
+<!--                                </p>-->
+                                <ul>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">乐享旅游是一套旅游景区分销的电商系统</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">包括乐享旅游商城系统、商城后台管理系统、分销商管理系统</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">前端UI库使用BootStrap、LayUI等技术;网页使用HTML、CSS、JavaScript等技术</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">后端用到SpringBoot、Spring Security、MyBatis、Spring MVC框架</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">基础服务：JDK1.8、GIT、MAVEN、GitHub</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">工具组件：Lombok、Swagger、Hutool、Druid、FastJSON等</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">数据层：MySQL、redis、阿里云</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">该项目前台商城包含首页门户、商品分类、新品上新、首页轮播、商品推荐、商品搜索、商品详情、购物车、订单管理、个人中心等模块</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">该项目后台管理系统包含数据面板、轮播图管理、商品管理、订单管理、会员管理、分类管理、设置管理等模块</a></li>
+                                    <li><a href="https://github.com/mumuzsl/dpta" target="_blank">该项目分销商管理系统包含分销管理、商铺管理等模块</a></li>
+                                </ul>
+                            </a>
+
+                            <p>乐享旅游 在 GitHub 创建了代码仓库，可以在GitHub上看到更新</p>
+                            <ul>
+                                <li><a href="https://github.com/mumuzsl/dpta" target="_blank">乐享旅游 in GitHub</a></li>
+<!--                                <li><a href="https://gitee.com/newbee-ltd/newbee-mall" target="_blank">newbee-mall in Gitee</a></li>-->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- 引入页脚footer-fragment -->
+    <div th:replace="admin/footer::footer-fragment"></div>
+</div>
+<!-- jQuery -->
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/admin/dist/js/adminlte.min.js}"></script>
+</body>
+</html>
