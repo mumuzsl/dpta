@@ -33,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
+import javax.xml.crypto.Data;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -42,13 +44,13 @@ import static java.util.stream.Collectors.groupingBy;
 @Service
 public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
 
-    @Autowired
+    @Resource
     private NewBeeMallOrderMapper newBeeMallOrderMapper;
-    @Autowired
+    @Resource
     private NewBeeMallOrderItemMapper newBeeMallOrderItemMapper;
-    @Autowired
+    @Resource
     private NewBeeMallShoppingCartItemMapper newBeeMallShoppingCartItemMapper;
-    @Autowired
+    @Resource
     private NewBeeMallGoodsMapper newBeeMallGoodsMapper;
 
     @Override
@@ -385,5 +387,20 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
             }
         }
         return null;
+    }
+
+    @Override
+    public int oneDayOrderSum(String d) {
+        return newBeeMallOrderMapper.oneDayOrderSum(d);
+    }
+
+    @Override
+    public List<NewBeeMallOrder> allOrder() {
+        return newBeeMallOrderMapper.allOrder();
+    }
+
+    @Override
+    public Integer orderSum() {
+        return newBeeMallOrderMapper.orderSum();
     }
 }

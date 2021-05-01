@@ -13,4 +13,5 @@ import com.cqjtu.dpta.api.support.CrudService;
  */
 public interface ShopService extends CrudService<Shop> {
 
+    public int countShop();
 }

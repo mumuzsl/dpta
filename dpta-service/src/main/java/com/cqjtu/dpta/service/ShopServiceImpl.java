@@ -17,4 +17,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements ShopService {
 
+
+    @Override
+    public int countShop() {
+        return baseMapper.countShop();
+    }
 }

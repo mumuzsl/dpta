@@ -3,15 +3,18 @@ package com.cqjtu.dpta.web.controller.api.admin;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.PafCommService;
+import com.cqjtu.dpta.api.support.SettleService;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.common.result.Result;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +31,9 @@ public class PafCommController {
 
     @Resource
     private PafCommService pafCommService;
+
+    @Resource
+    private SettleService settleService;
 
     private static final String[] COLUMNS = {"COMM_NM", "TYPE", "STATE"};
 
@@ -73,6 +79,17 @@ public class PafCommController {
     public Result del(@RequestBody List ids) {
         boolean result = pafCommService.removeByIds(ids);
         return Result.judge(result);
+    }
+
+    @RequestMapping("/show/bar")
+    @ResponseBody
+    public List<Integer> findBybar(Model model){
+        List barData = new ArrayList();
+        barData.add(settleService.platSum(2019));
+        barData.add(settleService.platSum(2020));
+        barData.add(settleService.platSum(2021));
+
+        return barData;
     }
 
 }
