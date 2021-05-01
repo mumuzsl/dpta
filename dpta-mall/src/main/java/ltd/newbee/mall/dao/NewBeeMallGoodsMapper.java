@@ -16,7 +16,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface NewBeeMallGoodsMapper {
-    int deleteByPrimaryKey(Long goodsId);
+    Boolean deleteByPrimaryKey(Long[] goodsId);
 
     int insert(NewBeeMallGoods record);
 
@@ -45,5 +45,7 @@ public interface NewBeeMallGoodsMapper {
     int updateStockNum(@Param("stockNumDTOS") List<StockNumDTO> stockNumDTOS);
 
     int batchUpdateSellStatus(@Param("orderIds") Long[] orderIds, @Param("sellStatus") int sellStatus);
+
+    int deleteBatch(Long[] ids);
 
 }

@@ -161,10 +161,12 @@ public class NewBeeMallGoodsCategoryController {
     @RequestMapping(value = "/categories/delete", method = RequestMethod.POST)
     @ResponseBody
     public Result delete(@RequestBody Integer[] ids) {
+//        System.out.println("------");
         if (ids.length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }
         if (newBeeMallCategoryService.deleteBatch(ids)) {
+//            System.out.println(ResultGenerator.genSuccessResult());
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("删除失败");

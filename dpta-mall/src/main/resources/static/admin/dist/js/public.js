@@ -178,3 +178,4 @@ function getSelectedRows() {
     }
     return grid.getGridParam("selarrrow");
 }
+

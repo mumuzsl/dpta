@@ -31,6 +31,9 @@ public interface NewBeeMallGoodsService {
      */
     String saveNewBeeMallGoods(NewBeeMallGoods goods);
 
+    Boolean deleteByPrimaryKey(Long[] goodsId);
+    Boolean deleteBatch(Long[] ids);
+
     /**
      * 批量新增商品数据
      *

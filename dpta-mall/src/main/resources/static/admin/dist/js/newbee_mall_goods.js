@@ -97,42 +97,43 @@ function editGoods() {
 /**
  * 删除商品
  */
-
-function deleteGoods() {
+function deleteGoods () {
     var ids = getSelectedRows();
-    if (ids = null){
+    if (ids == null) {
         return;
     }
     swal({
-        title:"确认弹框",
-        text:"确认要删除数据吗",
-        icon:"warning",
-        buttons:true,
-        dangerMode:true,
-    }).then(flag=>{
-        if(flag){
-            $.ajax({
-                type:"POST",
-                url:"admin/goods/delete",
-                contentType:"application/json",
-                data:JSON.stringify(ids),
-                success:function (r) {
-                    if (r.resultCode == 200){
-                        swal("删除成功",{
-                            icon:"success",
-                        });
-                        $("#jqGrid").trigger("reloadGrid");
+        title: "确认弹框",
+        text: "确认要删除数据吗?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((flag) => {
+            if (flag) {
+                $.ajax({
+                    type: "POST",
+                    url: "/admin/goods/delete",
+                    contentType: "application/json",
+                    data: JSON.stringify(ids),
+                    success: function (r) {
+                        if (r.resultCode == 200) {
+                            swal("删除成功", {
+                                icon: "success",
+                            });
+                            $("#jqGrid").trigger("reloadGrid");
+                        } else {
+                            swal(r.message, {
+                                icon: "error",
+                            });
+                        }
                     }
-                    else{
-                        swal(r.message,{
-                            icon:"error",
-                        });
-                    }
-                }
-            })
+                });
+            }
         }
-    });
+    )
+    ;
 }
+
 /**
  * 上架
  */

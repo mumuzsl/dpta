@@ -171,6 +171,13 @@
     delete from tb_newbee_mall_goods_info
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </delete>
+    <update id="deleteBatch">
+        update tb_newbee_mall_goods_info
+        set is_deleted=1,update_time=now() where goods_id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
     <insert id="insert" parameterType="ltd.newbee.mall.entity.NewBeeMallGoods">
     insert into tb_newbee_mall_goods_info (goods_id, goods_name, goods_intro, 
       goods_cover_img, goods_carousel, original_price, 
