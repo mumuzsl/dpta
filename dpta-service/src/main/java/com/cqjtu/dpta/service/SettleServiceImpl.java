@@ -135,4 +135,9 @@ public class SettleServiceImpl implements SettleService {
         }
         return true;
     }
+
+    @Override
+    public Integer platSum(int d) {
+        return settleMMapper.platSum(d);
+    }
 }

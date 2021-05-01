@@ -23,13 +23,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
 public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
 
-    @Autowired
+    @Resource
     private MallUserMapper mallUserMapper;
 
     @Override
@@ -108,5 +109,15 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
             return false;
         }
         return mallUserMapper.lockUserBatch(ids, lockStatus) > 0;
+    }
+
+    @Override
+    public Integer oneDayPeopleSum(String d) {
+        return mallUserMapper.oneDayPeopleSum(d);
+    }
+
+    @Override
+    public Integer shopSum() {
+        return mallUserMapper.shopSum();
     }
 }

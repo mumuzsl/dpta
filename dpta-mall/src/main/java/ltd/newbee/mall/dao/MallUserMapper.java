@@ -36,4 +36,16 @@ public interface MallUserMapper {
     int getTotalMallUsers(PageQueryUtil pageUtil);
 
     int lockUserBatch(@Param("ids") Integer[] ids, @Param("lockStatus") int lockStatus);
+
+    /**
+     * 返回某一天新用户的人数
+     * @param d
+     * @return
+     */
+    Integer oneDayPeopleSum(@Param("d") String d);
+
+    /**
+     * 返回总店铺数
+     */
+    Integer shopSum();
 }
