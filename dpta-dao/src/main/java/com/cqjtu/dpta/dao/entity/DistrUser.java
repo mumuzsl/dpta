@@ -27,12 +27,10 @@ public class DistrUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
     /**
      * 分销商id
      */
+    @TableId
     private Long distrId;
 
     /**

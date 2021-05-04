@@ -1,11 +1,11 @@
 package com.cqjtu.dpta.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.common.vo.OrderVo;
+import com.cqjtu.dpta.common.vo.OrderParam;
+import com.cqjtu.dpta.dao.dto.OrderDDto;
+import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.api.support.CrudService;
-import com.cqjtu.dpta.dao.entity.OrderD;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
@@ -20,19 +20,29 @@ import java.util.List;
  */
 
 public interface OrderService extends CrudService<Order> {
+    List<OrderDDto> getFullDetail(Long id);
+
+    IPage<OrderDto> pageNotDetailOrderDto(Pageable pageable, Long distrId);
+
+    OrderDto getFullOrderDto(Long orderId);
 
     IPage<Order> search(Pageable pageable, String keyword, Integer option);
 
+    IPage<OrderDto> searchByDistrId(Pageable pageable, String keyword, Integer option, Long distrId);
+
     /**
      * 根据分销商编码获取分销商名下店铺的所有已核销订单
+     *
      * @param distr_id 分销商编码
      * @return
      */
     List<Order> getOrderListByDistrId(Long distr_id);
 
-    void create(OrderVo vo);
+    void create(OrderParam vo);
 
     Long getDistrId(Long id);
+
+    IPage<Order> pageByDistr(Pageable pageable, Long distrId);
 
 //    IPage<Order> pageByDistrId(Long distrId);
 }

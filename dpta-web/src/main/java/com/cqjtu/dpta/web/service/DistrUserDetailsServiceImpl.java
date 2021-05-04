@@ -47,9 +47,8 @@ public class DistrUserDetailsServiceImpl extends AbstractUserDetailsService {
                 .eq(DistrUser::getUsername, username)
                 .oneOpt()
                 .orElseThrow(() -> new UsernameNotFoundException("username not exists"));
-        return new BigUser(distrUser.getId(), distrUser.getUsername(), distrUser.getPassword(), getAuthorities());
+        return new BigUser(distrUser.getDistrId(), distrUser.getUsername(), distrUser.getPassword(), getAuthorities());
     }
-
 
 }
 

@@ -1,5 +1,6 @@
 package com.cqjtu.dpta.web.security;
 
+import com.auth0.jwt.JWT;
 import com.cqjtu.dpta.web.support.BigUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;

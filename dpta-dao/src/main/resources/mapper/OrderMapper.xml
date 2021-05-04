@@ -1,22 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqjtu.dpta.dao.mapper.OrderMapper">
+    <resultMap id="OrderDDto" type="com.cqjtu.dpta.dao.dto.OrderDDto">
+        <id property="id" column="detail_id"/>
+        <result property="count" column="detail_count"/>
+        <result property="price" column="detail_price"/>
+        <result property="profit" column="detail_profit"/>
+        <result property="state" column="detail_state"/>
+        <association property="pafComm" javaType="com.cqjtu.dpta.dao.entity.PafComm">
+            <id property="commId" column="comm_id"/>
+            <result property="commNm" column="comm_nm"/>
+        </association>
+        <association property="sku" javaType="com.cqjtu.dpta.dao.entity.Sku">
+            <id property="id" column="sku_id"/>
+            <result property="spec" column="sku_spec"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="OrderDto" type="com.cqjtu.dpta.dao.dto.OrderDto">
+        <id property="id" column="order_id"/>
+        <result property="profit" column="order_profit"/>
+        <result property="datm" column="order_datm"/>
+        <result property="amount" column="order_amount"/>
+        <result property="state" column="order_state"/>
+        <result property="verifyTm" column="order_verify_tm"/>
+        <result property="baseP" column="order_base_p"/>
+        <association property="shop" javaType="com.cqjtu.dpta.dao.entity.Shop">
+            <id property="shopId" column="shop_id"/>
+            <result property="shopNm" column="shop_nm"/>
+        </association>
+        <collection property="details" resultMap="OrderDDto">
+        </collection>
+    </resultMap>
+
+    <select id="pageHalfOrderDto" resultMap="OrderDto">
+        select t.ID        as order_id,
+               t.STATE     as order_state,
+               t.AMOUNT    as order_amount,
+               t.DATM      as order_datm,
+               t.PROFIT    as order_profit,
+               t.VERIFY_TM as order_verify_tm,
+               t.BASE_P    as order_base_p,
+               ts.SHOP_ID  as shop_id,
+               ts.SHOP_NM  as shop_nm
+        from t_shop ts
+                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID and ts.DISTR_ID = #{distrId}
+    </select>
+
+    <select id="getFullDetail" resultMap="OrderDDto">
+        select tod.ID      as detail_id,
+               tod.COUNT   as detail_count,
+               tod.PRICE   as detail_price,
+               tod.PROFIT  as detail_profit,
+               tod.STATE   as detail_state,
+               tpc.COMM_ID as comm_id,
+               tpc.COMM_NM as comm_nm,
+               tsku.id     as sku_id,
+               tsku.spec   as sku_spec
+        from t_order t
+                 inner join t_order_d tod on t.ID = tod.ORDER_ID and t.ID = #{id}
+                 inner join t_sku tsku on tod.sku_id = tsku.id
+                 inner join t_paf_comm tpc
+                            on tod.COMM_ID = tpc.COMM_ID
+    </select>
+
+    <select id="getFullOrderDto" resultMap="OrderDto">
+        select t.ID        as order_id,
+               t.STATE     as order_state,
+               t.AMOUNT    as order_amount,
+               t.DATM      as order_datm,
+               t.PROFIT    as order_profit,
+               t.VERIFY_TM as order_verify_tm,
+               t.BASE_P    as order_base_p,
+               ts.SHOP_ID  as shop_id,
+               ts.SHOP_NM  as shop_nm,
+               tod.ID      as detail_id,
+               tod.COUNT   as detail_count,
+               tod.PRICE   as detail_price,
+               tod.PROFIT  as detail_profit,
+               tod.STATE   as detail_state,
+               tpc.COMM_ID as comm_id,
+               tpc.COMM_NM as comm_nm,
+               tsku.id     as sku_id,
+               tsku.spec   as sku_spec
+        from t_shop ts
+                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID and t.ID = #{id}
+                 inner join t_order_d tod on t.ID = tod.ORDER_ID
+                 inner join t_sku tsku on tod.sku_id = tsku.id
+                 inner join t_paf_comm tpc
+                            on tod.COMM_ID = tpc.COMM_ID
+    </select>
+
+    <select id="pageByDistrAndShop" resultMap="OrderDto">
+        select  t.ID        as order_id,
+                t.STATE     as order_state,
+                t.AMOUNT    as order_amount,
+                t.DATM      as order_datm,
+                t.PROFIT    as order_profit,
+                t.VERIFY_TM as order_verify_tm,
+                t.BASE_P    as order_base_p,
+                ts.SHOP_ID  as shop_id,
+                ts.SHOP_NM  as shop_nm
+        from t_shop ts
+                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID
+            and ts.DISTR_ID = #{distrId} and ts.SHOP_NM like concat('%', #{pg.keyword}, '%')
+    </select>
+
+
+    <select id="pageByDistrAndComm" resultMap="OrderDto">
+        select  t.ID        as order_id,
+                t.STATE     as order_state,
+                t.AMOUNT    as order_amount,
+                t.DATM      as order_datm,
+                t.PROFIT    as order_profit,
+                t.VERIFY_TM as order_verify_tm,
+                t.BASE_P    as order_base_p,
+                ts.SHOP_ID  as shop_id,
+                ts.SHOP_NM  as shop_nm
+        from t_shop ts
+                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID and ts.DISTR_ID = #{distrId}
+                 inner join t_order_d tod on t.ID = tod.ORDER_ID
+                 inner join t_paf_comm tpc
+                            on tod.COMM_ID = tpc.COMM_ID and tpc.COMM_NM like concat('%', #{pg.keyword}, '%')
+        group by t.ID
+    </select>
+
+    <select id="pageByDistrAndState" resultMap="OrderDto">
+        select  t.ID        as order_id,
+                t.STATE     as order_state,
+                t.AMOUNT    as order_amount,
+                t.DATM      as order_datm,
+                t.PROFIT    as order_profit,
+                t.VERIFY_TM as order_verify_tm,
+                t.BASE_P    as order_base_p,
+                ts.SHOP_ID  as shop_id,
+                ts.SHOP_NM  as shop_nm
+        from t_shop ts
+                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID
+            and ts.DISTR_ID = #{distrId} and t.STATE = #{pg.keyword}
+    </select>
+
+    <select id="pageByDistr" resultType="com.cqjtu.dpta.dao.entity.Order">
+        select t1.*
+        from t_order t1
+                 inner join t_shop ts on t1.SHOP_ID = ts.SHOP_ID
+            and ts.DISTR_ID = #{distrId}
+    </select>
+
     <select id="getDistrId" resultType="java.lang.Long">
         select ts.DISTR_ID
         from t_order t1
                  inner join t_shop ts on t1.SHOP_ID = ts.SHOP_ID
-            and ts.DISTR_ID = #{id};
+            and t1.ID = #{id}
     </select>
 
     <select id="selectByShop" resultType="com.cqjtu.dpta.dao.entity.Order">
-        select t1.ID, t1.SHOP_ID, DATM, t1.STATE, PROFIT, VERIFY_TM, AMOUNT
+        select t1.*
         from t_order t1
                  inner join t_shop ts on t1.SHOP_ID = ts.SHOP_ID
             and ts.SHOP_NM like concat('%', #{pg.keyword}, '%')
     </select>
 
     <select id="selectByComm" resultType="com.cqjtu.dpta.dao.entity.Order">
-        select t1.ID, SHOP_ID, DATM, STATE, PROFIT, VERIFY_TM, AMOUNT
+        select t1.*
         from t_order t1
                  inner join (
             select tod.ORDER_ID
@@ -30,13 +176,13 @@
     </select>
 
     <select id="selectByState" resultType="com.cqjtu.dpta.dao.entity.Order">
-        select ID, SHOP_ID, DATM, STATE, PROFIT, VERIFY_TM, AMOUNT
+        select *
         from t_order
         where STATE like #{pg.keyword}
     </select>
 
     <select id="selectByDistr" resultType="com.cqjtu.dpta.dao.entity.Order">
-        select t1.ID, t1.SHOP_ID, DATM, t1.STATE, PROFIT, VERIFY_TM, AMOUNT
+        select t1.*
         from t_order t1
                  inner join t_shop ts on t1.SHOP_ID = ts.SHOP_ID
                  inner join t_distr td on ts.DISTR_ID = td.DISTR_ID
@@ -44,19 +190,13 @@
     </select>
 
     <select id="getOrderListByDistrId" resultType="com.cqjtu.dpta.dao.entity.Order">
-        SELECT
-        *
-        FROM
-        t_order
-        WHERE
-        shop_id IN (
-        SELECT
-        shop_id
-        FROM
-        t_shop
-        WHERE
-        distr_id = #{distr_id}
+        SELECT *
+        FROM t_order
+        WHERE shop_id IN (
+            SELECT shop_id
+            FROM t_shop
+            WHERE distr_id = #{distr_id}
         )
-        AND state = 2
+          AND state = 2
     </select>
 </mapper>

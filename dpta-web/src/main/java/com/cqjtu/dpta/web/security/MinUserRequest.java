@@ -16,8 +16,8 @@ public class MinUserRequest implements MinUser {
         this.detail = detail;
     }
 
-    public static MinUserRequest of(Object userId) {
-        return new MinUserRequest(userId, null);
+    public static MinUser of(Object userId) {
+        return userId != null ? new MinUserRequest(userId, null) : null;
     }
 
     public static MinUserRequest of(Object userId, Object detail) {

@@ -30,7 +30,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/platform/api/credit")
-public class CreditController {
+public class PlatformCreditController {
 
     @Resource
     private CreditService creditService;

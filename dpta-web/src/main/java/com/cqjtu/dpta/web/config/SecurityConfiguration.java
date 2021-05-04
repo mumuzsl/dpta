@@ -1,5 +1,7 @@
 package com.cqjtu.dpta.web.config;
 
+import com.cqjtu.dpta.web.filter.OptionsRequestFilter;
+import com.cqjtu.dpta.web.security.TokenUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,7 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.filter.CorsFilter;
 
 import javax.annotation.Resource;
 
@@ -48,6 +52,7 @@ public class SecurityConfiguration {
 
             http.logout(logout ->
                     logout
+                            .addLogoutHandler(TokenUtils.tokenLogoutHandler())
                             .logoutRequestMatcher(new AntPathRequestMatcher("logout", "GET"))
                             .permitAll()
             );
@@ -68,7 +73,7 @@ public class SecurityConfiguration {
         }
     }
 
-    @Configuration
+    //    @Configuration
     public static class DistrSecurityConfiguration extends Support {
         public DistrSecurityConfiguration(UserDetailsService distrUserDetailsServiceImpl, PasswordEncoder passwordEncoder) {
             super(distrUserDetailsServiceImpl, passwordEncoder);
@@ -76,18 +81,22 @@ public class SecurityConfiguration {
 
         @Override
         protected void customConfigure(HttpSecurity http) throws Exception {
-            http
-                    .antMatcher("/api/**")
-                    .authorizeRequests()
-                    .antMatchers("/api/**")
-//                    .anyRequest()
-                    .hasRole("DISTR")
-                    .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .loginProcessingUrl("/distr/login")
-                    .permitAll()
-            ;
+            http.antMatcher("/distr/**");
+
+            http.addFilterAfter(new OptionsRequestFilter(), CorsFilter.class);
+
+            http.authorizeRequests(authorizeRequests ->
+                    authorizeRequests
+                            .anyRequest().hasRole("DISTR")
+            );
+
+
+//            http.formLogin(formLogin ->
+//                    formLogin
+//                            .loginPage("/distr/login")
+//                            .loginProcessingUrl("/distr/login")
+//                            .permitAll()
+//            );
         }
     }
 

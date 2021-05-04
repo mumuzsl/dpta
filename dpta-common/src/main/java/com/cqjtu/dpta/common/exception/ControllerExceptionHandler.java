@@ -1,9 +1,11 @@
 package com.cqjtu.dpta.common.exception;
 
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.cqjtu.dpta.common.redis.RedisDisabledException;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.ResultUtils;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -24,7 +26,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result handleException(Exception e) {
-        return Result.fail(e.getMessage());
+        return Result.fail(e.toString());
     }
 
     @ExceptionHandler(OptionException.class)
@@ -37,5 +39,11 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public Result handleOrderException(BadRequestException e) {
         return Result.fail(e.getMessage());
+    }
+
+    @ExceptionHandler(JWTVerificationException.class)
+    @ResponseBody
+    public Result handleJWTVerificationException(JWTVerificationException e) {
+        return Result.fail("token无效");
     }
 }

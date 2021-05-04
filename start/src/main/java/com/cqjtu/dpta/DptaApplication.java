@@ -13,7 +13,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @author mumu
  * @date 2021/3/3 22:28
  */
-@SpringBootApplication(scanBasePackages = {"com.cqjtu"})
+@SpringBootApplication
 @EnableScheduling
 public class DptaApplication {
     public static void main(String[] args) {

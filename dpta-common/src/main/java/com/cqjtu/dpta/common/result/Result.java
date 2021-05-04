@@ -87,7 +87,6 @@ public class Result<T> implements Serializable {
      * @return
      */
     public static <T> Result<T> fail(T data) {
-        Result<T> result = build(data);
         return build(data, ResultCodeEnum.FAIL);
     }
 

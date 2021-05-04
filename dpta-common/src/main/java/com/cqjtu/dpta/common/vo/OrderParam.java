@@ -10,7 +10,7 @@ import java.util.List;
  * date: 2021/4/22
  */
 @Data
-public class OrderVo {
+public class OrderParam {
 
     private Long shopId;
 

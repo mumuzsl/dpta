@@ -22,4 +22,8 @@ public class BigUser extends User {
     public Long getId() {
         return id;
     }
+
+    public BigUser getBigUser() {
+        return this;
+    }
 }
