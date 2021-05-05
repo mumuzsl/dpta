@@ -32,6 +32,7 @@ public interface PafCommMapper extends BaseMapper<PafComm> {
      */
     List<ShopTop> getShopTop();
 
+
     /**
      * 返回分销商收入前十
      */
