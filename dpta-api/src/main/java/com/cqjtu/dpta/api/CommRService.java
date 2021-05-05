@@ -5,6 +5,8 @@ import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.api.support.CrudService;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
  * <p>
  * 佣金规则表 服务类
@@ -16,4 +18,10 @@ import org.springframework.data.domain.Pageable;
 public interface CommRService extends CrudService<CommR> {
 
     IPage<CommR> bindSort(Pageable pageable);
+
+    /**
+     * 返回佣金规则
+     * @return
+     */
+    List<CommR> getAllCommR();
 }

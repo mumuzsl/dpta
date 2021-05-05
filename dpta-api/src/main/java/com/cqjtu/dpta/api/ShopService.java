@@ -16,5 +16,7 @@ import org.springframework.data.domain.Pageable;
  */
 public interface ShopService extends CrudService<Shop> {
 
+    public int countShop();
+
     IPage<PafComm> getInsellComms(Pageable pageable, long distrId, Long shopId);
 }

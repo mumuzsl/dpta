@@ -30,12 +30,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * @author 13
- * @qq交流群 796794009
- * @email 2449207463@qq.com
- * @link https://github.com/newbee-ltd
- */
 @Controller
 @RequestMapping("/admin")
 public class NewBeeMallGoodsController {
@@ -193,6 +187,25 @@ public class NewBeeMallGoodsController {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult(result);
+        }
+    }
+
+    /**
+     *删除
+     */
+    @RequestMapping(value = "/goods/delete",method = RequestMethod.POST)
+    @ResponseBody
+    public Result delete(@RequestBody Long[] ids){
+        System.out.println(ids.length);
+        if (ids.length< 1) {
+            return ResultGenerator.genFailResult("参数异常");
+        }
+        if (newBeeMallGoodsService.deleteBatch(ids)) {
+            System.out.println("jinru");
+            System.out.println(ResultGenerator.genSuccessResult());
+            return ResultGenerator.genSuccessResult();
+        }else {
+            return ResultGenerator.genFailResult("删除失败");
         }
     }
 

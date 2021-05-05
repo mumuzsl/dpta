@@ -12,6 +12,8 @@ import ltd.newbee.mall.entity.NewBeeMallOrder;
 import ltd.newbee.mall.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 public interface NewBeeMallOrderMapper {
@@ -40,4 +42,26 @@ public interface NewBeeMallOrderMapper {
     int closeOrder(@Param("orderIds") List<Long> orderIds, @Param("orderStatus") int orderStatus);
 
     int checkDone(@Param("orderIds") List<Long> asList);
+
+    /**
+     * 获取某一天订单数
+     * @param d
+     * @return
+     */
+    Integer oneDayOrderSum(@Param("d") String d);
+
+    /**
+     * 获取所有订单详情
+     */
+    List<NewBeeMallOrder> allOrder();
+
+    /**
+     * 订单总数
+     */
+    Integer orderSum();
+
+    /**
+     * 返回退款数
+     */
+    Integer rOrderSum();
 }

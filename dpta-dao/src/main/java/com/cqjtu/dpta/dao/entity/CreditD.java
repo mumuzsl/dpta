@@ -1,7 +1,6 @@
 package com.cqjtu.dpta.dao.entity;
 
 import java.math.BigDecimal;
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
@@ -28,7 +27,7 @@ public class CreditD implements Serializable {
     /**
      * 流水编码
      */
-    @TableId(value = "D_CRE_ID", type = IdType.AUTO)
+    @TableId("D_CRE_ID")
     private Long dCreId;
 
     /**
@@ -52,7 +51,7 @@ public class CreditD implements Serializable {
     /**
      * 订单编码
      */
-    @TableField("DEAL_ID")
+    @TableField("DEAl_ID")
     private Long dealId;
 
     /**

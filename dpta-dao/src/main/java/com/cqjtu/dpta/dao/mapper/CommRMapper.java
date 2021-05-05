@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 佣金规则表 Mapper 接口
@@ -21,4 +23,10 @@ public interface CommRMapper extends BaseMapper<CommR> {
      * @return
      */
     IPage<CommR> bindSort(Page<?> page);
+
+    /**
+     * 返回佣金规则
+     * @return
+     */
+    List<CommR> getAllCommR();
 }

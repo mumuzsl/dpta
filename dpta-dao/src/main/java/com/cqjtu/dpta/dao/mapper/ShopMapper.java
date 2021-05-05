@@ -17,6 +17,8 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface ShopMapper extends BaseMapper<Shop> {
 
+    public int countShop();
+
     IPage<PafComm> getComms(Page<?> page,
                             @Param("distrId") Long distrId,
                             @Param("shopId") Long shopId,

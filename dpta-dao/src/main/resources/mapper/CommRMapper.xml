@@ -11,4 +11,7 @@
             as t2 on t1.R_COMM_ID = t2.R_COMM_ID
         ORDER BY comm_count desc
     </select>
+    <select id="getAllCommR" resultType="com.cqjtu.dpta.dao.entity.CommR">
+        select * from dpta.t_comm_r c where c.STATE = 1;
+    </select>
 </mapper>

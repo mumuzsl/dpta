@@ -71,6 +71,18 @@
                         </p>
                     </a>
                 </li>
+
+                <li class="nav-header">平台模块</li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/plat_analysis}"
+                       th:class="${path}=='plat_analysis.html'?'nav-link active':'nav-link'">
+                        <i class="fa fa-list-alt nav-icon" aria-hidden="true"></i>
+                        <p>
+                            平台分析
+                        </p>
+                    </a>
+                </li>
+
                 <li class="nav-header">管理模块</li>
                 <li class="nav-item">
                     <a th:href="@{/admin/categories?parentId=0&categoryLevel=1&backParentId=0}"
@@ -105,6 +117,21 @@
                         </p>
                     </a>
                 </li>
+<!--                <li class="nav-header">商家</li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a th:href=""-->
+<!--                        th:class="">-->
+<!--                        <i class="fa fa-archive nav-icon"></i>-->
+<!--                        <p>商家管理</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+<!--                <li class="nav-item">-->
+<!--                    <a th:href=""-->
+<!--                        th:class="">-->
+<!--                        <i class="fa fa-money nav-icon"></i>-->
+<!--                        <p>分销配置</p>-->
+<!--                    </a>-->
+<!--                </li>-->
                 <li class="nav-header">系统管理</li>
                 <li class="nav-item">
                     <a th:href="@{/admin/profile}"

@@ -33,4 +33,9 @@ public interface OrderDMapper extends BaseMapper<OrderD> {
      * @return
      */
     CommR getCommR(@Param("comm_id") Long comm_id);
+
+    /**
+     * 返回订单数
+     */
+    Long getOrderSum();
 }
