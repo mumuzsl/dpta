@@ -1,5 +1,7 @@
 package com.cqjtu.dpta.api;
 
+import com.cqjtu.dpta.common.util.PageQueryUtil;
+import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.dao.entity.TaxR;
 import com.cqjtu.dpta.api.support.CrudService;
 
@@ -20,4 +22,6 @@ public interface TaxRService extends CrudService<TaxR> {
      * @return
      */
     TaxR getTaxR (BigDecimal amount);
+
+    PageResult getList(PageQueryUtil pageUtil);
 }

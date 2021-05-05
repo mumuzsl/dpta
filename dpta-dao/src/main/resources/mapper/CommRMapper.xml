@@ -11,4 +11,10 @@
             as t2 on t1.R_COMM_ID = t2.R_COMM_ID
         ORDER BY comm_count desc
     </select>
+    <select id="getAll" resultType="com.cqjtu.dpta.dao.entity.CommR">
+        select * from t_comm_r
+    </select>
+    <select id="getByNm" resultType="com.cqjtu.dpta.dao.entity.CommR">
+        select * from t_comm_r where R_COMM_NM like concat("%",#{name},"%")
+    </select>
 </mapper>

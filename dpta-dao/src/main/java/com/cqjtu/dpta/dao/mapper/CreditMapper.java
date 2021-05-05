@@ -2,9 +2,14 @@ package com.cqjtu.dpta.dao.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.common.extension.SearchPage;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
+import com.cqjtu.dpta.common.vo.CreditVo;
+import com.cqjtu.dpta.common.vo.DealVo;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -32,4 +37,10 @@ public interface CreditMapper extends BaseMapper<Credit> {
      * @return
      */
     IPage<Credit> applyByDistrNm(SearchPage<?> page, @Param("state") Integer state);
+
+    List<CreditVo> getByNm(PageQueryUtil pageUtil, @Param("name") String name);
+
+    List<CreditVo> getByNm1(PageQueryUtil pageUtil, @Param("name") String name);
+
+    List<DealVo> getRecords(PageQueryUtil pageUtil, @Param("suppId") Long suppId, @Param("distrId") Long distrId);
 }

@@ -1,10 +1,14 @@
 package com.cqjtu.dpta.dao.entity;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -26,7 +30,7 @@ public class DistrLevel implements Serializable {
     /**
      * 等级编码
      */
-    @TableId("LEVEL_ID")
+    @TableId(value = "LEVEL_ID", type = IdType.AUTO)
     private Long levelId;
 
     /**
@@ -41,5 +45,12 @@ public class DistrLevel implements Serializable {
     @TableField("YIELD")
     private BigDecimal yield;
 
+    @TableField("SettledM")
+    private Integer settledM;
 
+    @TableField("PafP")
+    private  BigDecimal pafP;
+
+    @TableField("UpdateTm")
+    private LocalDateTime updateTm;
 }
