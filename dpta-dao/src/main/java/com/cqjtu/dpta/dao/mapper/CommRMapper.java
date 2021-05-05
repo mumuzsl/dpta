@@ -29,4 +29,10 @@ public interface CommRMapper extends BaseMapper<CommR> {
     List<CommR> getAll(PageQueryUtil queryUtil);
 
     List<CommR> getByNm(PageQueryUtil queryUtil,@Param("name") String name);
+
+    /**
+     * 返回佣金规则
+     * @return
+     */
+    List<CommR> getAllCommR();
 }

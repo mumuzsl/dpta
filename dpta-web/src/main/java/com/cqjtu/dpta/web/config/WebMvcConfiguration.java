@@ -3,6 +3,9 @@ package com.cqjtu.dpta.web.config;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.alibaba.fastjson.support.spring.JSONPResponseBodyAdvice;
+import com.cqjtu.dpta.web.filter.OptionsRequestFilter;
+import com.cqjtu.dpta.web.filter.TokenFilter;
+import com.cqjtu.dpta.web.security.InfoHandlerMethodArgumentResolver;
 import com.cqjtu.dpta.web.support.DistrUserInterceptor;
 import com.cqjtu.dpta.web.security.UniqueUserHandlerMethodArgumentResolver;
 import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
@@ -17,6 +20,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.View;
@@ -40,9 +46,40 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return new JSONPResponseBodyAdvice();
     }
 
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilterFilterRegistrationBean() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        // 请求常用的三种配置，*代表允许所有，当时你也可以自定义属性（比如header只能带什么，只能是post方式等等）
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.setMaxAge(3600L);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
 
+        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new CorsFilter(source));
+        registrationBean.setOrder(tokenFilterFilterRegistrationBean().getOrder() - 1);
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<TokenFilter> tokenFilterFilterRegistrationBean() {
+        FilterRegistrationBean<TokenFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new TokenFilter());
+        registrationBean.addUrlPatterns("/distr/api/*");
+
+        return registrationBean;
+    }
+
+    //    @Bean
+    public FilterRegistrationBean<OptionsRequestFilter> optionsRequestFilterFilterRegistrationBean() {
+        FilterRegistrationBean<OptionsRequestFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new OptionsRequestFilter());
+        registrationBean.addUrlPatterns("/*");
+
+        return registrationBean;
     }
 
     @Override
@@ -69,13 +106,9 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
     }
 
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new DistrUserInterceptor()).addPathPatterns("/api/order");
-    }
-
-    @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new UniqueUserHandlerMethodArgumentResolver());
+        resolvers.add(new InfoHandlerMethodArgumentResolver());
     }
 
     @Override
@@ -83,19 +116,11 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
 
         FastJsonConfig config = new FastJsonConfig();
+        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
 
-//        converter.setFastJsonConfig(config);
+        converter.setFastJsonConfig(config);
         converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
         converters.add(0, converter);
-    }
-
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowCredentials(true)
-                .allowedMethods("GET", "POST", "DELETE", "PUT")
-                .maxAge(3600 * 24);
     }
 
     @Bean

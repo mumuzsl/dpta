@@ -12,6 +12,7 @@ import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.entity.MallUser;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
+import org.apache.ibatis.annotations.Param;
 
 import javax.servlet.http.HttpSession;
 
@@ -59,4 +60,16 @@ public interface NewBeeMallUserService {
      * @return
      */
     Boolean lockUsers(Integer[] ids, int lockStatus);
+
+    /**
+     * 返回某一天新用户的人数
+     * @param d
+     * @return
+     */
+    Integer oneDayPeopleSum(@Param("d") String d);
+
+    /**
+     * 返回总店铺数
+     */
+    Integer shopSum();
 }

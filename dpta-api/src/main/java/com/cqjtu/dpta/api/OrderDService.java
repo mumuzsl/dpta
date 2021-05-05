@@ -30,4 +30,9 @@ public interface OrderDService extends CrudService<OrderD> {
      * @return
      */
     CommR getCommR(Long comm_id);
+
+    /**
+     * 返回订单数
+     */
+    Long getOrderSum();
 }

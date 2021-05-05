@@ -28,4 +28,10 @@ public interface CommRService extends CrudService<CommR> {
     int delList(List<Long> ids);
 
     PageResult getPafComm(PageQueryUtil pageUtil, Long id);
+
+    /**
+     * 返回佣金规则
+     * @return
+     */
+    List<CommR> getAllCommR();
 }

@@ -3,7 +3,9 @@ package com.cqjtu.dpta.web.service;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
+import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.DistrUserService;
+import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.web.support.BigUser;
 import org.springframework.security.config.core.GrantedAuthorityDefaults;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -32,6 +35,8 @@ import java.util.Set;
 public class DistrUserDetailsServiceImpl extends AbstractUserDetailsService {
     @Resource
     private DistrUserService distrUserService;
+    @Resource
+    private DistrService distrService;
 
     private static final String[] ROLES = {"DISTR"};
 
@@ -47,9 +52,10 @@ public class DistrUserDetailsServiceImpl extends AbstractUserDetailsService {
                 .eq(DistrUser::getUsername, username)
                 .oneOpt()
                 .orElseThrow(() -> new UsernameNotFoundException("username not exists"));
-        return new BigUser(distrUser.getId(), distrUser.getUsername(), distrUser.getPassword(), getAuthorities());
+        distrUser.setLastLoginTime(LocalDateTime.now());
+        distrUserService.updateById(distrUser);
+        return new BigUser(distrUser.getDistrId(), distrUser.getUsername(), distrUser.getPassword(), getAuthorities());
     }
-
 
 }
 

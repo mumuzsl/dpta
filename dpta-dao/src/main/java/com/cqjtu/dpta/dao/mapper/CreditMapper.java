@@ -7,6 +7,7 @@ import com.cqjtu.dpta.common.vo.CreditVo;
 import com.cqjtu.dpta.common.vo.DealVo;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cqjtu.dpta.dao.entity.Distr;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -20,6 +21,16 @@ import java.util.List;
  * @since 2021-04-06
  */
 public interface CreditMapper extends BaseMapper<Credit> {
+
+
+    IPage<Credit> pageByDistrAndState(@Param("page") SearchPage<?> page,
+                                      @Param("distrId") Long distrId,
+                                      @Param("state") Integer state);
+
+    IPage<Distr> pageBySuppAndState(@Param("page") SearchPage<?> page,
+                                    @Param("suppId") Long suppId,
+                                    @Param("state") Integer state);
+
     /**
      * 根据供应商名称和授信状态搜索授信
      *
@@ -36,8 +47,7 @@ public interface CreditMapper extends BaseMapper<Credit> {
      * @param state
      * @return
      */
-    IPage<Credit> applyByDistrNm(SearchPage<?> page, @Param("state") Integer state);
-
+    IPage<Credit> applyByDistrNm(@Param("page") SearchPage<?> page, @Param("state") Integer state);
     List<CreditVo> getByNm(PageQueryUtil pageUtil, @Param("name") String name);
 
     List<CreditVo> getByNm1(PageQueryUtil pageUtil, @Param("name") String name);

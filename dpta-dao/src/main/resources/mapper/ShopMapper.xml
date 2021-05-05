@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqjtu.dpta.dao.mapper.ShopMapper">
 
+    <update id="countShop" parameterType="int">
+        select count(*) from t_shop
+    </update>
+
+    <select id="getComms" resultType="com.cqjtu.dpta.dao.entity.PafComm">
+        select *
+        from t_shp_comm tsc
+                 inner join t_shop ts on tsc.SHOP_ID = ts.SHOP_ID and ts.DISTR_ID = #{distrId} and ts.SHOP_ID = #{shopId}
+                 inner join t_paf_comm tpc on tsc.COMM_ID = tpc.COMM_ID and tsc.STATE = #{state}
+    </select>
+
 </mapper>

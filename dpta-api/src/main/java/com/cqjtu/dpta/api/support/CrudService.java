@@ -33,15 +33,15 @@ public interface CrudService<T> extends IService<T> {
         return pageMaps(convert(pageable), queryWrapper);
     }
 
-    default <E> IPage<E> convert(Pageable pageable, Class<E> e) {
-        return new Page<>(pageable.getPageNumber(), pageable.getPageSize());
-    }
-
     default <E> IPage<E> convert(Pageable pageable) {
         return new Page<E>(pageable.getPageNumber(), pageable.getPageSize());
     }
 
-    default Page<?> toPage(Pageable pageable) {
-        return new Page<>(pageable.getPageNumber(), pageable.getPageSize());
+    default Page<T> toPage(Pageable pageable) {
+        return new Page<T>(pageable.getPageNumber(), pageable.getPageSize());
+    }
+
+    default Page<T> transform(Pageable pageable) {
+        return new Page<T>(pageable.getPageNumber(), pageable.getPageSize());
     }
 }

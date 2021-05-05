@@ -1,7 +1,10 @@
 package com.cqjtu.dpta.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.api.support.CrudService;
+import org.springframework.data.domain.Pageable;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.cqjtu.dpta.api.support.CrudService;
  */
 public interface ShopService extends CrudService<Shop> {
 
+    public int countShop();
+
+    IPage<PafComm> getInsellComms(Pageable pageable, long distrId, Long shopId);
 }

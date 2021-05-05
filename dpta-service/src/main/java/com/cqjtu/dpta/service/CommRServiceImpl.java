@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+
 import java.util.List;
 
 /**
@@ -70,6 +71,11 @@ public class CommRServiceImpl extends ServiceImpl<CommRMapper, CommR> implements
         List<PafComm> list = pafCommService.list(wrapper);
         PageResult pageResult = new PageResult(list, list.size(), pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
+    }
+
+    @Override
+    public List<CommR> getAllCommR() {
+        return baseMapper.getAllCommR();
     }
 
 }

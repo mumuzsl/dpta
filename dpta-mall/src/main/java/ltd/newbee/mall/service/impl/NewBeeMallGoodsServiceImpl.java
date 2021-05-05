@@ -16,10 +16,10 @@ import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.List;
 @Service
 public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
 
-    @Autowired
+    @Resource
     private NewBeeMallGoodsMapper goodsMapper;
 
     @Override
@@ -45,6 +45,27 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
         }
         return ServiceResultEnum.DB_ERROR.getResult();
     }
+
+    @Override
+    public Boolean deleteByPrimaryKey(Long[] goodsId) {
+        return null;
+    }
+
+    @Override
+    public Boolean deleteBatch(Long[] ids) {
+        if (ids.length < 1) {
+            return false;
+        }
+        //删除数据
+        return goodsMapper.deleteBatch(ids) > 0;
+    }
+
+//    @Override
+//    public Boolean deleteByPrimaryKey(Long[] goodsId) {
+//        if(goodsId.length<1)
+//            return false;
+//        return goodsMapper.deleteByPrimaryKey(goodsId) > 0;
+//    }
 
     @Override
     public void batchSaveNewBeeMallGoods(List<NewBeeMallGoods> newBeeMallGoodsList) {
@@ -75,6 +96,15 @@ public class NewBeeMallGoodsServiceImpl implements NewBeeMallGoodsService {
     public Boolean batchUpdateSellStatus(Long[] ids, int sellStatus) {
         return goodsMapper.batchUpdateSellStatus(ids, sellStatus) > 0;
     }
+
+//    @Override
+//    public Boolean deleteBatch(Integer[] ids){
+//        if (ids.length<1){
+//            return false;
+//        }
+//        //删除数据
+//        return goodsMapper.deleteBatch(ids)>0;
+//    }
 
     @Override
     public PageResult searchNewBeeMallGoods(PageQueryUtil pageUtil) {
