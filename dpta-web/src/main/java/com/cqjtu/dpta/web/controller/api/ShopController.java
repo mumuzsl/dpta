@@ -1,12 +1,11 @@
 package com.cqjtu.dpta.web.controller.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.ShopService;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.web.support.Info;
+import com.cqjtu.dpta.common.web.Info;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * <p>

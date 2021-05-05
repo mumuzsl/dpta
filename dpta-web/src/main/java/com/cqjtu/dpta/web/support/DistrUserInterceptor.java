@@ -2,26 +2,14 @@ package com.cqjtu.dpta.web.support;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cqjtu.dpta.api.DistrUserService;
-import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrUser;
-import com.cqjtu.dpta.web.security.TokenUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.core.MethodParameter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.Optional;
 
 /**
  * author: mumu

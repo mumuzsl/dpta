@@ -1,28 +1,27 @@
 package com.cqjtu.dpta.web.controller.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.cqjtu.dpta.api.CreditService;
 import com.cqjtu.dpta.api.DistrAppService;
 import com.cqjtu.dpta.api.DistrLevelService;
-import com.cqjtu.dpta.api.support.CrudService;
+import com.cqjtu.dpta.api.DistrService;
+import com.cqjtu.dpta.api.DistrUserService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.Credit;
+import com.cqjtu.dpta.common.vo.DistrVo;
 import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrApp;
 import com.cqjtu.dpta.dao.entity.DistrLevel;
+import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.web.support.ControllerUtils;
-import com.cqjtu.dpta.web.support.Info;
 import com.cqjtu.dpta.web.support.Options;
 import com.cqjtu.dpta.web.support.OptionsUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,12 +38,15 @@ public class PublicApiController {
 
     @Resource
     private DistrAppService distrAppService;
-
     @Resource
     private DistrLevelService distrLevelService;
-
     @Resource
     private CreditService creditService;
+    @Resource
+    private DistrUserService distrUserService;
+    @Resource
+    private DistrService distrService;
+
 
     private static final String[] COLUMNS = {"APP_ID"};
 
@@ -74,4 +76,18 @@ public class PublicApiController {
         return Result.ok(page);
     }
 
+    @GetMapping("distr")
+    public Result getDistr(@RequestParam("username") Long username) {
+        DistrUser distrUser = distrUserService
+                .lambdaQuery()
+                .eq(DistrUser::getUsername, username)
+                .one();
+        Distr distr = distrService
+                .lambdaQuery()
+                .eq(Distr::getDistrId, distrUser.getDistrId())
+                .one();
+        DistrVo distrVo = new DistrVo();
+        BeanUtils.copyProperties(distr, distrVo);
+        return Result.ok(distrVo);
+    }
 }

@@ -55,5 +55,8 @@ public class DistrUser implements Serializable {
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 
-
+    /**
+     * 上次登录时间
+     */
+    private LocalDateTime lastLoginTime;
 }

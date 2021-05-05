@@ -1,4 +1,4 @@
-package com.cqjtu.dpta.web.security;
+package com.cqjtu.dpta.common.util;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.LocalDateTimeUtil;
@@ -6,9 +6,6 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.cqjtu.dpta.dao.entity.User;
-import com.cqjtu.dpta.web.support.BigUser;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
@@ -30,7 +27,7 @@ import java.util.Locale;
  * date: 2021/4/29
  */
 public abstract class TokenUtils {
-    private static final long EXPIRES_STEP = DateUtils.MILLIS_PER_HOUR;
+    private static final long EXPIRES_STEP = 3600 * 1000;
     private static final String TOKEN_NAME = "token";
     private static final String TOKEN_HEADER_NAME = "X-Token";
     private static LogoutHandler logoutHandler = new CookieClearingLogoutHandler(TOKEN_NAME);
@@ -75,11 +72,6 @@ public abstract class TokenUtils {
 
     public static long longId(Object token) {
         return Long.parseLong(subject(token));
-    }
-
-
-    public static String create(User user) {
-        return create(user.getId().toString(), user.getPasswd());
     }
 
     public static <T> String create(T userId, String password) {

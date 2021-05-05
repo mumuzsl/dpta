@@ -56,6 +56,8 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
         return ServiceResultEnum.DB_ERROR.getResult();
     }
 
+
+
     @Override
     public String login(String loginName, String passwordMD5, HttpSession httpSession) {
         MallUser user = mallUserMapper.selectByLoginNameAndPasswd(loginName, passwordMD5);

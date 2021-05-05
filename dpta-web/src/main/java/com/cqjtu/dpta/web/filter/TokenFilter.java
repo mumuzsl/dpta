@@ -1,28 +1,19 @@
 package com.cqjtu.dpta.web.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.Order;
-import com.cqjtu.dpta.web.security.TokenUtils;
-import org.apache.catalina.Host;
+import com.cqjtu.dpta.common.result.ResultCodeEnum;
+import com.cqjtu.dpta.common.util.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
-import java.util.Enumeration;
-import java.util.Locale;
 
 /**
  * author: mumu
@@ -42,6 +33,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 TokenUtils.verifier().verify(token);
                 TokenUtils.setAttribute(request, token);
                 filterChain.doFilter(request, response);
+                return;
             } catch (JWTVerificationException e) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("token veify failure");
@@ -50,5 +42,7 @@ public class TokenFilter extends OncePerRequestFilter {
         }
 
         response.setStatus(HttpStatus.FORBIDDEN.value());
+        response.setContentType("application/json");
+        response.getWriter().write(JSON.toJSONString(Result.build(ResultCodeEnum.USER_NO_OR_IllEGAL_TOKEN)));
     }
 }

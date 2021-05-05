@@ -1,20 +1,14 @@
 package com.cqjtu.dpta.web.controller.api;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.api.CreditService;
 import com.cqjtu.dpta.api.DealService;
-import com.cqjtu.dpta.common.exception.BadRequestException;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.common.util.DptaUtils;
-import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.dao.entity.Credit;
-import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.web.support.ControllerUtils;
-import com.cqjtu.dpta.web.support.Info;
-import org.apache.commons.lang3.StringUtils;
+import com.cqjtu.dpta.common.web.Info;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;

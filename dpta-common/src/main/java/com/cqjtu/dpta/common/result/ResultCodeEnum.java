@@ -45,9 +45,13 @@ public enum ResultCodeEnum {
     STOCK_ERROR(4002, "库存不足"),
     OUT_SELL_ERROR(4003, "商品下架"),
 
-    USER_NOT_FOUNT_USER(5001, "没有该用户"),
-    USER_LOGIN_PARAM_ERROR(5002, "用户名或密码格式不正确"),
-    USER_PASSWORD_NOT_MATCH(5003, "密码不正确"),
+    USER_ERROR(50000, "与用户相关的错误"),
+    USER_NOT_FOUNT_USER(50001, "没有该用户"),
+    USER_LOGIN_PARAM_ERROR(50002, "用户名或密码格式不正确"),
+    USER_PASSWORD_NOT_MATCH(50003, "密码不正确"),
+    USER_REGISTERED(50004, "没有token或token无效"),
+    USER_PHONE_ERROR(50005, "无效手机号"),
+    USER_NO_OR_IllEGAL_TOKEN(50008, "没有token或token无效"),
     ;
 
     private Integer code;

@@ -18,7 +18,6 @@
         <module>dpta-common</module>
         <module>dpta-mall</module>
         <module>dpta-cms</module>
-        <module>dpta-cms</module>
     </modules>
 
     <properties>

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -53,4 +54,5 @@ public class IndexController {
         request.setAttribute("recommendGoodses", recommendGoodses);//推荐商品
         return "mall/index";
     }
+
 }

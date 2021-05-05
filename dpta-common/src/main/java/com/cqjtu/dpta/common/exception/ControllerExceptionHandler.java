@@ -26,7 +26,8 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result handleException(Exception e) {
-        return Result.fail(e.toString());
+        e.printStackTrace();
+        return Result.build(ResultCodeEnum.SERVICE_ERROR);
     }
 
     @ExceptionHandler(OptionException.class)
