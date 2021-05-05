@@ -27,4 +27,7 @@
         t1.comm_id = #{comm_id}
         AND t1.r_comm_id = t2.r_comm_id
     </select>
+    <select id="getOrderSum" resultType="java.lang.Long">
+        select count(id) from dpta.t_order_d
+    </select>
 </mapper>

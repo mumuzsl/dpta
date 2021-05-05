@@ -294,4 +294,7 @@
     <select id="orderSum" resultType="java.lang.Integer">
         select count(*) from newbee_mall_db.tb_newbee_mall_order
     </select>
+    <select id="rOrderSum" resultType="java.lang.Integer">
+        select count(*) from newbee_mall_db.tb_newbee_mall_order where order_status = -1
+    </select>
 </mapper>

@@ -42,4 +42,9 @@ public class OrderDServiceImpl extends ServiceImpl<OrderDMapper, OrderD> impleme
     public CommR getCommR(Long comm_id) {
         return baseMapper.getCommR(comm_id);
     }
+
+    @Override
+    public Long getOrderSum() {
+        return baseMapper.getOrderSum();
+    }
 }

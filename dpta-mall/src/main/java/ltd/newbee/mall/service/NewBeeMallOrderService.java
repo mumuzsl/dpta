@@ -133,4 +133,9 @@ public interface NewBeeMallOrderService {
      * 订单总数
      */
     Integer orderSum();
+
+    /**
+     * 返回退款数
+     */
+    Integer rOrderSum();
 }

@@ -403,4 +403,9 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
     public Integer orderSum() {
         return newBeeMallOrderMapper.orderSum();
     }
+
+    @Override
+    public Integer rOrderSum() {
+        return newBeeMallOrderMapper.rOrderSum();
+    }
 }

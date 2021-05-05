@@ -59,4 +59,9 @@ public interface NewBeeMallOrderMapper {
      * 订单总数
      */
     Integer orderSum();
+
+    /**
+     * 返回退款数
+     */
+    Integer rOrderSum();
 }
