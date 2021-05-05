@@ -26,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/platform/api/distr-app")
-public class DistrAppController {
+public class PlatformDistrAppController {
 
     @Resource
     private DistrAppService distrAppService;

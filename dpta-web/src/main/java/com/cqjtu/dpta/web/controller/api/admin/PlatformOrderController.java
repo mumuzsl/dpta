@@ -8,12 +8,10 @@ import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.util.ResultUtils;
+import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.dao.entity.OrderD;
 import com.cqjtu.dpta.web.security.CheckParam;
-import com.cqjtu.dpta.web.security.DefaultUserChecker;
-import com.cqjtu.dpta.web.security.UserCheck;
-import com.cqjtu.dpta.web.support.UserIdChecker;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +32,12 @@ public class PlatformOrderController {
 
     @Resource
     private OrderDService orderDService;
+
+    @GetMapping("full/{orderId}")
+    public Result<OrderDto> full(@PathVariable Long orderId) {
+        OrderDto orderDto = orderService.getFullOrderDto(orderId);
+        return Result.ok(orderDto);
+    }
 
     /**
      * 根据订单id修改订单状态

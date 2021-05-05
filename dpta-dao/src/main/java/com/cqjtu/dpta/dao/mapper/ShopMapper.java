@@ -1,7 +1,11 @@
 package com.cqjtu.dpta.dao.mapper;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.Shop;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * <p>
@@ -14,4 +18,10 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 public interface ShopMapper extends BaseMapper<Shop> {
 
     public int countShop();
+
+    IPage<PafComm> getComms(Page<?> page,
+                            @Param("distrId") Long distrId,
+                            @Param("shopId") Long shopId,
+                            @Param("state") Integer state);
+
 }

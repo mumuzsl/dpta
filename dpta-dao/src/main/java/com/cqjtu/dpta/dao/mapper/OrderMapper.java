@@ -1,7 +1,10 @@
 package com.cqjtu.dpta.dao.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cqjtu.dpta.common.extension.SearchPage;
+import com.cqjtu.dpta.dao.dto.OrderDDto;
+import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,6 +20,19 @@ import java.util.List;
  * @since 2021-04-06
  */
 public interface OrderMapper extends BaseMapper<Order> {
+    List<OrderDDto> getFullDetail(Long id);
+
+    IPage<OrderDto> pageHalfOrderDto(Page<?> page, @Param("distrId") Long distrIdd);
+
+    OrderDto getFullOrderDto(Long id);
+
+    IPage<OrderDto> pageByDistrAndShop(@Param("pg") SearchPage<?> page, @Param("distrId") Long distrId);
+
+    IPage<OrderDto> pageByDistrAndComm(@Param("pg") SearchPage<?> page, @Param("distrId") Long distrId);
+
+    IPage<OrderDto> pageByDistrAndState(@Param("pg") SearchPage<?> page, @Param("distrId") Long distrId);
+
+    IPage<Order> pageByDistr(Page<?> page, @Param("distrId") Long distrId);
 
     /**
      * 获取分销商id
@@ -59,6 +75,7 @@ public interface OrderMapper extends BaseMapper<Order> {
 
     /**
      * 根据分销商编码获取分销商名下店铺的所有已核销订单
+     *
      * @param distr_id 分销商编码
      * @return
      */

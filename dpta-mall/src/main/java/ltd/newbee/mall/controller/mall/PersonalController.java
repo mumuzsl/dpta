@@ -8,6 +8,11 @@
  */
 package ltd.newbee.mall.controller.mall;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
+import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.common.web.LoginParam;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
@@ -23,16 +28,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class PersonalController {
-
     @Resource
     private NewBeeMallUserService newBeeMallUserService;
+    @Resource
+    private RestTemplate restTemplate;
 
     @GetMapping("/personal")
     public String personalPage(HttpServletRequest request,
@@ -67,7 +76,8 @@ public class PersonalController {
     public Result login(@RequestParam("loginName") String loginName,
                         @RequestParam("verifyCode") String verifyCode,
                         @RequestParam("password") String password,
-                        HttpSession httpSession) {
+                        HttpSession httpSession,
+                        HttpServletResponse response) {
         if (StringUtils.isEmpty(loginName)) {
             return ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_NAME_NULL.getResult());
         }
@@ -81,14 +91,38 @@ public class PersonalController {
         if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.toLowerCase().equals(kaptchaCode)) {
             return ResultGenerator.genFailResult(ServiceResultEnum.LOGIN_VERIFY_CODE_ERROR.getResult());
         }
+
         //todo 清verifyCode
         String loginResult = newBeeMallUserService.login(loginName, MD5Util.MD5Encode(password, "UTF-8"), httpSession);
+
+        LoginParam loginParam = new LoginParam();
+        loginParam.setUsername(loginName);
+        loginParam.setPassword(password);
+        com.cqjtu.dpta.common.result.Result<Info> result = postForObject("/distr/login", loginParam, com.cqjtu.dpta.common.web.Info.class);
+
         //登录成功
-        if (ServiceResultEnum.SUCCESS.getResult().equals(loginResult)) {
+        if (ServiceResultEnum.SUCCESS.getResult().equals(loginResult) && isOk(result)) {
+            response.addCookie(new Cookie("token", result.getData().getToken()));
             return ResultGenerator.genSuccessResult();
         }
         //登录失败
-        return ResultGenerator.genFailResult(loginResult);
+        return ResultGenerator.genFailResult(loginResult + " " + result.getMessage());
+    }
+
+    <T> TypeReference<com.cqjtu.dpta.common.result.Result<T>> buildType(Class<T> clazz) {
+        return new TypeReference<com.cqjtu.dpta.common.result.Result<T>>(clazz) {};
+    }
+
+    <T> com.cqjtu.dpta.common.result.Result<T> postForObject(String path, Object request, Class<T> clazz) {
+        String json = restTemplate
+                .postForObject("http://localhost:8080" + path,
+                        request,
+                        String.class);
+        return JSON.parseObject(json, buildType(clazz));
+    }
+
+    boolean isOk(com.cqjtu.dpta.common.result.Result<?> result) {
+        return result != null && result.getCode() == 200;
     }
 
     @PostMapping("/register")
@@ -112,18 +146,24 @@ public class PersonalController {
         }
         //todo 清verifyCode
         String registerResult = newBeeMallUserService.register(loginName, password);
+
+        LoginParam loginParam = new LoginParam();
+        loginParam.setUsername(loginName);
+        loginParam.setPassword(password);
+        com.cqjtu.dpta.common.result.Result<Boolean> result = postForObject("/distr/register", loginParam, Boolean.class);
+
         //注册成功
-        if (ServiceResultEnum.SUCCESS.getResult().equals(registerResult)) {
+        if (ServiceResultEnum.SUCCESS.getResult().equals(registerResult) && isOk(result)) {
             return ResultGenerator.genSuccessResult();
         }
         //注册失败
-        return ResultGenerator.genFailResult(registerResult);
+        return ResultGenerator.genFailResult(registerResult + " " + result.getMessage());
     }
 
     @PostMapping("/personal/updateInfo")
     @ResponseBody
     public Result updateInfo(@RequestBody MallUser mallUser, HttpSession httpSession) {
-        NewBeeMallUserVO mallUserTemp = newBeeMallUserService.updateUserInfo(mallUser,httpSession);
+        NewBeeMallUserVO mallUserTemp = newBeeMallUserService.updateUserInfo(mallUser, httpSession);
         if (mallUserTemp == null) {
             Result result = ResultGenerator.genFailResult("修改失败");
             return result;

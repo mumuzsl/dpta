@@ -27,12 +27,10 @@ public class DistrUser implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Long id;
-
     /**
      * 分销商id
      */
+    @TableId
     private Long distrId;
 
     /**
@@ -57,5 +55,8 @@ public class DistrUser implements Serializable {
     @TableField(fill = FieldFill.UPDATE)
     private LocalDateTime updateTime;
 
-
+    /**
+     * 上次登录时间
+     */
+    private LocalDateTime lastLoginTime;
 }

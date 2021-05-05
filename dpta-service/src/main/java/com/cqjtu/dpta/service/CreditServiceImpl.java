@@ -6,6 +6,7 @@ import com.cqjtu.dpta.common.extension.SearchPage;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.cqjtu.dpta.dao.entity.CreditD;
+import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.mapper.CreditMapper;
 import com.cqjtu.dpta.api.CreditService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -30,6 +31,16 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
     @Resource
     private CreditDService creditDService;
 
+    public IPage<Credit> pageByDistrAndState(Long distrId, Pageable pageable, String keyword, Integer state) {
+        SearchPage<Credit> page = SearchPage.toPage(pageable, keyword);
+        return baseMapper.pageByDistrAndState(page, distrId, state);
+    }
+
+    public IPage<Distr> pageBySuppAndState(Long suppId, Pageable pageable, String keyword, Integer state) {
+        SearchPage<Credit> page = SearchPage.toPage(pageable, keyword);
+        return baseMapper.pageBySuppAndState(page, suppId, state);
+    }
+
     @Override
     public IPage<Credit> applyBySuppNm(Pageable pageable, String keyword, Integer state) {
         SearchPage<Credit> page = SearchPage.toPage(pageable, keyword);
@@ -44,7 +55,8 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
 
     /**
      * 使用授信付款
-     * @param id: 授信编码
+     *
+     * @param id:     授信编码
      * @param amount: 使用金额
      * @param dealId: 订单ID
      * @return 成功返回TRUE，失败返回FALSE
@@ -52,7 +64,7 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
     @Override
     public Boolean useCredit(Long id, Double amount, Long dealId) {
         Credit credit = this.getById(id);
-        if(credit == null){
+        if (credit == null) {
             return false;
         }
         BigDecimal usedAmount = credit.getUsedAmout().add(BigDecimal.valueOf(amount));
@@ -72,14 +84,15 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
 
     /**
      * 恢复授信额度
-     * @param id: 授信编码
+     *
+     * @param id:     授信编码
      * @param amount: 恢复的额度
      * @return 成功返回TRUE，失败返回FALSE
      */
     @Override
     public Boolean renewCredit(Long id, Double amount) {
         Credit credit = this.getById(id);
-        if(credit == null){
+        if (credit == null) {
             return false;
         }
         BigDecimal usedAmount = credit.getUsedAmout().subtract(BigDecimal.valueOf(amount));

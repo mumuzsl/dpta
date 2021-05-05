@@ -17,7 +17,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/platform/api/statis")
-public class StatisController {
+public class PlatformStatisController {
 
     @Resource
     private StatisService statisService;

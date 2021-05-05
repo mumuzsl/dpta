@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cqjtu.dpta.dao.mapper.CreditMapper">
+    <select id="pageByDistrAndState" resultType="com.cqjtu.dpta.dao.entity.Credit">
+        select tc.*
+        from t_credit tc
+                 inner join t_supp ts on tc.SUPP_ID = ts.SUPP_ID
+            and tc.DISTR_ID = #{distrId} and tc.STATE = #{state} and ts.SUPP_NM like concat('%', #{page.keyword}, '%')
+    </select>
+
+    <select id="pageBySuppAndState" resultType="com.cqjtu.dpta.dao.entity.Distr">
+        select td.DISTR_NM, td.LEVEL_ID
+        from t_credit tc
+                 inner join t_distr td on tc.DISTR_ID = td.DISTR_ID
+            and tc.SUPP_ID = #{suppId} and tc.STATE = #{state} and td.DISTR_NM like concat('%', #{page.keyword}, '%')
+    </select>
+
     <select id="applyBySuppNm" resultType="com.cqjtu.dpta.dao.entity.Credit">
         select t1.CREDIT_ID, t1.SUPP_ID, DISTR_ID, CREDIT_AMOUT, USED_AMOUT, STATE
         from (select credit_id, supp_id, distr_id, credit_amout, used_amout, state

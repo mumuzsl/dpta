@@ -8,17 +8,29 @@
  */
 package ltd.newbee.mall.config;
 
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.interceptor.AdminLoginInterceptor;
 import ltd.newbee.mall.interceptor.NewBeeMallCartNumberInterceptor;
 import ltd.newbee.mall.interceptor.NewBeeMallLoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-//@Configuration
+import java.nio.charset.StandardCharsets;
+import java.util.Collections;
+import java.util.List;
+
+
+@Configuration
 public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
 
     @Autowired
@@ -27,6 +39,28 @@ public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
     private NewBeeMallLoginInterceptor newBeeMallLoginInterceptor;
     @Autowired
     private NewBeeMallCartNumberInterceptor newBeeMallCartNumberInterceptor;
+
+    @Bean
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate();
+
+//        FastJsonConfig config = new FastJsonConfig();
+//        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
+//        converter.setFastJsonConfig(config);
+
+        restTemplate.getMessageConverters().forEach(httpMessageConverter -> {
+            if (httpMessageConverter instanceof StringHttpMessageConverter) {
+                StringHttpMessageConverter stringHttpMessageConverter = (StringHttpMessageConverter) httpMessageConverter;
+                stringHttpMessageConverter.setDefaultCharset(StandardCharsets.UTF_8);
+            }
+        });
+
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
+        restTemplate.getMessageConverters().add(0, converter);
+
+        return restTemplate;
+    }
 
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加一个拦截器，拦截以/admin为前缀的url路径（后台登陆拦截）
@@ -62,5 +96,6 @@ public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/upload/**").addResourceLocations("file:" + Constants.FILE_UPLOAD_DIC);
         registry.addResourceHandler("/goods-img/**").addResourceLocations("file:" + Constants.FILE_UPLOAD_DIC);
+        registry.addResourceHandler("/distr/**").addResourceLocations("classpath:/distr/");
     }
 }
