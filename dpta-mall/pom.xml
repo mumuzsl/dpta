@@ -15,7 +15,7 @@
 
         <dependency>
             <groupId>com.cqjtu</groupId>
-            <artifactId>dpta-common</artifactId>
+            <artifactId>dpta-dao</artifactId>
             <version>${project.version}</version>
             <exclusions>
                 <exclusion>
@@ -25,6 +25,10 @@
                 <exclusion>
                     <groupId>com.baomidou</groupId>
                     <artifactId>mybatis-plus-boot-starter</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.alibaba</groupId>
+                    <artifactId>druid-spring-boot-starter</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
