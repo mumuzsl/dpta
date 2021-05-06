@@ -51,7 +51,9 @@ public class PersonalController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession httpSession) {
+    public String logout(HttpSession httpSession,
+                         HttpServletResponse response,
+                         HttpServletRequest request) {
         httpSession.removeAttribute(Constants.MALL_USER_SESSION_KEY);
         return "mall/login";
     }

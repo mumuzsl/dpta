@@ -5,10 +5,10 @@ $(function () {
         colModel: [
             {label: '规则编码', name: 'rCommId', index: 'rCommId', width: 60, key: true},
             {label: '规则名称', name: 'rCommNm', index: 'rCommNm', width: 60},
-            {label: '规则状态', name: 'state', index: 'state', width: 60,formatter: commRStatusFormatter},
+            {label: '规则状态', name: 'state', index: 'state', width: 60, formatter: commRStatusFormatter},
             {label: '规则类型', name: 'type', index: 'type', width: 60},
             {label: '分润值', name: 'value', index: 'value', width: 60},
-            {label: '操作',width: 60,formatter: commROperateFormatter}
+            {label: '操作', width: 60, formatter: commROperateFormatter}
         ],
         height: 760,
         rowNum: 20,
@@ -52,7 +52,7 @@ $(function () {
     }
 
     function commROperateFormatter(cellvalue, rowObject) {
-        return "<a href=\"#myPopup1\" onclick=viewRecords("+rowObject.rowId+") data-rel=\"popup\" class=\"ui-btn\" data-position-to=\"window\">查看绑定的商品</a>"
+        return "<a href=\"#myPopup1\" onclick=viewRecords(" + rowObject.rowId + ") data-rel=\"popup\" class=\"ui-btn\" data-position-to=\"window\">查看绑定的商品</a>"
     }
 
 
@@ -64,7 +64,7 @@ function viewRecords(id) {
     }
     $('#myPopup1').modal('show');
     $("#jqGridr").jqGrid({
-        url: '/platform/api/paf-comm-rule/detail/'+id,
+        url: '/platform/api/paf-comm-rule/detail/' + id,
         datatype: "json",
         colModel: [
             {label: '商品编号', name: 'commId', index: 'commId', width: 60, key: true},
@@ -107,7 +107,7 @@ function viewRecords(id) {
     $(window).resize(function () {
         $("#jqGridr").setGridWidth($(".card-body").width());
     });
-    $('#jqGridr').jqGrid('setGridParam', {url: '/platform/api/paf-comm-rule/detail/'+id}).trigger('reloadGrid');
+    $('#jqGridr').jqGrid('setGridParam', {url: '/platform/api/paf-comm-rule/detail/' + id}).trigger('reloadGrid');
 }
 
 
@@ -122,6 +122,7 @@ function reload() {
         page: page
     }).trigger("reloadGrid");
 }
+
 function reset() {
     $("#rCommNm").val('');
     $("#type").val('');
@@ -137,17 +138,21 @@ function SellStatusFormatter(cellvalue) {
     if (cellvalue == 0) {
         return "<button type=\"button\" class=\"btn btn-block btn-secondary btn-sm\" style=\"width: 80%;\">已下架</button>";
     }
+    if (cellvalue === undefined) {
+        return "<button type=\"button\" class=\"btn btn-block btn-secondary btn-sm\" style=\"width: 80%;\">未知</button>";
+    }
 }
 
 function coverImageFormatter(cellvalue) {
     return "<img src='" + cellvalue + "' height=\"80\" width=\"80\" alt='商品主图'/>";
 }
+
 /**
  * 启用规则
  */
 function commrEnable() {
     var ids = getSelectedRows();
-    if(ids == null)
+    if (ids == null)
         return;
     swal({
         title: "确认弹框",
@@ -188,16 +193,17 @@ function search() {
     var name = $("#name").val();
     if (name == "") {
         reload();
-    }else{
-        $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/paf-comm-rule/search0/'+name}).trigger('reloadGrid');
+    } else {
+        $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/paf-comm-rule/search0/' + name}).trigger('reloadGrid');
     }
 }
+
 /**
  * 禁用规则
  */
 function commrDisable() {
     var ids = getSelectedRows();
-    if(ids == null)
+    if (ids == null)
         return;
     swal({
         title: "确认弹框",
@@ -230,6 +236,7 @@ function commrDisable() {
         }
     )
 }
+
 /**
  * 规则新增
  */
@@ -292,8 +299,7 @@ function commrDel() {
                                     icon: "error",
                                 });
                                 $("#jqGrid").trigger("reloadGrid");
-                            }
-                            else {
+                            } else {
                                 swal(r.message, {
                                     icon: "error",
                                 });
@@ -306,6 +312,7 @@ function commrDel() {
     )
     ;
 }
+
 //绑定modal上的保存按钮
 $('#saveButton').click(function () {
     var rCommId = $("#rCommId").val();
@@ -326,8 +333,7 @@ $('#saveButton').click(function () {
             "state": 1,
             "value": value
         }
-    }
-    else if (flag == 2) {
+    } else if (flag == 2) {
         mes = "修改成功";
         url = '/platform/api/paf-comm-rule/modif';
         data = {
@@ -336,7 +342,8 @@ $('#saveButton').click(function () {
             "type": type,
             "value": value
         }
-    };
+    }
+    ;
     $.ajax({
         type: 'POST',//方法类型
         url: url,
@@ -371,32 +378,31 @@ $('#saveButton').click(function () {
 
 function deleteGoods() {
     var ids = getSelectedRows();
-    if (ids = null){
+    if (ids = null) {
         return;
     }
     swal({
-        title:"确认弹框",
-        text:"确认要删除数据吗",
-        icon:"warning",
-        buttons:true,
-        dangerMode:true,
-    }).then(flag=>{
-        if(flag){
+        title: "确认弹框",
+        text: "确认要删除数据吗",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then(flag => {
+        if (flag) {
             $.ajax({
-                type:"POST",
-                url:"admin/goods/delete",
-                contentType:"application/json",
-                data:JSON.stringify(ids),
-                success:function (r) {
-                    if (r.resultCode == 200){
-                        swal("删除成功",{
-                            icon:"success",
+                type: "POST",
+                url: "admin/goods/delete",
+                contentType: "application/json",
+                data: JSON.stringify(ids),
+                success: function (r) {
+                    if (r.resultCode == 200) {
+                        swal("删除成功", {
+                            icon: "success",
                         });
                         $("#jqGrid").trigger("reloadGrid");
-                    }
-                    else{
-                        swal(r.message,{
-                            icon:"error",
+                    } else {
+                        swal(r.message, {
+                            icon: "error",
                         });
                     }
                 }
@@ -404,6 +410,7 @@ function deleteGoods() {
         }
     });
 }
+
 /**
  * 上架
  */

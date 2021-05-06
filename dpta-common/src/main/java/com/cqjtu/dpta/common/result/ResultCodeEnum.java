@@ -52,6 +52,8 @@ public enum ResultCodeEnum {
     USER_REGISTERED(50004, "没有token或token无效"),
     USER_PHONE_ERROR(50005, "无效手机号"),
     USER_NO_OR_IllEGAL_TOKEN(50008, "没有token或token无效"),
+
+    DATA_BIG_DAY_ERROR(60001,"该接口不支持过大时间跨度查询"),
     ;
 
     private Integer code;

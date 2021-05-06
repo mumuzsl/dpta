@@ -2,14 +2,18 @@ package com.cqjtu.dpta.web.controller.api;
 
 import com.cqjtu.dpta.api.StatisService;
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.vo.CommStatisVo;
-import com.cqjtu.dpta.web.support.StatisVo;
+import com.cqjtu.dpta.common.vo.StatisVo;
+import com.cqjtu.dpta.common.vo.XyVo;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +26,34 @@ public class StatisController {
 
     @Resource
     private StatisService statisService;
+
+    private static List<Object> ydata = new ArrayList<>(7);
+
+    static {
+        ydata.add(168);
+        ydata.add(169);
+        ydata.add(160);
+        ydata.add(159);
+        ydata.add(170);
+        ydata.add(155);
+        ydata.add(166);
+    }
+
+    @GetMapping("recent/")
+    public Result recent(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
+        Result<XyVo> result = Result.ok();
+        if (day > 7) {
+            result.setMessage(ResultCodeEnum.DATA_BIG_DAY_ERROR.getMessage());
+        }
+        XyVo xyVo = XyVo.of(day);
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < day; i++) {
+            xyVo.getXdata().add(now.minusDays(i + 1).toLocalDate());
+        }
+        xyVo.setYdata(ydata);
+        result.setData(xyVo);
+        return result;
+    }
 
     @GetMapping("all")
     public Result all() {

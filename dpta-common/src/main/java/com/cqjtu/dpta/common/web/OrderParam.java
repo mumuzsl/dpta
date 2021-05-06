@@ -1,5 +1,6 @@
-package com.cqjtu.dpta.common.vo;
+package com.cqjtu.dpta.common.web;
 
+import com.cqjtu.dpta.common.vo.CommVo;
 import lombok.Data;
 
 import java.util.List;

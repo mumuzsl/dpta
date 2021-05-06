@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.controller.mall;
 
+import com.cqjtu.dpta.common.result.Result;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.common.ServiceResultEnum;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
@@ -88,5 +90,6 @@ public class GoodsController {
         request.setAttribute("goodsDetail", goodsDetailVO);
         return "mall/detail";
     }
+
 
 }

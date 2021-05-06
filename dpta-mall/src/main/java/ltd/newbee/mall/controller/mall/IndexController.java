@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.controller.mall;
 
+import com.cqjtu.dpta.common.result.Result;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.IndexConfigTypeEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallIndexCarouselVO;
@@ -19,6 +20,8 @@ import ltd.newbee.mall.service.NewBeeMallIndexConfigService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -54,5 +57,6 @@ public class IndexController {
         request.setAttribute("recommendGoodses", recommendGoodses);//推荐商品
         return "mall/index";
     }
+
 
 }
