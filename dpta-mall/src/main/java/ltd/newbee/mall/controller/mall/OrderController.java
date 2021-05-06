@@ -35,7 +35,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
-@Controller
+@Controller("newbeeOrderController")
 public class OrderController {
 
     @Resource

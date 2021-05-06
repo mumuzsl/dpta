@@ -1,5 +1,6 @@
 package com.cqjtu.dpta.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -25,7 +26,7 @@ public class RefundR implements Serializable {
     /**
      * 退款规则编码
      */
-    @TableId("REFUND_ID")
+    @TableId(value = "REFUND_ID", type = IdType.AUTO)
     private Long refundId;
 
     /**
@@ -55,8 +56,6 @@ public class RefundR implements Serializable {
     /**
      * 退款条件
      */
-    @TableField("CONDITION")
-    private String condition;
-
-
+    @TableField("REFUND_IF")
+    private String refundIf;
 }

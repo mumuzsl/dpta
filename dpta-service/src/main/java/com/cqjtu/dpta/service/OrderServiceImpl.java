@@ -1,23 +1,17 @@
 package com.cqjtu.dpta.service;
 
-import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cqjtu.dpta.api.OrderDService;
 import com.cqjtu.dpta.api.ShpCommService;
 import com.cqjtu.dpta.api.SkuStockService;
-import com.cqjtu.dpta.common.exception.BadRequestException;
-import com.cqjtu.dpta.common.exception.OrderException;
 import com.cqjtu.dpta.common.extension.SearchPage;
-import com.cqjtu.dpta.common.lang.Const;
-import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.vo.CommVo;
-import com.cqjtu.dpta.common.vo.OrderVo;
+import com.cqjtu.dpta.common.vo.OrderParam;
+import com.cqjtu.dpta.dao.dto.OrderDDto;
+import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.dao.entity.OrderD;
-import com.cqjtu.dpta.dao.entity.PafComm;
-import com.cqjtu.dpta.dao.entity.ShpComm;
 import com.cqjtu.dpta.dao.entity.SkuStock;
 import com.cqjtu.dpta.dao.mapper.OrderMapper;
 import com.cqjtu.dpta.api.OrderService;
@@ -27,13 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * <p>
@@ -56,8 +46,43 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private SkuStockService skuStockService;
 
     @Override
+    public List<OrderDDto> getFullDetail(Long id) {
+        return baseMapper.getFullDetail(id);
+    }
+
+    @Override
+    public IPage<OrderDto> pageNotDetailOrderDto(Pageable pageable, Long distrId) {
+        return baseMapper.pageHalfOrderDto(toPage(pageable), distrId);
+    }
+
+    @Override
+    public OrderDto getFullOrderDto(Long orderId) {
+        return baseMapper.getFullOrderDto(orderId);
+    }
+
+    @Override
+    public IPage<Order> pageByDistr(Pageable pageable, Long distrId) {
+        return baseMapper.pageByDistr(toPage(pageable), distrId);
+    }
+
+    @Override
     public Long getDistrId(Long id) {
         return baseMapper.getDistrId(id);
+    }
+
+    @Override
+    public IPage<OrderDto> searchByDistrId(Pageable pageable, String keyword, Integer option, Long distrId) {
+        SearchPage<Order> page = SearchPage.toPage(pageable, keyword);
+        switch (option) {
+            case 0:
+                return baseMapper.pageByDistrAndComm(page, distrId);
+            case 1:
+                return baseMapper.pageByDistrAndShop(page, distrId);
+            case 2:
+                return baseMapper.pageByDistrAndState(page, distrId);
+            default:
+                return null;
+        }
     }
 
     @Override
@@ -90,7 +115,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     @Transactional
-    public void create(OrderVo vo) {
+    public void create(OrderParam vo) {
         Order order = new Order();
         order.setShopId(vo.getShopId());
         order.setDatm(LocalDateTime.now());

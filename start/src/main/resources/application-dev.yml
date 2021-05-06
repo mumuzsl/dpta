@@ -7,7 +7,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 132135138zsl
+    password: '0000'
     #    url: jdbc:mysql://10.61.54.95:3306/dpta?serverTimezone=Asia/Shanghai
     url: jdbc:mysql://localhost:3306/dpta?serverTimezone=Asia/Shanghai
   redis:
@@ -26,4 +26,5 @@ swagger:
 #logging:
 #  level:
 #    root: debug
-
+#mybatis-plus:
+#  mapper-locations: classpath:mapper/*.xml

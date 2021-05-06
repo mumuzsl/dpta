@@ -2,8 +2,12 @@ package com.cqjtu.dpta.dao.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,4 +25,14 @@ public interface CommRMapper extends BaseMapper<CommR> {
      * @return
      */
     IPage<CommR> bindSort(Page<?> page);
+
+    List<CommR> getAll(PageQueryUtil queryUtil);
+
+    List<CommR> getByNm(PageQueryUtil queryUtil,@Param("name") String name);
+
+    /**
+     * 返回佣金规则
+     * @return
+     */
+    List<CommR> getAllCommR();
 }

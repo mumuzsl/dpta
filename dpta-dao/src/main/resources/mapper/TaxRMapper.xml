@@ -13,4 +13,11 @@
         P_START DESC
         LIMIT 1
     </select>
+
+    <select id="getList" resultType="com.cqjtu.dpta.dao.entity.TaxR">
+        SELECT
+        *
+        FROM
+        t_tax_r
+    </select>
 </mapper>

@@ -15,7 +15,11 @@ import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.entity.NewBeeMallOrder;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
+import org.springframework.stereotype.Repository;
 
+import javax.annotation.Resource;
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 public interface NewBeeMallOrderService {
@@ -114,4 +118,24 @@ public interface NewBeeMallOrderService {
     String paySuccess(String orderNo, int payType);
 
     List<NewBeeMallOrderItemVO> getOrderItems(Long id);
+
+    /**
+     *获取某一天订单数
+     */
+    int oneDayOrderSum(String d);
+
+    /**
+     * 获取所有订单详情
+     */
+    List<NewBeeMallOrder> allOrder();
+
+    /**
+     * 订单总数
+     */
+    Integer orderSum();
+
+    /**
+     * 返回退款数
+     */
+    Integer rOrderSum();
 }

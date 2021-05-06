@@ -2,20 +2,30 @@ package com.cqjtu.dpta.web.controller.api.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.RefundRService;
+import com.cqjtu.dpta.api.ShpCommService;
+import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.lang.Range;
+import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.dao.entity.CommR;
+import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.RefundR;
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.dao.entity.ShpComm;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -65,6 +75,15 @@ public class RefundRController {
         return Result.ok(page);
     }
 
+    @GetMapping("findByNm/{name}")
+    public Result findByNm(@RequestParam Map<String, Object> params,
+                           @PathVariable String name) {
+        if(name.equals("*"))
+            name = "";
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(refundRService.getCommRByName(pageUtil,name));
+    }
+
     /**
      * 获取全部数据
      * @return
@@ -95,8 +114,59 @@ public class RefundRController {
 
     @PostMapping("del")
     public Result del(@RequestBody List ids) {
-        boolean result = refundRService.removeByIds(ids);
-        return Result.judge(result);
+        int sus = refundRService.delList(ids);
+        if (ids.size() == sus) {
+            return Result.ok();
+        }
+        if (sus == 0) {
+            return Result.build(252,"删除失败\n绑定了商品的退款规则不能被删除");
+        }
+        int fai = ids.size()-sus;
+        return Result.build(251,"成功删除"+sus+"条退款规则\n"+fai+"条删除失败\n绑定了商品的退款规则不能被删除");
+    }
+
+    @PostMapping("enable")
+    public Result enable(@RequestBody List<Long> ids) {
+        List<RefundR> list = new ArrayList<>();
+        for (Long id : ids) {
+            RefundR refundR = refundRService.getById(id);
+            refundR.setState(Const.ENABLE);
+            list.add(refundR);
+        }
+        boolean b = refundRService.updateBatchById(list);
+        return Result.judge(b);
+    }
+
+    @Resource
+    ShpCommService shpCommService;
+    @Resource
+    PafCommService pafCommService;
+    @PostMapping("disable")
+    public Result disable(@RequestBody List<Long> ids) {
+        List<RefundR> list = new ArrayList<>();
+        for (Long id : ids) {
+            QueryWrapper<PafComm> wrapper = new QueryWrapper<>();
+            wrapper.eq("refund_id",id);
+            // 将绑定该规则的平台商品下架，并解除绑定
+            List<PafComm> list1 = pafCommService.list(wrapper);
+            for (PafComm comm : list1) {
+                comm.setState(Const.OUTSELL);
+                comm.setRefundId(null);
+                QueryWrapper<ShpComm> wrapper1 = new QueryWrapper<>();
+                wrapper1.eq("comm_id",comm.getCommId());
+                List<ShpComm> list2 = shpCommService.list(wrapper1);
+                for (ShpComm shpComm : list2) {
+                    shpComm.setState(Const.OUTSELL);
+                }
+                shpCommService.updateBatchById(list2);
+            }
+            pafCommService.updateBatchById(list1);
+            RefundR refundR = refundRService.getById(id);
+            refundR.setState(Const.DISABLE);
+            list.add(refundR);
+        }
+        boolean b = refundRService.updateBatchById(list);
+        return Result.judge(b);
     }
 
 }

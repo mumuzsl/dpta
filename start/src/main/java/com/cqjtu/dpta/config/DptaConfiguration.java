@@ -22,15 +22,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 public class DptaConfiguration {
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
-        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(redisConnectionFactory);
-        redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new GenericFastJsonRedisSerializer());
-        return redisTemplate;
-    }
-
-    @Bean
     public UserChecker defaultUserChecker() {
         return new DefaultUserChecker();
     }

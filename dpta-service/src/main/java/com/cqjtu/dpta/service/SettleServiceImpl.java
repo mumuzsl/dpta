@@ -44,7 +44,7 @@ public class SettleServiceImpl implements SettleService {
             List<OrderD> list1 = orderDService.list(queryWrapper1);
             boolean flage = true;
             for (OrderD orderD : list1) {
-                if (orderD.getState().equals(1)) continue;
+//                if (orderD.getState().equals(1)) continue;
                 Long com = orderDService.outRefundTime(orderD.getCommId(),order.getDatm());
                 if (com == null) {
                     flage = false;
@@ -56,7 +56,7 @@ public class SettleServiceImpl implements SettleService {
                 BigDecimal base = new BigDecimal(0);
                 BigDecimal amount = new BigDecimal(0);
                 for (OrderD orderD : list1) {
-                    if (orderD.getState().equals(1)) continue;
+//                    if (orderD.getState().equals(1)) continue;
                     CommR commR = orderDService.getCommR(orderD.getCommId());
                     PafSkuStock pafSkuStock = pafCommService.getByCommIdAndSkuId(orderD.getCommId(),orderD.getSkuId());
                     base = base.add(pafSkuStock.getSuppPrice());
@@ -134,5 +134,10 @@ public class SettleServiceImpl implements SettleService {
             settleMMapper.insert(settleM);
         }
         return true;
+    }
+
+    @Override
+    public Integer platSum(int d) {
+        return settleMMapper.platSum(d);
     }
 }

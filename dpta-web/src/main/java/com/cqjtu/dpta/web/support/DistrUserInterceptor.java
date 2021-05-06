@@ -2,23 +2,14 @@ package com.cqjtu.dpta.web.support;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cqjtu.dpta.api.DistrUserService;
-import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrUser;
-import org.springframework.core.MethodParameter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Method;
-import java.util.Date;
-import java.util.Optional;
 
 /**
  * author: mumu
@@ -30,15 +21,8 @@ public class DistrUserInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-//        Optional.of(authentication)
-//                .map(Authentication::getDetails)
-//                .filter(o -> o instanceof UserDetails)
-//                .map(this::getDistrUser)
-//                .map(DistrUser::getId)
-//        ;
-        return true;
+        return false;
     }
 
     @Override

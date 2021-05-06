@@ -1,5 +1,7 @@
 package com.cqjtu.dpta.api;
 
+import com.cqjtu.dpta.common.util.PageQueryUtil;
+import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.dao.entity.DistrLevel;
 import com.cqjtu.dpta.api.support.CrudService;
 
@@ -13,4 +15,5 @@ import com.cqjtu.dpta.api.support.CrudService;
  */
 public interface DistrLevelService extends CrudService<DistrLevel> {
 
+    PageResult getList(PageQueryUtil pageUtil);
 }

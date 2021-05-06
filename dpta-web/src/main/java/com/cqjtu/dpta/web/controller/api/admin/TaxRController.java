@@ -2,6 +2,7 @@ package com.cqjtu.dpta.web.controller.api.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.TaxRService;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.dao.entity.TaxR;
 import com.cqjtu.dpta.common.result.Result;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -46,9 +48,15 @@ public class TaxRController {
     }
 
     @PostMapping("del")
-    public Result del(@RequestBody List ids) {
+    public Result del(@RequestBody List<Long> ids) {
         boolean result = taxRService.removeByIds(ids);
         return Result.judge(result);
+    }
+
+    @GetMapping("list")
+    public Result findByNm(@RequestParam Map<String, Object> params) {
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(taxRService.getList(pageUtil));
     }
 
 }

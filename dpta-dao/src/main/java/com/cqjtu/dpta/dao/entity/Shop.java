@@ -1,9 +1,12 @@
 package com.cqjtu.dpta.dao.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.io.Serializable;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,7 +28,7 @@ public class Shop implements Serializable {
     /**
      * 商铺编码
      */
-    @TableId("SHOP_ID")
+    @TableId(value = "SHOP_ID", type = IdType.AUTO)
     private Long shopId;
 
     /**

@@ -1,25 +1,33 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CommRService;
 import com.cqjtu.dpta.api.PafCommService;
+import com.cqjtu.dpta.api.ShpCommService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.common.util.Status;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.PafComm;
+import com.cqjtu.dpta.dao.entity.ShpComm;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.annotation.Resource;
+import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -76,20 +84,21 @@ public class CommRController {
      * 根据佣金规则id按页获取绑定了该佣金规则的商品数据
      *
      * @param id
-     * @param pageable
+     * @param
      * @return
      */
     @GetMapping("detail/{id}")
     public Result detail(@PathVariable Long id,
-                         @PageableDefault Pageable pageable) {
+                         @RequestParam Map<String, Object> params) {
         CommR commR = commRService.getById(id);
         if (commR == null) {
             return ResultUtils.keyError();
         }
-        QueryWrapper<PafComm> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("R_COMM_ID", id);
-        IPage<PafComm> page = pafCommService.page(pageable, queryWrapper);
-        return Result.ok(page);
+        if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
+            return Result.build(ResultCodeEnum.PARAM_ERROR);
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(commRService.getPafComm(pageUtil,id));
     }
 
     /**
@@ -155,9 +164,22 @@ public class CommRController {
      * @return
      */
     @GetMapping("all")
-    public Result all() {
-        List<CommR> rs = commRService.list();
-        return Result.ok(rs);
+    public Result all(@RequestParam Map<String, Object> params) {
+        if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
+            return Result.build(ResultCodeEnum.PARAM_ERROR);
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(commRService.getCommRPage(pageUtil));
+    }
+
+    @GetMapping("search0/{name}")
+    public Result search(@RequestParam Map<String, Object> params,
+                         @PathVariable String name) {
+        if (StringUtils.isEmpty(name)) {
+            return Result.build(ResultCodeEnum.PARAM_ERROR);
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(commRService.getCommRByName(pageUtil,name));
     }
 
     @GetMapping
@@ -179,9 +201,56 @@ public class CommRController {
     }
 
     @PostMapping("del")
-    public Result del(@RequestBody List ids) {
-        boolean result = commRService.removeByIds(ids);
-        return Result.judge(result);
+    public Result del(@RequestBody List<Long> ids) {
+        int sus = commRService.delList(ids);
+        if (ids.size() == sus) {
+            return Result.ok();
+        }
+        if (sus == 0) {
+            return Result.build(252,"删除失败\n绑定了商品的佣金规则不能被删除");
+        }
+        int fai = ids.size()-sus;
+        return Result.build(251,"成功删除"+sus+"条佣金规则\n"+fai+"条删除失败\n绑定了商品的佣金规则不能被删除");
+    }
+    @PostMapping("enable")
+    public Result enable(@RequestBody List<Long> ids) {
+        List<CommR> list = new ArrayList<>();
+        for (Long id : ids) {
+            CommR commR = commRService.getById(id);
+            commR.setState(Const.ENABLE);
+            list.add(commR);
+        }
+        boolean b = commRService.updateBatchById(list);
+        return Result.judge(b);
+    }
+    @Resource
+    ShpCommService shpCommService;
+    @PostMapping("disable")
+    public Result disable(@RequestBody List<Long> ids) {
+        List<CommR> list = new ArrayList<>();
+        for (Long id : ids) {
+            QueryWrapper<PafComm> wrapper = new QueryWrapper<>();
+            wrapper.eq("r_comm_id",id);
+            // 将绑定该规则的平台商品下架，并解除绑定
+            List<PafComm> list1 = pafCommService.list(wrapper);
+            for (PafComm comm : list1) {
+                comm.setState(Const.OUTSELL);
+                comm.setRCommId(null);
+                QueryWrapper<ShpComm> wrapper1 = new QueryWrapper<>();
+                wrapper1.eq("comm_id",comm.getCommId());
+                List<ShpComm> list2 = shpCommService.list(wrapper1);
+                for (ShpComm shpComm : list2) {
+                    shpComm.setState(Const.OUTSELL);
+                }
+                shpCommService.updateBatchById(list2);
+            }
+            pafCommService.updateBatchById(list1);
+            CommR commR = commRService.getById(id);
+            commR.setState(Const.DISABLE);
+            list.add(commR);
+        }
+        boolean b = commRService.updateBatchById(list);
+        return Result.judge(b);
     }
 
 }

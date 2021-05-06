@@ -1,5 +1,7 @@
 package com.cqjtu.dpta.common.result;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -87,7 +89,6 @@ public class Result<T> implements Serializable {
      * @return
      */
     public static <T> Result<T> fail(T data) {
-        Result<T> result = build(data);
         return build(data, ResultCodeEnum.FAIL);
     }
 

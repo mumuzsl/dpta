@@ -38,8 +38,8 @@ public class PafComm implements Serializable {
     /**
      * 类型
      */
-    @TableField("TYPE")
-    private String type;
+    @TableField("CATEGORY_ID")
+    private String categoryId;
 
     /**
      * 供应商编码
@@ -76,6 +76,12 @@ public class PafComm implements Serializable {
      */
     @TableField("STATE")
     private Integer state;
+
+    /**
+     * 图片地址
+     */
+    @TableField("IMG_URL")
+    private String imgUrl;
 
 
 }

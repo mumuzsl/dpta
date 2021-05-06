@@ -2,9 +2,13 @@ package com.cqjtu.dpta.dao.mapper;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.dao.entity.RefundR;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +20,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface RefundRMapper extends BaseMapper<RefundR> {
     IPage<RefundR> bindSort(Page<?> page);
+
+    List<RefundR> getByNm(PageQueryUtil queryUtil, @Param("name") String name);
+
 }

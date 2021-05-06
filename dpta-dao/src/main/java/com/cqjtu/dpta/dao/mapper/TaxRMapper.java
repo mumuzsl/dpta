@@ -1,10 +1,12 @@
 package com.cqjtu.dpta.dao.mapper;
 
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.dao.entity.TaxR;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * <p>
@@ -22,4 +24,6 @@ public interface TaxRMapper extends BaseMapper<TaxR> {
      * @return
      */
     TaxR getTaxR (@Param("amount") BigDecimal amount);
+
+    List<TaxR> getList(PageQueryUtil pageUtil);
 }

@@ -19,5 +19,4 @@ public final class ResultUtils {
         return CommonResult.KEY_ERROR;
     }
 
-
 }

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header th:replace="admin/header::header-fragment">
+</header>
+<style>
+    .distab {
+        width: 80%;
+        margin-left: 10%;
+    }
+    .ui-jqgrid tr.jqgrow td {
+        white-space: normal !important;
+        height: auto;
+        vertical-align: text-top;
+        padding-top: 2px;
+    }
+
+    a {
+        color: #1baeae;
+        text-decoration: none;
+        background-color: transparent;
+        -webkit-text-decoration-skip: objects;
+    }
+
+    a:hover {
+        color: white;
+        background-color: #1baeae;
+    }
+</style>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+    <!-- 引入页面头header-fragment -->
+    <div th:replace="admin/header::header-nav"></div>
+    <!-- 引入工具栏sidebar-fragment -->
+    <div th:replace="admin/sidebar::sidebar-fragment(${path})"></div>
+    <!-- Content Wrapper. Contains 图标content -->
+    <div class="content-wrapper">
+        <!-- Content Header (图标header) -->
+        <div class="content-header">
+            <div class="container-fluid">
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- Main content -->
+        <div class="content">
+            <div class="container-fluid">
+                <div class="card card-primary card-outline">
+                    <div class="card-header">
+                        <h3 class="card-title">佣金规则管理</h3>
+                    </div> <!-- /.card-body -->
+                    <div class="card-body" style="float: left">
+                        <div class="grid-btn">
+                            <button class="btn btn-info" onclick="commrAdd()"><i
+                                    class="fa fa-plus"></i>&nbsp;新增佣金规则
+                            </button>
+                            <button class="btn btn-info" onclick="commrEdit()"><i
+                                    class="fa fa-pencil-square-o"></i>&nbsp;修改佣金规则
+                            </button>
+                            <button class="btn btn-danger" onclick="commrDel()"><i
+                                    class="fa fa-trash-o"></i>&nbsp;删除佣金规则
+                            </button>
+                            <button class="btn btn-info" onclick="commrEnable()"><i
+                                    class="fa fa-plus-circle"></i>&nbsp;启用
+                            </button>
+                            <button class="btn btn-info" onclick="commrDisable()"><i
+                                    class="fa fa-trash-o"></i>&nbsp;禁用
+                            </button>
+                            <input type="text" id="name" class="form-control" placeholder="请输入规则名称" required="true" style="width: 10%;margin-left: 53%;">
+                            <button class="btn btn-info" onclick="search()" style="margin-left: 1%;">
+                                <i class="fa fa-search"></i>搜索
+                            </button>
+                        </div>
+                        <table id="jqGrid" class="table table-bordered">
+                        </table>
+                        <div id="jqGridPager"></div>
+                    </div><!-- /.card-body -->
+                </div>
+            </div><!-- /.container-fluid -->
+        </div>
+        <div class="content">
+            <!-- 模态框（Modal） -->
+            <div class="modal fade" id="commrInfoModal" tabindex="-1" role="dialog"
+                 aria-labelledby="commrInfoModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true">&times;</span></button>
+                            <h6 class="modal-title" id="commrInfoModalLabel">Modal</h6>
+                        </div>
+                        <div class="modal-body">
+                            <form id="##">
+                                <div class="form-group">
+                                    <div class="alert alert-danger" id="edit-error-msg" style="display: none;">
+                                        错误信息展示栏。
+                                    </div>
+                                </div>
+                                <input type="hidden" id="rCommId">
+                                <div class="form-group">
+                                    <label for="rCommNm" class="control-label">规则名称:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <input type="text" class="form-control" id="rCommNm" name="rCommNm"
+                                           placeholder="请输入规则名称" required="required">
+                                </div>
+                                <div class="form-group">
+                                    <label for="type"
+                                           class="control-label">规则类型:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <select id="type">
+                                        <option selected>比例分润</option>
+                                        <option>固定分润</option>
+                                    </select>
+                                </div>
+                                <input type="hidden" id="fla">
+                                <div class="form-group">
+                                    <label for="value" class="control-label">分润值:&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                    <input type="number" class="form-control" id="value" name="value"
+                                           placeholder="请输入分润值" required="required">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="saveButton">确认</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal -->
+        </div>
+        <div role="dialog" id="myPopup1" class="modal fade" style="margin: auto;">
+            <div class="modal-dialog" role="document" style="margin: auto;">
+                <div class="modal-content" style="margin: auto;width: 1000px">
+                    <table id="jqGridr" class="table table-bordered">
+                    </table>
+                    <div id="jqGridrPager"></div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <!-- /.content-wrapper -->
+    <!-- 引入页脚footer-fragment -->
+    <div th:replace="admin/footer::footer-fragment"></div>
+</div>
+<!-- jQuery -->
+<script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
+<!-- Bootstrap 4 -->
+<script th:src="@{/admin/plugins/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!-- AdminLTE App -->
+<script th:src="@{/admin/dist/js/adminlte.min.js}"></script>
+<!-- jqgrid -->
+<script th:src="@{/admin/plugins/jqgrid-5.5.2/jquery.jqGrid.min.js}"></script>
+<script th:src="@{/admin/plugins/jqgrid-5.5.2/grid.locale-cn.js}"></script>
+<!-- sweetalert -->
+<script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
+<script th:src="@{/admin/dist/js/public.js}"></script>
+<script th:src="@{/admin/dist/js/commission.js}"></script>
+</body>
+</html>
