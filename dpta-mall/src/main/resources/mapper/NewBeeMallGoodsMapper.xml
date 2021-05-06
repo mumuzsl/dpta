@@ -17,6 +17,7 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_user" jdbcType="INTEGER" property="updateUser"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="isDeleted"/>
     </resultMap>
     <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="ltd.newbee.mall.entity.NewBeeMallGoods">
         <result column="goods_detail_content" jdbcType="LONGVARCHAR" property="goodsDetailContent"/>
@@ -24,7 +25,7 @@
     <sql id="Base_Column_List">
     goods_id, goods_name, goods_intro,goods_category_id, goods_cover_img, goods_carousel, original_price,
     selling_price, stock_num, tag, goods_sell_status, create_user, create_time, update_user, 
-    update_time
+    update_time,is_deleted
   </sql>
     <sql id="Blob_Column_List">
     goods_detail_content
@@ -78,6 +79,7 @@
             <if test="endTime != null and endTime.trim() != ''">
                 and create_time &lt; #{endTime}
             </if>
+            and is_deleted = 0
         </where>
         order by goods_id desc
         <if test="start!=null and limit!=null">
@@ -99,6 +101,7 @@
             <if test="goodsSellStatus!=null">
                 and goods_sell_status = #{goodsSellStatus}
             </if>
+            and is_deleted = 0
         </where>
         <if test="orderBy!=null and orderBy!=''">
             <choose>
@@ -133,6 +136,7 @@
             <if test="goodsSellStatus!=null">
                 and goods_sell_status = #{goodsSellStatus}
             </if>
+            and is_deleted = 0
         </where>
     </select>
 
@@ -149,6 +153,7 @@
             #{id}
         </foreach>
         );
+--         and is_deleted = 0
     </select>
     <select id="getTotalNewBeeMallGoods" parameterType="Map" resultType="int">
         select count(*) from tb_newbee_mall_goods_info
@@ -167,10 +172,10 @@
             </if>
         </where>
     </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from tb_newbee_mall_goods_info
-    where goods_id = #{goodsId,jdbcType=BIGINT}
-  </delete>
+    <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    update from tb_newbee_mall_goods_info set is_deleted=1
+    where goods_id = #{goodsId,jdbcType=BIGINT} and is_deleted=0
+  </update>
     <update id="deleteBatch">
         update tb_newbee_mall_goods_info
         set is_deleted=1,update_time=now() where goods_id in
@@ -183,13 +188,14 @@
       goods_cover_img, goods_carousel, original_price, 
       selling_price, stock_num, tag, 
       goods_sell_status, create_user, create_time, 
-      update_user, update_time, goods_detail_content
+      update_user, update_time, goods_detail_content,is_deleted
       )
     values (#{goodsId,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsIntro,jdbcType=VARCHAR}, 
       #{goodsCoverImg,jdbcType=VARCHAR}, #{goodsCarousel,jdbcType=VARCHAR}, #{originalPrice,jdbcType=INTEGER}, 
       #{sellingPrice,jdbcType=INTEGER}, #{stockNum,jdbcType=INTEGER}, #{tag,jdbcType=VARCHAR}, 
       #{goodsSellStatus,jdbcType=TINYINT}, #{createUser,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{goodsDetailContent,jdbcType=LONGVARCHAR}
+      #{updateUser,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{goodsDetailContent,jdbcType=LONGVARCHAR},
+      #{isDeleted,jdbcType=TINYINT}
       )
   </insert>
     <insert id="insertSelective" parameterType="ltd.newbee.mall.entity.NewBeeMallGoods">
@@ -243,6 +249,9 @@
             <if test="goodsDetailContent != null">
                 goods_detail_content,
             </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="goodsId != null">
@@ -292,6 +301,9 @@
             </if>
             <if test="goodsDetailContent != null">
                 #{goodsDetailContent,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted,jdbcType=TINYINT},
             </if>
         </trim>
     </insert>
@@ -343,6 +355,9 @@
             <if test="goodsDetailContent != null">
                 goods_detail_content = #{goodsDetailContent,jdbcType=LONGVARCHAR},
             </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted,jdbcType=TINYINT},
+            </if>
         </set>
         where goods_id = #{goodsId,jdbcType=BIGINT}
     </update>
@@ -361,7 +376,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      goods_detail_content = #{goodsDetailContent,jdbcType=LONGVARCHAR}
+      goods_detail_content = #{goodsDetailContent,jdbcType=LONGVARCHAR},
+      is_deleted = #{isDeleted,jdbcType=TINYINT}
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </update>
     <update id="updateByPrimaryKey" parameterType="ltd.newbee.mall.entity.NewBeeMallGoods">
@@ -378,7 +394,8 @@
       create_user = #{createUser,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      is_deleted = #{isDeleted,jdbcType=TINYINT}
     where goods_id = #{goodsId,jdbcType=BIGINT}
   </update>
 </mapper>

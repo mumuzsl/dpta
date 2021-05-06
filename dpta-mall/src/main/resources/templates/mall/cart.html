@@ -125,8 +125,8 @@
     function updateItem(id) {
         var domId = 'goodsCount' + id;
         var goodsCount = $("#" + domId).val();
-        if (goodsCount > 5) {
-            swal("单个商品最多可购买5个", {
+        if (goodsCount > 100) {
+            swal("单个商品最多可购买100个", {
                 icon: "error",
             });
             return;

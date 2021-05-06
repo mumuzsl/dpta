@@ -47,6 +47,8 @@ public class NewBeeMallGoods {
 
     private String goodsDetailContent;
 
+    private Byte isDeleted;
+
     public Long getGoodsId() {
         return goodsId;
     }
@@ -175,6 +177,10 @@ public class NewBeeMallGoods {
         this.goodsDetailContent = goodsDetailContent == null ? null : goodsDetailContent.trim();
     }
 
+    public Byte getIsDeleted(){return isDeleted;}
+
+    public void setIsDeleted(Byte isDeleted){this.isDeleted = isDeleted;}
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -196,6 +202,7 @@ public class NewBeeMallGoods {
         sb.append(", updateUser=").append(updateUser);
         sb.append(", updateTime=").append(updateTime);
         sb.append(", goodsDetailContent=").append(goodsDetailContent);
+        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }
