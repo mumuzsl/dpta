@@ -23,6 +23,8 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.nio.charset.StandardCharsets;
@@ -62,6 +64,16 @@ public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
         return restTemplate;
     }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/admin/credit").setViewName("admin/credit_manage");
+        registry.addViewController("/admin/credit-v").setViewName("admin/credit_verify");
+        registry.addViewController("/admin/refundr").setViewName("admin/refundr_manage");
+        registry.addViewController("/admin/taxr").setViewName("admin/tax_manage");
+        registry.addViewController("/admin/level").setViewName("admin/level_manage");
+        registry.addViewController("/admin/commr").setViewName("admin/commission_manage");
+    }
+
     public void addInterceptors(InterceptorRegistry registry) {
         // 添加一个拦截器，拦截以/admin为前缀的url路径（后台登陆拦截）
         registry.addInterceptor(adminLoginInterceptor)
@@ -98,4 +110,5 @@ public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
         registry.addResourceHandler("/goods-img/**").addResourceLocations("file:" + Constants.FILE_UPLOAD_DIC);
         registry.addResourceHandler("/distr/**").addResourceLocations("classpath:/distr/");
     }
+
 }

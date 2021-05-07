@@ -33,5 +33,55 @@
             and td.DISTR_NM like concat('%', #{page.keyword}, '%')
     </select>
 
+    <select id="getByNm" resultType="com.cqjtu.dpta.common.vo.CreditVo">
+        SELECT
+            t1.CREDIT_ID,
+            t2.DISTR_NM,
+            t3.SUPP_NM,
+            t1.CREDIT_AMOUT,
+            t1.USED_AMOUT,
+            t1.STATE
+        FROM
+            t_credit t1,
+            t_distr t2,
+            t_supp t3
+        WHERE
+            t1.DISTR_ID = t2.DISTR_ID
+        AND t1.SUPP_ID = t3.SUPP_ID
+        AND (t2.DISTR_NM like CONCAT("%",#{name},"%") OR t3.SUPP_NM like CONCAT("%",#{name},"%"))
+        AND t1.STATE in(1,2)
+    </select>
 
+    <select id="getByNm1" resultType="com.cqjtu.dpta.common.vo.CreditVo">
+        SELECT
+            t1.CREDIT_ID,
+            t2.DISTR_NM,
+            t3.SUPP_NM,
+            t1.CREDIT_AMOUT
+        FROM
+            t_credit t1,
+            t_distr t2,
+            t_supp t3
+        WHERE
+            t1.DISTR_ID = t2.DISTR_ID
+        AND t1.SUPP_ID = t3.SUPP_ID
+        AND (t2.DISTR_NM like CONCAT("%",#{name},"%") OR t3.SUPP_NM like CONCAT("%",#{name},"%"))
+        AND t1.STATE = 0
+    </select>
+    <select id="getRecords" resultType="com.cqjtu.dpta.common.vo.DealVo">
+        SELECT
+            t1.DEAL_ID,
+            t3.COMM_NM,
+            t2.count,
+            t2.price,
+            t1.create_time
+        FROM
+            t_deal t1,
+            t_deal_d t2,
+            t_paf_comm t3
+        WHERE
+            t1.DISTR_ID = #{distrId}
+        AND t2.comm_id = t3.COMM_ID
+        AND t3.SUPP_ID = #{suppId}
+    </select>
 </mapper>

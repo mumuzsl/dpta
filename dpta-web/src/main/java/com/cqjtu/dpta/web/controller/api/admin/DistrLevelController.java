@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.DistrLevelService;
 import com.cqjtu.dpta.api.DistrService;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrLevel;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -88,9 +90,15 @@ public class DistrLevelController {
     }
 
     @PostMapping("del")
-    public Result del(@RequestBody List ids) {
+    public Result del(@RequestBody List<Long> ids) {
         boolean result = distrLevelService.removeByIds(ids);
         return Result.judge(result);
+    }
+
+    @GetMapping("list")
+    public Result list(@RequestParam Map<String, Object> params) {
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(distrLevelService.getList(pageUtil));
     }
 
 }

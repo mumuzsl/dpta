@@ -5,20 +5,28 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.api.CreditService;
 import com.cqjtu.dpta.api.DealService;
+import com.cqjtu.dpta.common.lang.Const;
+import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.dao.entity.Deal;
+import com.cqjtu.dpta.dao.entity.RefundR;
 import io.swagger.annotations.ApiParam;
+import net.bytebuddy.asm.Advice;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -183,4 +191,77 @@ public class PlatformCreditController {
         return Result.judge(result);
     }
 
+    @GetMapping("findByNm/{name}")
+    public Result findByNm(@RequestParam Map<String, Object> params,
+                           @PathVariable String name) {
+        if(name.equals("*"))
+            name = "";
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(creditService.findByName(pageUtil,name));
+    }
+
+    @GetMapping("findByNm1/{name}")
+    public Result findByNm1(@RequestParam Map<String, Object> params,
+                           @PathVariable String name) {
+        if(name.equals("*"))
+            name = "";
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(creditService.findByName1(pageUtil,name));
+    }
+
+    @PostMapping("enable")
+    public Result enable(@RequestBody List<Long> ids) {
+        List<Credit> list = new ArrayList<>();
+        for (Long id : ids) {
+            Credit credit = creditService.getById(id);
+            credit.setState(Const.ADOPT);
+            list.add(credit);
+        }
+        boolean b = creditService.updateBatchById(list);
+        return Result.judge(b);
+    }
+    @PostMapping("disable")
+    public Result disable(@RequestBody List<Long> ids) {
+        List<Credit> list = new ArrayList<>();
+        for (Long id : ids) {
+            Credit credit = creditService.getById(id);
+            credit.setState(Const.FORBIDDEN);
+            list.add(credit);
+        }
+        boolean b = creditService.updateBatchById(list);
+        return Result.judge(b);
+    }
+
+    @PostMapping("reject")
+    public Result reject(@RequestBody List<Long> ids) {
+        List<Credit> list = new ArrayList<>();
+        for (Long id : ids) {
+            Credit credit = creditService.getById(id);
+            credit.setState(Const.REJECT);
+            list.add(credit);
+        }
+        boolean b = creditService.updateBatchById(list);
+        return Result.judge(b);
+    }
+
+    @GetMapping("viewCreditR/{id}")
+    public Result viewCredit(@RequestParam Map<String, Object> params,
+                              @PathVariable Long id){
+        if (id == null){
+            return Result.build(ResultCodeEnum.PARAM_ERROR);
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(creditDService.getRecords(pageUtil,id));
+    }
+
+    @GetMapping("viewCreditR1/{id}")
+    public Result viewCredit1(@RequestParam Map<String, Object> params,
+                              @PathVariable Long id){
+        Credit credit = creditService.getById(id);
+        if (credit == null){
+            return Result.build(ResultCodeEnum.PARAM_ERROR);
+        }
+        PageQueryUtil pageUtil = new PageQueryUtil(params);
+        return Result.ok(creditService.getRecords(pageUtil,credit.getSuppId(),credit.getDistrId()));
+    }
 }

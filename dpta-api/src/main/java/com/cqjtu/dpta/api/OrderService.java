@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.common.vo.OrderParam;
+import com.cqjtu.dpta.common.web.OrderParam;
 import com.cqjtu.dpta.dao.dto.OrderDDto;
 import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.entity.Order;

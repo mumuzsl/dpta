@@ -7,7 +7,7 @@ import com.cqjtu.dpta.api.ShpCommService;
 import com.cqjtu.dpta.api.SkuStockService;
 import com.cqjtu.dpta.common.extension.SearchPage;
 import com.cqjtu.dpta.common.vo.CommVo;
-import com.cqjtu.dpta.common.vo.OrderParam;
+import com.cqjtu.dpta.common.web.OrderParam;
 import com.cqjtu.dpta.dao.dto.OrderDDto;
 import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.entity.Order;

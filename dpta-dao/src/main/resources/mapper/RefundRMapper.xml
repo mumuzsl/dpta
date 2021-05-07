@@ -11,4 +11,7 @@
             as t2 on t1.REFUND_ID = t2.REFUND_ID
         ORDER BY comm_count desc
     </select>
+    <select id="getByNm" resultType="com.cqjtu.dpta.dao.entity.RefundR">
+        select * from t_refund_r where REFUND_NM like concat("%",#{name},"%")
+    </select>
 </mapper>

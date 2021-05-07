@@ -1,6 +1,8 @@
 package com.cqjtu.dpta.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
+import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.cqjtu.dpta.api.support.CrudService;
 import com.cqjtu.dpta.dao.entity.Distr;
@@ -44,4 +46,9 @@ public interface CreditService extends CrudService<Credit> {
     Boolean renewCredit(Long id, Double amount);
 
 
+    PageResult findByName(PageQueryUtil pageUtil, String name);
+
+    PageResult findByName1(PageQueryUtil pageUtil, String name);
+
+    PageResult getRecords(PageQueryUtil pageUtil, Long suppId, Long distrId);
 }

@@ -1,6 +1,8 @@
 package com.cqjtu.dpta.dao.entity;
 
 import java.math.BigDecimal;
+
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -26,7 +28,7 @@ public class TaxR implements Serializable {
     /**
      * 税费规则编码
      */
-    @TableId("TAX_ID")
+    @TableId(value = "TAX_ID", type = IdType.AUTO)
     private Long taxId;
 
     /**

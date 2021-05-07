@@ -1,4 +1,4 @@
-package com.cqjtu.dpta.web.support;
+package com.cqjtu.dpta.common.vo;
 
 import lombok.Data;
 
