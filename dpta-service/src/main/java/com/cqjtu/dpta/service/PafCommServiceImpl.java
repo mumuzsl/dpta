@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,18 +48,23 @@ public class PafCommServiceImpl extends ServiceImpl<PafCommMapper, PafComm> impl
     }
 
     @Override
-    public List<DistrSumM> getDistrSumM(int d) {
+    public List<DistrSumM> getDistrSumM(String d) {
         return baseMapper.getDistrSumM(d);
     }
 
     @Override
-    public List<DistrSumM> getDistrSumN(int d) {
+    public List<DistrSumM> getDistrSumN(String d) {
         return baseMapper.getDistrSumN(d);
     }
 
     @Override
     public BigDecimal getDistrSum(String d, int b) {
         return baseMapper.getDistrSum(d,b);
+    }
+
+    @Override
+    public List<Date> getAllDate() {
+        return baseMapper.getAllDate();
     }
 
 }

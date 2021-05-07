@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <p>
@@ -92,11 +92,13 @@ public class PafCommController {
 
     @RequestMapping("/show/bar")
     @ResponseBody
-    public List<Integer> findBybar(Model model){
+    public List<Object> findBybar(Model model){
         List barData = new ArrayList();
+
         barData.add(settleService.platSum(2019));
         barData.add(settleService.platSum(2020));
         barData.add(settleService.platSum(2021));
+
 
         return barData;
     }
@@ -107,24 +109,81 @@ public class PafCommController {
         List store  = new ArrayList();
         List<String> names = new ArrayList<>();
         List<BigDecimal> prices = new ArrayList<>();
-        String a = pafCommService.getDistrSumM(2021).get(0).getDistrName();
-        String b = pafCommService.getDistrSumM(2021).get(1).getDistrName();
-        String c = pafCommService.getDistrSumN(2021).get(0).getDistrName();
-        String d = pafCommService.getDistrSumN(2021).get(1).getDistrName();
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        String dateReal = formatter.format(date);
+
+        String a = pafCommService.getDistrSumM(dateReal).get(0).getDistrName();
+        String b = pafCommService.getDistrSumM(dateReal).get(1).getDistrName();
+        String c = pafCommService.getDistrSumN(dateReal).get(0).getDistrName();
+        String d = pafCommService.getDistrSumN(dateReal).get(1).getDistrName();
         names.add(a);
         names.add(b);
         names.add(c);
         names.add(d);
-        for(int i=2016;i<=2021;i++){
-            prices.add(pafCommService.getDistrSum(a,i));
-            prices.add(pafCommService.getDistrSum(b,i));
-            prices.add(pafCommService.getDistrSum(c,i));
-            prices.add(pafCommService.getDistrSum(d,i));
+
+        for(int j=0;j<sortQ().size();j++){
+            prices.add(pafCommService.getDistrSum(a,Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(b,Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(c,Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(d,Integer.parseInt(sortQ().get(j))));
         }
         store.add(names);
         store.add(prices);
         return store;
     }
+
+    /**
+     * 去掉重复的数
+     * @param al
+     * @return
+     */
+    public ArrayList sort(ArrayList al) {
+        ArrayList list = new ArrayList();
+        for (int i = 0; i < al.size(); i++) {
+            if (!list.contains(al.get(i))) {
+                list.add(al.get(i));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 排序
+     * @return
+     */
+    public ArrayList<String> sortQ(){
+        List<String> datas = new ArrayList<>();
+        ArrayList<String> arrayList = new ArrayList();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+        for (int i = 0; i < pafCommService.getAllDate().size(); i++) {
+            Date date = pafCommService.getAllDate().get(i);
+            datas.add(formatter.format(date));
+        }
+        arrayList = sort((ArrayList) datas);
+        for (int i=0;i<arrayList.size();i++){
+            for (int j=i;j<arrayList.size();j++){
+                if(Integer.parseInt(arrayList.get(i))>Integer.parseInt(arrayList.get(j))){
+                    String a = arrayList.get(i);
+                    arrayList.set(i,arrayList.get(j));
+                    arrayList.set(j,a);
+//                    arrayList.sort(new Comparator<String>() {
+//                        @Override
+//                        public int compare(String o1, String o2) {
+//                            return 0;
+//                        }
+//                    });
+                }
+            }
+        }
+
+//        Arrays.s
+        return arrayList;
+    }
+
+
+
 
     @RequestMapping("/topComm")
     @ResponseBody

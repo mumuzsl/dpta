@@ -6,6 +6,7 @@ import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,15 +47,21 @@ public interface PafCommMapper extends BaseMapper<PafComm> {
     /**
      * 返回分销商前2店铺名
      */
-    List<DistrSumM> getDistrSumM(@Param("d") int d);
+    List<DistrSumM> getDistrSumM(@Param("d") String d);
 
     /**
      * 返回分销商最后2名店铺名
      */
-    List<DistrSumM> getDistrSumN(@Param("d") int d);
+    List<DistrSumM> getDistrSumN(@Param("d") String d);
 
     /**
      * 返回每年的收益
      */
     BigDecimal getDistrSum(@Param("d") String d,@Param("b") int b);
+
+    /**
+     * 返回数据库中所有的店铺结算金额的时间
+     * @return
+     */
+    List<Date> getAllDate();
 }
