@@ -3,12 +3,13 @@ package com.cqjtu.dpta.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqjtu.dpta.api.*;
+import com.cqjtu.dpta.api.CreditService;
+import com.cqjtu.dpta.api.DealService;
+import com.cqjtu.dpta.api.PafCommService;
+import com.cqjtu.dpta.api.ResveService;
 import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.DealMapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -25,10 +26,6 @@ import java.util.Map;
 @Service
 public class DealServiceImpl extends ServiceImpl<DealMapper, Deal> implements DealService {
 
-    @Override
-    public IPage<Deal> pageBySuppAndDistr(Pageable pageable, Long suppId, Long distrId) {
-        return baseMapper.selectBySuppAndDistr(toPage(pageable), suppId, distrId);
-    }
 
     @Resource
     PafCommService pafCommService;
@@ -36,6 +33,11 @@ public class DealServiceImpl extends ServiceImpl<DealMapper, Deal> implements De
     CreditService creditService;
     @Resource
     ResveService resveService;
+
+    @Override
+    public IPage<Deal> pageBySuppAndDistr(Pageable pageable, Long suppId, Long distrId) {
+        return baseMapper.selectBySuppAndDistr(toPage(pageable), suppId, distrId);
+    }
 
     /**
      * 分销商对订单进行付款
@@ -48,7 +50,7 @@ public class DealServiceImpl extends ServiceImpl<DealMapper, Deal> implements De
         Deal deal = baseMapper.selectById(deal_id);
         List<DealD> list = baseMapper.getDealDByDealId(deal_id);
         BigDecimal enCredit = new BigDecimal(0);
-        Map<Long,List<DealD>> map = new HashMap<>();
+        Map<Long, List<DealD>> map = new HashMap<>();
         for (DealD dealD : list) {
             PafComm pafComm = pafCommService.getById(dealD.getCommId());
             Long supp_id = pafComm.getSuppId();
@@ -74,11 +76,10 @@ public class DealServiceImpl extends ServiceImpl<DealMapper, Deal> implements De
                 for (DealD dealD : list1) {
                     pay = pay.add(dealD.getPrice().multiply(BigDecimal.valueOf(dealD.getCount())));
                 }
-                if (pay.compareTo(balance) ==- 1) {
+                if (pay.compareTo(balance) == -1) {
                     credit.setEnCredit(pay);
                     enCredit = enCredit.add(pay);
-                }
-                else {
+                } else {
                     credit.setEnCredit(balance);
                     enCredit = enCredit.add(balance);
                 }

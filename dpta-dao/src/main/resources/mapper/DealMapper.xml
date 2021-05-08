@@ -13,11 +13,35 @@
              on t1.COMM_ID = t2.COMM_ID
     </select>
     <select id="getDealDByDealId" resultType="com.cqjtu.dpta.dao.entity.DealD">
-        SELECT
-        *
-        FROM
-        t_deal_d
-        WHERE
-        deal_id = #{deal_id}
+        SELECT *
+        FROM t_deal_d
+        WHERE deal_id = #{deal_id}
     </select>
+
+<!--    <resultMap id="DealDDto" type="com.cqjtu.dpta.dao.dto.DealDDto">-->
+<!--        <id property="id" column="detail_id"/>-->
+<!--        <association property="pafComm" javaType="com.cqjtu.dpta.dao.entity.PafComm">-->
+<!--            <id property="commId" column="comm_id"/>-->
+<!--            <result property="commNm" column="comm_nm"/>-->
+<!--        </association>-->
+<!--    </resultMap>-->
+
+<!--    <resultMap id="DealDto" type="com.cqjtu.dpta.dao.dto.DealDto">-->
+<!--        <id property="dealId" column="deal_id"/>-->
+<!--        <collection property="details" resultMap="DealDDto"/>-->
+<!--    </resultMap>-->
+
+<!--    <select id="pageByDistr" resultMap="DealDto">-->
+<!--        select td.DEAL_ID     as deal_id,-->
+<!--               td.AMOUNT      as deal_amount,-->
+<!--               td.state       as deal_state,-->
+<!--               td.create_time as deal_create_time,-->
+<!--               tdd.id         as id,-->
+<!--               tdd.count      as count,-->
+<!--               tdd.price      as price,-->
+<!--               tpc.COMM_NM as tpc.-->
+<!--        from t_deal td-->
+<!--                 inner join t_deal_d tdd on td.DEAL_ID = tdd.deal_id and td.DISTR_ID = #{distrId}-->
+<!--                 inner join t_paf_comm tpc on tdd.comm_id = tpc.COMM_ID-->
+<!--    </select>-->
 </mapper>

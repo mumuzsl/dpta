@@ -8,6 +8,8 @@ import com.cqjtu.dpta.api.support.CrudService;
 import com.cqjtu.dpta.dao.entity.Distr;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
+
 /**
  * <p>
  * 授信表 服务类
@@ -44,6 +46,8 @@ public interface CreditService extends CrudService<Credit> {
      * @return 成功返回TRUE，失败返回FALSE
      */
     Boolean renewCredit(Long id, Double amount);
+
+    Boolean renewCredit(Long id, BigDecimal amount);
 
 
     PageResult findByName(PageQueryUtil pageUtil, String name);

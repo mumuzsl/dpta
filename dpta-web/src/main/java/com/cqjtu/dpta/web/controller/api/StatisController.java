@@ -39,7 +39,27 @@ public class StatisController {
         ydata.add(166);
     }
 
-    @GetMapping("recent/")
+    @GetMapping("recent/person-time")
+    public Result personTime(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
+        Result<XyVo> result = Result.ok();
+        if (day > 7) {
+            result.setMessage(ResultCodeEnum.DATA_BIG_DAY_ERROR.getMessage());
+        }
+        XyVo xyVo = XyVo.of(day);
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < day; i++) {
+            xyVo.getXdata().add(now.minusDays(i + 1).toLocalDate());
+        }
+        List<Object> newYData = new ArrayList<>(day);
+        for (Object o : ydata) {
+            newYData.add((int) o * 3);
+        }
+        xyVo.setYdata(newYData);
+        result.setData(xyVo);
+        return result;
+    }
+
+    @GetMapping("recent/person-number")
     public Result recent(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
         Result<XyVo> result = Result.ok();
         if (day > 7) {

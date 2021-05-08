@@ -1,9 +1,11 @@
 package com.cqjtu.dpta.api;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.cqjtu.dpta.api.support.CrudService;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.dao.entity.CreditD;
-import com.cqjtu.dpta.api.support.CrudService;
+import org.springframework.data.domain.Pageable;
 
 /**
  * <p>
@@ -23,4 +25,6 @@ public interface CreditDService extends CrudService<CreditD> {
     Boolean addCreditD(CreditD creditD);
 
     PageResult getRecords(PageQueryUtil pageUtil, Long id);
+
+    IPage<CreditD>  pageByDistrAndType(Pageable pageable,Long distrId,Integer type);
 }

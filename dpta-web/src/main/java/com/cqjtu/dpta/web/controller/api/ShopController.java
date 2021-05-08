@@ -33,7 +33,7 @@ public class ShopController {
     public Result page(@PageableDefault Pageable pageable,
                        Info info) {
         IPage<Shop> page = shopService.lambdaQuery()
-                .eq(Shop::getDistrId, info.longId())
+                .eq(Shop::getDistrId, info.id())
                 .page(shopService.convert(pageable));
         return Result.ok(page);
     }
@@ -48,7 +48,7 @@ public class ShopController {
     public Result add(@RequestBody Shop shop,
                       Info info) {
         shop.setShopId(null);
-        shop.setDistrId(info.longId());
+        shop.setDistrId(info.id());
         if (StringUtils.isBlank(shop.getShopNm())) {
             return Result.fail();
         }
@@ -60,7 +60,7 @@ public class ShopController {
     public Result comms(@PageableDefault Pageable pageable,
                         @PathVariable Long shopId,
                         Info info) {
-        IPage<PafComm> page = shopService.getInsellComms(pageable, info.longId(), shopId);
+        IPage<PafComm> page = shopService.getInsellComms(pageable, info.id(), shopId);
         return Result.ok(page);
     }
 

@@ -1,7 +1,9 @@
 package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cqjtu.dpta.api.CreditDService;
+import com.cqjtu.dpta.api.CreditService;
 import com.cqjtu.dpta.common.extension.SearchPage;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
@@ -11,10 +13,7 @@ import com.cqjtu.dpta.common.vo.DealVo;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.dao.entity.Distr;
-import com.cqjtu.dpta.dao.entity.RefundR;
 import com.cqjtu.dpta.dao.mapper.CreditMapper;
-import com.cqjtu.dpta.api.CreditService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -97,16 +96,28 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
      */
     @Override
     public Boolean renewCredit(Long id, Double amount) {
+        return renewCredit(id, BigDecimal.valueOf(amount));
+    }
+
+    /**
+     * 恢复授信额度
+     *
+     * @param id:     授信编码
+     * @param amount: 恢复的额度
+     * @return 成功返回TRUE，失败返回FALSE
+     */
+    @Override
+    public Boolean renewCredit(Long id, BigDecimal amount) {
         Credit credit = this.getById(id);
         if (credit == null) {
             return false;
         }
-        BigDecimal usedAmount = credit.getUsedAmout().subtract(BigDecimal.valueOf(amount));
+        BigDecimal usedAmount = credit.getUsedAmout().subtract(amount);
 
         CreditD creditD = new CreditD();
         creditD.setCreditId(id);
         creditD.setType(Const.REPAYMENT);
-        creditD.setAmount(BigDecimal.valueOf(amount));
+        creditD.setAmount(amount);
         creditD.setUsedAmount(usedAmount);
         creditD.setCreateTm(LocalDateTime.now());
         creditDService.addCreditD(creditD);
@@ -118,21 +129,21 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
 
     @Override
     public PageResult findByName(PageQueryUtil pageUtil, String name) {
-        List<CreditVo> list = baseMapper.getByNm(pageUtil,name);
+        List<CreditVo> list = baseMapper.getByNm(pageUtil, name);
         PageResult pageResult = new PageResult(list, list.size(), pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
 
     @Override
     public PageResult findByName1(PageQueryUtil pageUtil, String name) {
-        List<CreditVo> list = baseMapper.getByNm1(pageUtil,name);
+        List<CreditVo> list = baseMapper.getByNm1(pageUtil, name);
         PageResult pageResult = new PageResult(list, list.size(), pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
 
     @Override
     public PageResult getRecords(PageQueryUtil pageUtil, Long suppId, Long distrId) {
-        List<DealVo> list = baseMapper.getRecords(pageUtil,suppId,distrId);
+        List<DealVo> list = baseMapper.getRecords(pageUtil, suppId, distrId);
         PageResult pageResult = new PageResult(list, list.size(), pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }

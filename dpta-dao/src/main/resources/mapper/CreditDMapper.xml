@@ -3,6 +3,15 @@
 <mapper namespace="com.cqjtu.dpta.dao.mapper.CreditDMapper">
 
     <select id="getRecodrs" resultType="com.cqjtu.dpta.dao.entity.CreditD">
-        select * from t_credit_d where credit_id = #{id}
+        select *
+        from t_credit_d
+        where credit_id = #{id}
+    </select>
+
+    <select id="pageByDistrAndType" resultType="com.cqjtu.dpta.dao.entity.CreditD">
+        select *
+        from t_credit_d tcd
+                 inner join t_credit tc on tcd.CREDIT_ID = tc.CREDIT_ID
+            and tc.DISTR_ID = #{distrId} and tcd.TYPE
     </select>
 </mapper>

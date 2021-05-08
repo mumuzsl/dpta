@@ -5,14 +5,19 @@ import com.cqjtu.dpta.api.ResveDService;
 import com.cqjtu.dpta.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.ResveD;
 import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.dao.entity.ResveD;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Map;
 
 /**
  * <p>
@@ -32,11 +37,28 @@ public class ResveController {
     @Resource
     ResveDService resveDService;
 
+    @PostMapping("add")
+    public Result add(@RequestBody Map<String, String> map,
+                      Info info) {
+        return useResve(info.id(), map.get("pay_value"), Const.RECHARGE);
+    }
+
+    private Result useResve(Long distrId, String value, int type) {
+        try {
+            BigDecimal v = BigDecimal.valueOf(Double.parseDouble(value));
+            Boolean b = resveService.useResve(distrId, v, type);
+            return Result.judge(b);
+        } catch (NumberFormatException | NullPointerException e) {
+            return Result.fail();
+        }
+    }
+
+
     @GetMapping("/recharge")
     public Result recharge(@PageableDefault Pageable pageable, Info info) {
         Page<ResveD> page = resveDService
                 .lambdaQuery()
-                .eq(ResveD::getDistrId, info.longId())
+                .eq(ResveD::getDistrId, info.id())
                 .eq(ResveD::getType, Const.RECHARGE)
                 .page(resveDService.toPage(pageable));
         return Result.ok(page);

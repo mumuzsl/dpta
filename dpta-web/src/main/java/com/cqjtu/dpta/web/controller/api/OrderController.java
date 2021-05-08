@@ -41,7 +41,7 @@ public class OrderController {
     public Result full(@PathVariable Long orderId,
                        Info info) {
         Long distrId = orderService.getDistrId(orderId);
-        if (distrId == null || !distrId.equals(info.longId())) {
+        if (distrId == null || !distrId.equals(info.id())) {
             return Result.fail();
         }
         OrderDto orderDto = orderService.getFullOrderDto(orderId);
@@ -69,12 +69,12 @@ public class OrderController {
                        Info info) {
         IPage<OrderDto> page = null;
         if (StringUtils.isBlank(keyword)) {
-            page = orderService.pageNotDetailOrderDto(pageable, info.longId());
+            page = orderService.pageNotDetailOrderDto(pageable, info.id());
         } else {
             if (!DptaUtils.in02(option)) {
                 return ResultUtils.keyError();
             }
-            page = orderService.searchByDistrId(pageable, keyword, option, info.longId());
+            page = orderService.searchByDistrId(pageable, keyword, option, info.id());
         }
         page.getRecords().forEach(orderDto -> {
             Long id = orderDto.getId();

@@ -1,8 +1,6 @@
 package com.cqjtu.dpta.web.controller.api;
 
-import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.PhoneUtil;
-import cn.hutool.core.util.StrUtil;
 import com.cqjtu.dpta.api.DistrLevelService;
 import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.DistrUserService;
@@ -58,7 +56,7 @@ public class DistrUserController {
     public Result detail(Info info) {
         Distr distr = distrService
                 .lambdaQuery()
-                .eq(Distr::getDistrId, info.longId())
+                .eq(Distr::getDistrId, info.id())
                 .one();
         return Result.ok(distr);
     }

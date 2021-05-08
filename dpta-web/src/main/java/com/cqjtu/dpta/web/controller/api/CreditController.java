@@ -1,19 +1,26 @@
 package com.cqjtu.dpta.web.controller.api;
 
+import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.api.CreditService;
 import com.cqjtu.dpta.api.DealService;
+import com.cqjtu.dpta.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.Credit;
-import com.cqjtu.dpta.web.support.ControllerUtils;
+import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.dao.entity.Credit;
+import com.cqjtu.dpta.dao.entity.CreditD;
+import com.cqjtu.dpta.web.support.ControllerUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * <p>
@@ -35,8 +42,44 @@ public class CreditController {
 
     @Resource
     private CreditDService creditDService;
+    @Resource
+    private ResveService resveService;
 
     private static final String[] COLUMNS = {"SUPP_ID", "DISTR_ID", "STATE", "CREDIT_ID"};
+
+    @GetMapping("refund")
+    public Result list(@PageableDefault Pageable pageable,
+                       Info info) {
+        IPage<CreditD> page = creditDService.pageByDistrAndType(pageable, info.id(), Const.REPAYMENT);
+        return Result.ok(page);
+    }
+
+    @PostMapping("refund")
+    public Result refund(@RequestBody Map<String, String> map,
+                         Info info) {
+        String credit_id = map.get("credit_id");
+        String refund_value = map.get("refund_value");
+
+        BigDecimal refundValue = Optional
+                .ofNullable(refund_value)
+                .filter(NumberUtil::isNumber)
+                .map(NumberUtil::toBigDecimal)
+                .orElseThrow(ResultUtils::badRequest);
+
+        Long creditId = Optional
+                .ofNullable(credit_id)
+                .filter(NumberUtil::isLong)
+                .map(NumberUtil::parseLong)
+                .map(creditService::getById)
+                .filter(c -> c.getDistrId() == info.id())
+                .filter(c -> NumberUtil.isGreaterOrEqual(c.getUsedAmout(), refundValue))
+                .map(Credit::getCreditId)
+                .orElseThrow(ResultUtils::badRequest);
+
+        Boolean b1 = resveService.useResve(info.id(), refundValue, Const.REPAYMENT);
+        Boolean b2 = creditService.renewCredit(creditId, refundValue);
+        return Result.judge(b1 && b2);
+    }
 
     /**
      * 根据授信id修改状态
@@ -45,7 +88,7 @@ public class CreditController {
     public Result state(@PathVariable Long id,
                         Info info) {
         Credit credit = creditService.getById(id);
-        if (credit == null || credit.getDistrId() != info.longId()) {
+        if (credit == null || credit.getDistrId() != info.id()) {
             return Result.fail();
         }
         credit.setState(Const.DISABLE);
@@ -61,10 +104,10 @@ public class CreditController {
                 keyword,
                 () -> creditService
                         .lambdaQuery()
-                        .eq(Credit::getDistrId, info.longId())
+                        .eq(Credit::getDistrId, info.id())
                         .page(creditService.toPage(pageable)),
                 () -> creditService
-                        .pageByDistrAndState(info.longId(), pageable, keyword, Const.ADOPT)
+                        .pageByDistrAndState(info.id(), pageable, keyword, Const.ADOPT)
         );
         return Result.ok(page);
     }

@@ -1,6 +1,7 @@
 package com.cqjtu.dpta.common.util;
 
 
+import com.cqjtu.dpta.common.exception.BadRequestException;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 
@@ -19,4 +20,9 @@ public final class ResultUtils {
         return CommonResult.KEY_ERROR;
     }
 
+    private static final BadRequestException BAD_REQUEST_EXCEPTION = new BadRequestException(ResultCodeEnum.KEY_ERROR);
+
+    public static BadRequestException badRequest() {
+        return BAD_REQUEST_EXCEPTION;
+    }
 }

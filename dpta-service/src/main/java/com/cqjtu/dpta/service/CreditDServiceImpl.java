@@ -1,12 +1,13 @@
 package com.cqjtu.dpta.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.dao.entity.CreditD;
-import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.dao.mapper.CreditDMapper;
-import com.cqjtu.dpta.api.CreditDService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +34,13 @@ public class CreditDServiceImpl extends ServiceImpl<CreditDMapper, CreditD> impl
 
     @Override
     public PageResult getRecords(PageQueryUtil pageUtil, Long id) {
-        List<CreditD> list = baseMapper.getRecodrs(pageUtil,id);
+        List<CreditD> list = baseMapper.getRecodrs(pageUtil, id);
         PageResult pageResult = new PageResult(list, list.size(), pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
+    }
+
+    @Override
+    public IPage<CreditD> pageByDistrAndType(Pageable pageable, Long distrId, Integer type) {
+        return baseMapper.pageByDistrAndType(toPage(pageable), distrId, type);
     }
 }

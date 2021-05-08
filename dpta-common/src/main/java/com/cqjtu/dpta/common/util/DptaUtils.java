@@ -1,8 +1,6 @@
 package com.cqjtu.dpta.common.util;
 
 
-import java.util.function.Predicate;
-
 /**
  * author: mumu
  * date: 2021/4/14
@@ -25,4 +23,6 @@ public final class DptaUtils {
     public static boolean in(int t, int min, int max) {
         return t >= min && t <= max;
     }
+
+
 }

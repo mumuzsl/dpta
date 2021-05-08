@@ -6,8 +6,8 @@ import com.cqjtu.dpta.api.support.CrudService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -29,5 +29,9 @@ public abstract class ControllerUtils {
 
     public static <E, T extends IPage<E>> IPage<E> quick(String keyword, Supplier<T> notSearchSupplier, Supplier<T> searchSupplier) {
         return StringUtils.isBlank(keyword) ? notSearchSupplier.get() : searchSupplier.get();
+    }
+
+    public static BigDecimal money(String value) {
+        return BigDecimal.valueOf(Double.parseDouble(value));
     }
 }

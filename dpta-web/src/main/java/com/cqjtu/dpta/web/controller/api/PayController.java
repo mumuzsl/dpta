@@ -1,44 +1,48 @@
 package com.cqjtu.dpta.web.controller.api;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.request.AlipayFundTransUniTransferRequest;
 import com.alipay.api.request.AlipayTradePagePayRequest;
-import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.response.AlipayFundTransUniTransferResponse;
-import com.alipay.api.response.AlipayTradePagePayResponse;
-import com.alipay.api.response.AlipayTradeQueryResponse;
-import com.cqjtu.dpta.api.ResveDService;
 import com.cqjtu.dpta.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
+import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.vo.AliPayBean;
-import com.cqjtu.dpta.dao.entity.Resve;
-import com.cqjtu.dpta.dao.entity.ResveD;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
+import com.cqjtu.dpta.common.web.Info;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
-@Controller
-@RequestMapping("/api/alipay")
+@RestController
+@RequestMapping("/distr/api/alipay")
 public class PayController {
 
     // 支付宝异步通知路径，付款完毕后会异步调用本项目的方法，必须为公网地址
     private final String NOTIFY_URL = "http://www.baidu.com";
     // 支付宝同步通知路径，也就是当付款完毕后跳转到本项目的页面，可以不是公网地址
-    private final String RETURN_URL = "http://www.baidu.com";
+    private final String RETURN_URL = "http://localhost:8080/";
+    private static final Snowflake SNOWFLAKE = IdUtil.getSnowflake(0, 0);
 
     @Resource
     AliPayBean aliPayBean;
+
     @GetMapping("pay")
-    public void pay(String distrId, String amount, HttpServletResponse httpResponse) throws IOException, AlipayApiException {
+    public Result pay(Info info,
+                      @RequestParam("amount") String amount,
+                      @RequestParam("return_url") String returnUrl,
+                      HttpServletResponse httpResponse) throws IOException, AlipayApiException {
         // 实例化客户端，填入所需参数
 //        AlipayClient alipayClient = new DefaultAlipayClient(aliPayBean.getServerUrl(), aliPayBean.getAppId(), aliPayBean.getPrivateKey(), aliPayBean.getFormat(), aliPayBean.getCharset(), aliPayBean.getPublicKey(), aliPayBean.getSignType());
 
@@ -56,7 +60,7 @@ public class PayController {
 
         AlipayTradePagePayRequest request = new AlipayTradePagePayRequest();
         // 在公共参数中设置回跳和通知地址
-        request.setReturnUrl(RETURN_URL);
+        request.setReturnUrl(returnUrl);
 //        request.setNotifyUrl(NOTIFY_URL);
 //        //根据订单编号,查询订单相关信息
 //        Order order = payService.selectById(orderId);
@@ -67,15 +71,15 @@ public class PayController {
 //        //订单名称，必填
 //        String subject = order.getOrderName();
 //        resveDService.getInsertId().toString()
-        String out_trade_no = "10014";
+        String out_trade_no = SNOWFLAKE.nextIdStr();
         String total_amount = amount;
         String subject = "充值预备金";
         //商品描述，可空
-        String body = distrId;
-        request.setBizContent("{\"out_trade_no\":\""+ out_trade_no +"\","
-                + "\"total_amount\":\""+ total_amount +"\","
-                + "\"subject\":\""+ subject +"\","
-                + "\"body\":\""+ body +"\","
+        String body = String.valueOf(info.id());
+        request.setBizContent("{\"out_trade_no\":\"" + out_trade_no + "\","
+                + "\"total_amount\":\"" + total_amount + "\","
+                + "\"subject\":\"" + subject + "\","
+                + "\"body\":\"" + body + "\","
                 + "\"product_code\":\"FAST_INSTANT_TRADE_PAY\"}");
         String form = "";
         try {
@@ -83,27 +87,29 @@ public class PayController {
         } catch (AlipayApiException e) {
             e.printStackTrace();
         }
-        httpResponse.setContentType("text/html;charset=" + aliPayBean.getCharset());
-        httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
-        httpResponse.getWriter().flush();
-        httpResponse.getWriter().close();
+//        httpResponse.setContentType("text/html;charset=" + aliPayBean.getCharset());
+//        httpResponse.getWriter().write(form);// 直接将完整的表单html输出到页面
+//        httpResponse.getWriter().flush();
+//        httpResponse.getWriter().close();
+        return Result.ok(form);
     }
 
     @Resource
     ResveService resveService;
+
     @PostMapping("notify")
-    public String notif (@RequestParam(value = "trade_status",required = false) String trade_status,
-                       @RequestParam(value = "total_amount",required = false) BigDecimal amount,
-                       @RequestParam(value = "body",required = false) Long distrId) {
+    public String notif(@RequestParam(value = "trade_status", required = false) String trade_status,
+                        @RequestParam(value = "total_amount", required = false) BigDecimal amount,
+                        @RequestParam(value = "body", required = false) Long distrId) {
         if (trade_status.equals("TRADE_SUCCESS")) {
-            resveService.useResve(distrId,amount,Const.RECHARGE);
+            resveService.useResve(distrId, amount, Const.RECHARGE);
             return "success";
         }
         return "fail";
     }
 
     @PostMapping("transfer")
-    public void transfer () throws AlipayApiException {
+    public void transfer() throws AlipayApiException {
         CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
         certAlipayRequest.setServerUrl(aliPayBean.getServerUrl());  //gateway:支付宝网关（固定）https://openapi.alipay.com/gateway.do
         certAlipayRequest.setAppId(aliPayBean.getAppId());  //APPID 即创建应用后生成,详情见创建应用并获取 APPID
@@ -132,7 +138,7 @@ public class PayController {
                 "}");
         AlipayFundTransUniTransferResponse response = alipayClient.certificateExecute(request);
 
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             System.out.println("调用成功");
         } else {
             System.out.println("调用失败");

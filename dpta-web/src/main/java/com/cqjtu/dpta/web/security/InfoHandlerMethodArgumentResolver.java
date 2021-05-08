@@ -1,8 +1,8 @@
 package com.cqjtu.dpta.web.security;
 
+import com.cqjtu.dpta.common.exception.NoTokenException;
 import com.cqjtu.dpta.common.util.TokenUtils;
 import com.cqjtu.dpta.common.web.Info;
-import io.swagger.models.auth.In;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -24,12 +24,12 @@ public class InfoHandlerMethodArgumentResolver implements HandlerMethodArgumentR
 
     @Override
     public Info resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        try {
-            HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
-            Assert.notNull(request, "request not be null");
-            return Info.of(TokenUtils.getAttribute(request));
-        } catch (Exception e) {
-            throw new IllegalStateException();
+        HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
+        Assert.notNull(request, "request not be null");
+        String token = TokenUtils.getAttribute(request);
+        if (token == null) {
+            throw new NoTokenException();
         }
+        return Info.of(token);
     }
 }

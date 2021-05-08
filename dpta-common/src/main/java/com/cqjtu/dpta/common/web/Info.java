@@ -1,16 +1,9 @@
 package com.cqjtu.dpta.common.web;
 
-import com.alibaba.fastjson.annotation.JSONPOJOBuilder;
-import com.alibaba.fastjson.annotation.JSONType;
 import com.cqjtu.dpta.common.util.TokenUtils;
-import io.swagger.models.auth.In;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.beans.Transient;
-import java.io.Serializable;
 
 /**
  * author: mumu
@@ -26,7 +19,7 @@ public class Info {
 
     private String avatar;
 
-    public long longId() {
+    public long id() {
         return TokenUtils.longId(token);
     }
 
