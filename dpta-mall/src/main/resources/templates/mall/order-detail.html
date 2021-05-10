@@ -5,7 +5,24 @@
 </head>
 <link rel="stylesheet" th:href="@{/admin/plugins/sweetalert/sweetalert.css}"/>
 <body>
-<header th:replace="mall/header::header-fragment"></header>
+<header th:replace="mall/header::header-fragment">
+</header>
+<style>
+    .form-text {
+        width: 200px;
+        padding: 5px 20px;
+        margin: 4px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .f1 {
+        border-radius: 5px;
+        padding: 10px;
+    }
+</style>
 <!-- nav -->
 <nav th:replace="mall/header::nav-fragment"></nav>
 
@@ -179,7 +196,25 @@
                                         <th>支付方式：</th>
                                         <td th:text="${orderDetailVO.payTypeString==null?'在线支付':orderDetailVO.payTypeString}">
                                             在线支付
+
                                         </td>
+                                        <div style="margin-left: 5%">
+                                            <form class="f1">
+                                                <div>
+                                                    <input type="hidden" id="amount" th:value="${payM.amount}">
+                                                    <label  th:text="${'待支付总金额:'+ payM.amount +'元'}"></label>
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="hidden" id="enCredit" th:value="${payM.enCredit}">
+                                                    <label for="credit" class="control-label">使用授信支付:&nbsp;</label>
+                                                    <input type="number" min="0.00" th:max="${payM.enCredit}" class="form-text" id="credit" name="credit" th:placeholder="${'最大可用授信'+payM.enCredit+'元'}" required="required">
+                                                </div>
+                                                <div>
+                                                    <input type="hidden" id="resve" th:value="${payM.resve}">
+                                                    <label id="uResve" th:text="${'使用预备金:'+payM.amount+'元'}">&nbsp;&nbsp;</label>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -216,6 +251,23 @@
 <script th:src="@{/admin/plugins/jquery/jquery.min.js}"></script>
 <script th:src="@{/admin/plugins/sweetalert/sweetalert.min.js}"></script>
 <script type="text/javascript">
+
+    $("#credit").keyup(function(){
+        var credit = $("#credit").val();
+        var amount = $("#amount").val();
+        var enCredit = $("#enCredit").val();
+        if (parseFloat(credit) > parseFloat(enCredit)) {
+            swal("最大可用授信为"+enCredit+"元，请重新输入！", {
+                icon: "error",
+            })
+            $("#credit").val(0.00);
+        }
+        else {
+            var t = '使用预备金:'+(amount-credit)+'元';
+            $("#uResve").text(t);
+        }
+
+    });
 
     function cancelOrder() {
         var orderNo = $("#orderNoValue").val();

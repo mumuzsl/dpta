@@ -1,7 +1,6 @@
 var editorD;
 
 $(function () {
-
     //富文本编辑器 用于商品详情编辑
     const E = window.wangEditor;
     editorD = new E('#wangEditor')
@@ -80,6 +79,7 @@ $('#saveButton').click(function () {
     var goodsIntro = $('#goodsIntro').val();
     var stockNum = $('#stockNum').val();
     var goodsSellStatus = $("input[name='goodsSellStatus']:checked").val();
+    var suppId = $("#suppC").val();
     var goodsDetailContent = editorD.txt.html();
     var goodsCoverImg = $('#goodsCoverImg')[0].src;
     if (isNull(goodsCategoryId)) {
@@ -179,7 +179,8 @@ $('#saveButton').click(function () {
         "goodsDetailContent": goodsDetailContent,
         "goodsCoverImg": goodsCoverImg,
         "goodsCarousel": goodsCoverImg,
-        "goodsSellStatus": goodsSellStatus
+        "goodsSellStatus": goodsSellStatus,
+        "suppId":suppId
     };
     if (goodsId > 0) {
         url = '/admin/goods/update';
@@ -196,7 +197,8 @@ $('#saveButton').click(function () {
             "goodsDetailContent": goodsDetailContent,
             "goodsCoverImg": goodsCoverImg,
             "goodsCarousel": goodsCoverImg,
-            "goodsSellStatus": goodsSellStatus
+            "goodsSellStatus": goodsSellStatus,
+            "suppId":suppId
         };
     }
     console.log(data);

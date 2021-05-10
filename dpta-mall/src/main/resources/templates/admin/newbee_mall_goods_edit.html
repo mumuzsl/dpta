@@ -100,12 +100,26 @@
                                        required="true">
                             </div>
                             <div class="form-group">
+                                <form>
+                                    <select class="form-control col-sm-3"
+                                            id="suppC"
+                                            data-placeholder="请选择供应商...">
+                                        <th:block th:each="c : ${suppers}">
+                                            <option th:value="${c.suppId}" th:text="${c.suppNm}"
+                                                    th:selected="${null !=suppId and suppId==c.suppId} ?true:false">
+                                                >
+                                            </option>
+                                        </th:block>
+                                    </select>
+                                </form>
+                            </div>
+                            <div class="form-group">
                                 <label class="control-label">上架状态:&nbsp;</label>
                                 <input name="goodsSellStatus" type="radio" id="goodsSellStatusTrue" checked=true
-                                       th:checked="${null==goods||(null !=goods and null !=goods.goodsSellStatus and goods.goodsSellStatus==0)} ?true:false"
+                                       th:checked="${null !=goods and null !=goods and null !=goods.goodsSellStatus and goods.goodsSellStatus==0} ?true:false"
                                        value="0"/>&nbsp;上架&nbsp;
                                 <input name="goodsSellStatus" type="radio" id="goodsSellStatusFalse" value="1"
-                                       th:checked="${null !=goods and null !=goods.goodsSellStatus and goods.goodsSellStatus==1} ?true:false"/>&nbsp;下架&nbsp;
+                                       th:checked="${null==goods||(null !=goods.goodsSellStatus and goods.goodsSellStatus==1)} ?true:false"/>&nbsp;下架&nbsp;
                             </div>
                             <div class="form-group">
                                 <div class="form-group">

@@ -50,4 +50,9 @@ public class SuppController {
         return Result.judge(result);
     }
 
+    @GetMapping("all")
+    public List<Supp> all(){
+        return suppService.list();
+    }
+
 }

@@ -3,7 +3,7 @@ $(function () {
     if (name=="")
         name="*";
     $("#jqGrid").jqGrid({
-        url: '/platform/api/credit/findByNm/'+name,
+        url: '/platform/api/credit/findByNm?name='+name,
         datatype: "json",
         colModel: [
             {label: '授信编码', name: 'creditId', index: 'creditId', width: 60, key: true},
@@ -33,6 +33,7 @@ $(function () {
         prmNames: {
             page: "page",
             rows: "limit",
+            search: "name"
         },
         gridComplete: function () {
             //隐藏grid底部滚动条
@@ -226,7 +227,7 @@ function search() {
     if (name == "") {
         name = "*";
     }
-    $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/credit/findByNm/'+name}).trigger('reloadGrid');
+    $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/credit/findByNm?name='+name}).trigger('reloadGrid');
 }
 /**
  * 禁用规则

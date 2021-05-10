@@ -194,7 +194,7 @@ function search() {
     if (name == "") {
         reload();
     } else {
-        $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/paf-comm-rule/search0/' + name}).trigger('reloadGrid');
+        $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/paf-comm-rule/search0?name=' + name}).trigger('reloadGrid');
     }
 }
 

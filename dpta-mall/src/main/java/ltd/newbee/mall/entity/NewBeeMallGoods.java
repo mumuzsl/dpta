@@ -37,6 +37,8 @@ public class NewBeeMallGoods {
 
     private Integer createUser;
 
+    private Long suppId;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
@@ -48,6 +50,14 @@ public class NewBeeMallGoods {
     private String goodsDetailContent;
 
     private Byte isDeleted;
+
+    public Long getSuppId() {
+        return suppId;
+    }
+
+    public void setSuppId(Long suppId) {
+        this.suppId = suppId;
+    }
 
     public Long getGoodsId() {
         return goodsId;

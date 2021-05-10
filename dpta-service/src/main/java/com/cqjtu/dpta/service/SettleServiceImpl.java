@@ -34,6 +34,7 @@ public class SettleServiceImpl implements SettleService {
      */
     @Override
     @Scheduled(cron = "0 0 23  * * ? ")
+//    @Scheduled(cron = "0 12 11  * * ? ")
     public Boolean dayVerify() {
         QueryWrapper<Order> queryWrapper = new QueryWrapper();
         queryWrapper.eq("state", Const.PAID);
@@ -58,12 +59,12 @@ public class SettleServiceImpl implements SettleService {
                 for (OrderD orderD : list1) {
 //                    if (orderD.getState().equals(1)) continue;
                     CommR commR = orderDService.getCommR(orderD.getCommId());
-                    PafSkuStock pafSkuStock = pafCommService.getByCommIdAndSkuId(orderD.getCommId(),orderD.getSkuId());
-                    base = base.add(pafSkuStock.getSuppPrice());
+                    PafComm pafComm = pafCommService.getById(orderD.getCommId());
+                    base = base.add(pafComm.getSuppPrice().multiply(BigDecimal.valueOf(orderD.getCount())));
                     amount = amount.add(orderD.getPrice().multiply(BigDecimal.valueOf(orderD.getCount())));
                     BigDecimal profit = new BigDecimal(0);
                     if (commR.getType().equals("比例分润")) {
-                        profit = orderD.getPrice().subtract(pafSkuStock.getSuppPrice())
+                        profit = orderD.getPrice().subtract(pafComm.getSuppPrice())
                                 .multiply(BigDecimal.valueOf(orderD.getCount()))
                                 .multiply(commR.getValue());
                     }
@@ -106,10 +107,12 @@ public class SettleServiceImpl implements SettleService {
      */
     @Override
     @Scheduled(cron = "0 30 23 28 * ? ")
+//    @Scheduled(cron = "0 45 11 10 * ? ")
     public Boolean MonthSettle() {
         List<Distr> list = distrService.list();
         for (Distr distr : list) {
             List<Order> list1 = orderService.getOrderListByDistrId(distr.getDistrId());
+            if (list1.size()==0) continue;
             BigDecimal base = new BigDecimal(0);
             BigDecimal amount = new BigDecimal(0);
             BigDecimal profit = new BigDecimal(0);
@@ -132,6 +135,7 @@ public class SettleServiceImpl implements SettleService {
             settleM.setPlaP(amount.subtract(base).subtract(profit));
             settleM.setSettleTm(LocalDateTime.now());
             settleMMapper.insert(settleM);
+
         }
         return true;
     }

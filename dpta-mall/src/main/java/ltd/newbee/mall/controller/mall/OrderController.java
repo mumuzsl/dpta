@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.controller.mall;
 
+import com.cqjtu.dpta.dao.entity.PayM;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.common.ServiceResultEnum;
@@ -32,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -50,6 +52,11 @@ public class OrderController {
         if (orderDetailVO == null) {
             return "error/error_5xx";
         }
+        PayM payM = new PayM();
+        payM.setAmount(new BigDecimal(2000));
+        payM.setEnCredit(new BigDecimal(1000));
+        payM.setResve(new BigDecimal(2000));
+        request.setAttribute("payM",payM);
         request.setAttribute("orderDetailVO", orderDetailVO);
         return "mall/order-detail";
     }

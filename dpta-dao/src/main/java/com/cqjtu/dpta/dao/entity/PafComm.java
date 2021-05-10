@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -26,7 +28,7 @@ public class PafComm implements Serializable {
     /**
      * 商品编码
      */
-    @TableId(value = "COMM_ID", type = IdType.AUTO)
+    @TableId("COMM_ID")
     private Long commId;
 
     /**
@@ -39,7 +41,7 @@ public class PafComm implements Serializable {
      * 类型
      */
     @TableField("CATEGORY_ID")
-    private String categoryId;
+    private Long categoryId;
 
     /**
      * 供应商编码
@@ -82,6 +84,9 @@ public class PafComm implements Serializable {
      */
     @TableField("IMG_URL")
     private String imgUrl;
+
+    @TableField("supp_price")
+    private BigDecimal suppPrice;
 
 
 }

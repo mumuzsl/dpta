@@ -8,6 +8,8 @@
  */
 package ltd.newbee.mall.controller.admin;
 
+import com.cqjtu.dpta.dao.entity.PafComm;
+import com.cqjtu.dpta.dao.entity.Supp;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallCategoryLevelEnum;
 import ltd.newbee.mall.common.ServiceResultEnum;
@@ -22,9 +24,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +42,8 @@ public class NewBeeMallGoodsController {
     private NewBeeMallGoodsService newBeeMallGoodsService;
     @Resource
     private NewBeeMallCategoryService newBeeMallCategoryService;
+    @Resource
+    RestTemplate restTemplate;
 
     @GetMapping("/goods")
     public String goodsPage(HttpServletRequest request) {
@@ -48,6 +54,8 @@ public class NewBeeMallGoodsController {
     @GetMapping("/goods/edit")
     public String edit(HttpServletRequest request) {
         request.setAttribute("path", "edit");
+        // 获取所有供应商
+         List<Supp> supp = restTemplate.getForObject("http://localhost:8081//api/data/supp/all",List.class);
         //查询所有的一级分类
         List<GoodsCategory> firstLevelCategories = newBeeMallCategoryService.selectByLevelAndParentIdsAndNumber(Collections.singletonList(0L), NewBeeMallCategoryLevelEnum.LEVEL_ONE.getLevel());
         if (!CollectionUtils.isEmpty(firstLevelCategories)) {
@@ -59,6 +67,7 @@ public class NewBeeMallGoodsController {
                 request.setAttribute("firstLevelCategories", firstLevelCategories);
                 request.setAttribute("secondLevelCategories", secondLevelCategories);
                 request.setAttribute("thirdLevelCategories", thirdLevelCategories);
+                request.setAttribute("suppers",supp);
                 request.setAttribute("path", "goods-edit");
                 return "admin/newbee_mall_goods_edit";
             }
@@ -70,9 +79,12 @@ public class NewBeeMallGoodsController {
     public String edit(HttpServletRequest request, @PathVariable("goodsId") Long goodsId) {
         request.setAttribute("path", "edit");
         NewBeeMallGoods newBeeMallGoods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        PafComm pafComm = restTemplate.getForObject("http://localhost:8081/platform/api/paf-comm/getById?pafCommId="+goodsId,PafComm.class);
         if (newBeeMallGoods == null) {
             return "error/error_400";
         }
+        // 获取所有供应商
+        List<Supp> supp = restTemplate.getForObject("http://localhost:8081/api/data/supp/all",List.class);
         if (newBeeMallGoods.getGoodsCategoryId() > 0) {
             if (newBeeMallGoods.getGoodsCategoryId() != null || newBeeMallGoods.getGoodsCategoryId() > 0) {
                 //有分类字段则查询相关分类数据返回给前端以供分类的三级联动显示
@@ -118,6 +130,10 @@ public class NewBeeMallGoodsController {
                 }
             }
         }
+        if (pafComm != null) {
+            request.setAttribute("suppId",pafComm.getSuppId());
+        }
+        request.setAttribute("suppers",supp);
         request.setAttribute("goods", newBeeMallGoods);
         request.setAttribute("path", "goods-edit");
         return "admin/newbee_mall_goods_edit";
@@ -154,8 +170,19 @@ public class NewBeeMallGoodsController {
                 || StringUtils.isEmpty(newBeeMallGoods.getGoodsDetailContent())) {
             return ResultGenerator.genFailResult("参数异常！");
         }
+        PafComm pafComm = new PafComm();
+        pafComm.setCommId(newBeeMallGoods.getGoodsId());
+        pafComm.setState(newBeeMallGoods.getGoodsSellStatus().intValue());
+        pafComm.setCategoryId(newBeeMallGoods.getGoodsCategoryId());
+        pafComm.setCommD(newBeeMallGoods.getGoodsDetailContent());
+        pafComm.setCommNm(newBeeMallGoods.getGoodsName());
+        pafComm.setImgUrl(newBeeMallGoods.getGoodsCoverImg());
+        pafComm.setSuppId(newBeeMallGoods.getSuppId());
+        pafComm.setSuppPrice(new BigDecimal(newBeeMallGoods.getSellingPrice()));
+
+        Boolean bol = restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/add",pafComm,Boolean.class);
         String result = newBeeMallGoodsService.saveNewBeeMallGoods(newBeeMallGoods);
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
+        if (ServiceResultEnum.SUCCESS.getResult().equals(result) && bol == true) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult(result);
@@ -182,8 +209,19 @@ public class NewBeeMallGoodsController {
                 || StringUtils.isEmpty(newBeeMallGoods.getGoodsDetailContent())) {
             return ResultGenerator.genFailResult("参数异常！");
         }
+        PafComm pafComm = new PafComm();
+        pafComm.setCommId(newBeeMallGoods.getGoodsId());
+        pafComm.setState(newBeeMallGoods.getGoodsSellStatus().intValue());
+        pafComm.setCategoryId(newBeeMallGoods.getGoodsCategoryId());
+        pafComm.setCommD(newBeeMallGoods.getGoodsDetailContent());
+        pafComm.setCommNm(newBeeMallGoods.getGoodsName());
+        pafComm.setImgUrl(newBeeMallGoods.getGoodsCoverImg());
+        pafComm.setSuppId(newBeeMallGoods.getSuppId());
+        pafComm.setSuppPrice(new BigDecimal(newBeeMallGoods.getSellingPrice()));
+
+        Boolean bol = restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/modif",pafComm,Boolean.class);
         String result = newBeeMallGoodsService.updateNewBeeMallGoods(newBeeMallGoods);
-        if (ServiceResultEnum.SUCCESS.getResult().equals(result)) {
+        if (ServiceResultEnum.SUCCESS.getResult().equals(result) && bol == true) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult(result);

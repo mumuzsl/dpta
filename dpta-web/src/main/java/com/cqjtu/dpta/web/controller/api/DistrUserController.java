@@ -3,6 +3,7 @@ package com.cqjtu.dpta.web.controller.api;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cqjtu.dpta.api.DistrLevelService;
 import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.DistrUserService;
@@ -61,6 +62,13 @@ public class DistrUserController {
                 .eq(Distr::getDistrId, info.longId())
                 .one();
         return Result.ok(distr);
+    }
+
+    @GetMapping("getByNm")
+    public DistrUser getByNm(@RequestParam String name) {
+        QueryWrapper<DistrUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",name);
+        return distrUserService.getOne(wrapper);
     }
 
     @GetMapping("logout")

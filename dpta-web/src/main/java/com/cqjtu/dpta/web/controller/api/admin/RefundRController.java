@@ -75,9 +75,9 @@ public class RefundRController {
         return Result.ok(page);
     }
 
-    @GetMapping("findByNm/{name}")
-    public Result findByNm(@RequestParam Map<String, Object> params,
-                           @PathVariable String name) {
+    @GetMapping("findByNm")
+    public Result findByNm(@RequestParam Map<String, Object> params) {
+        String name = params.get("name").toString();
         if(name.equals("*"))
             name = "";
         PageQueryUtil pageUtil = new PageQueryUtil(params);

@@ -11,6 +11,7 @@ import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.dao.entity.ShopTop;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
@@ -73,15 +74,15 @@ public class PafCommController {
     }
 
     @PostMapping("modif")
-    public Result modif(@RequestBody PafComm pafComm) {
+    public Boolean modif(@RequestBody PafComm pafComm) {
         boolean result = pafCommService.updateById(pafComm);
-        return Result.judge(result);
+        return result;
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody PafComm pafComm) {
+    public Boolean add(@RequestBody PafComm pafComm) {
         boolean result = pafCommService.save(pafComm);
-        return Result.judge(result);
+        return result;
     }
 
     @PostMapping("del")
@@ -190,4 +191,8 @@ public class PafCommController {
         return "url";
     }
 
+    @GetMapping("getById")
+    public PafComm getById(@RequestParam Long pafCommId) {
+        return pafCommService.getById(pafCommId);
+    }
 }
