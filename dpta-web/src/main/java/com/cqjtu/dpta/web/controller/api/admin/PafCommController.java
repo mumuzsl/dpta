@@ -75,7 +75,7 @@ public class PafCommController {
 
     @PostMapping("modif")
     public Boolean modif(@RequestBody PafComm pafComm) {
-        boolean result = pafCommService.updateById(pafComm);
+        boolean result = pafCommService.saveOrUpdate(pafComm);
         return result;
     }
 
@@ -195,4 +195,17 @@ public class PafCommController {
     public PafComm getById(@RequestParam Long pafCommId) {
         return pafCommService.getById(pafCommId);
     }
+
+    @PostMapping("changState/{state}")
+    public Boolean changstate(@RequestBody List<Long> ids,
+                              @PathVariable int state) {
+        QueryWrapper<PafComm> wrapper = new QueryWrapper<>();
+        wrapper.in("comm_id",ids);
+        List<PafComm> list = pafCommService.list(wrapper);
+        for (PafComm comm : list) {
+            comm.setState(state);
+        }
+        return pafCommService.updateBatchById(list);
+    }
+
 }

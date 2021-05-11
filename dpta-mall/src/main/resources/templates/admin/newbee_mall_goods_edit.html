@@ -2,6 +2,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <header th:replace="admin/header::header-fragment"></header>
+<style>
+    label {
+        padding-top:5px;
+        font-size:20px;
+    }
+    .sw3 {
+        width:200px;
+    }
+
+</style>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
     <!-- 引入页面头header-fragment -->
@@ -101,16 +111,45 @@
                             </div>
                             <div class="form-group">
                                 <form>
-                                    <select class="form-control col-sm-3"
-                                            id="suppC"
-                                            data-placeholder="请选择供应商...">
-                                        <th:block th:each="c : ${suppers}">
-                                            <option th:value="${c.suppId}" th:text="${c.suppNm}"
-                                                    th:selected="${null !=suppId and suppId==c.suppId} ?true:false">
-                                                >
-                                            </option>
-                                        </th:block>
-                                    </select>
+                                    <div class="form-group" style="display:flex;">
+                                        <label class="control-label">请选择供应商:&nbsp;&nbsp;</label>
+                                        <select class="form-control sw3"
+                                                id="suppC"
+                                                data-placeholder="请选择供应商...">
+                                            <th:block th:each="c : ${suppers}">
+                                                <option th:value="${c.suppId}" th:text="${c.suppNm}"
+                                                        th:selected="${null !=suppId and suppId==c.suppId} ?true:false">
+                                                    >
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                        <label class="control-label" style="margin-left: 25px;">请选择佣金规则:&nbsp;&nbsp;</label>
+                                        <select class="form-control sw3"
+                                                id="commR"
+                                                data-placeholder="请选择佣金规则...">
+                                            <th:block th:each="c : ${commRs}">
+                                                <option th:value="${c.rCommId}" th:text="${c.rCommNm}"
+                                                        th:selected="${null !=rCommId and rCommId==c.rCommId} ?true:false">
+                                                    >
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                        <label class="control-label" style="margin-left: 25px;">请选择退款规则:&nbsp;&nbsp;</label>
+                                        <select class="form-control sw3"
+                                                id="refundR"
+                                                data-placeholder="请选择退款规则...">
+                                            <th:block th:each="c : ${refundRs}">
+                                                <option th:value="${c.refundId}" th:text="${c.refundNm}"
+                                                        th:selected="${null !=refundId and refundId==c.refundId} ?true:false">
+                                                    >
+                                                </option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="form-group" style="display:flex;">
+                                <form>
                                 </form>
                             </div>
                             <div class="form-group">

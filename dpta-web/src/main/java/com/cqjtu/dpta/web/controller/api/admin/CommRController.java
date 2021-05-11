@@ -253,4 +253,10 @@ public class CommRController {
         return Result.judge(b);
     }
 
+    @GetMapping("getEnableR")
+    public List<CommR> getEnableR () {
+        QueryWrapper<CommR> wrapper = new QueryWrapper<>();
+        wrapper.eq("state",Const.ENABLE);
+        return commRService.list(wrapper);
+    }
 }

@@ -80,6 +80,8 @@ $('#saveButton').click(function () {
     var stockNum = $('#stockNum').val();
     var goodsSellStatus = $("input[name='goodsSellStatus']:checked").val();
     var suppId = $("#suppC").val();
+    var rCommId = $("#commR").val();
+    var refundId = $("#refundR").val();
     var goodsDetailContent = editorD.txt.html();
     var goodsCoverImg = $('#goodsCoverImg')[0].src;
     if (isNull(goodsCategoryId)) {
@@ -154,6 +156,30 @@ $('#saveButton').click(function () {
         });
         return;
     }
+    if (isNull(suppId)) {
+        swal("请选择供应商", {
+            icon: "error",
+        });
+        return;
+    }
+    if (isNull(rCommId)) {
+        swal("请选择佣金规则", {
+            icon: "error",
+        });
+        return;
+    }
+    if (isNull(refundId)) {
+        swal("请选择退款规则", {
+            icon: "error",
+        });
+        return;
+    }
+    if (isNull(goodsDetailContent)) {
+        swal("请输入商品介绍", {
+            icon: "error",
+        });
+        return;
+    }
     if (!validLength(goodsDetailContent, 50000)) {
         swal("商品介绍内容过长", {
             icon: "error",
@@ -180,7 +206,9 @@ $('#saveButton').click(function () {
         "goodsCoverImg": goodsCoverImg,
         "goodsCarousel": goodsCoverImg,
         "goodsSellStatus": goodsSellStatus,
-        "suppId":suppId
+        "suppId":suppId,
+        "rCommId":rCommId,
+        "refundId":refundId
     };
     if (goodsId > 0) {
         url = '/admin/goods/update';
@@ -198,7 +226,9 @@ $('#saveButton').click(function () {
             "goodsCoverImg": goodsCoverImg,
             "goodsCarousel": goodsCoverImg,
             "goodsSellStatus": goodsSellStatus,
-            "suppId":suppId
+            "suppId":suppId,
+            "rCommId":rCommId,
+            "refundId":refundId
         };
     }
     console.log(data);
