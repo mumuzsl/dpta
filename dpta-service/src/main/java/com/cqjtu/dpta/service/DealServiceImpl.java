@@ -82,11 +82,11 @@ public class DealServiceImpl extends ServiceImpl<DealMapper, Deal> implements De
                     credit.setEnCredit(balance);
                     enCredit = enCredit.add(balance);
                 }
-
+                li.add(credit);
             }
-            li.add(credit);
         }
         Resve resve = resveService.getById(deal.getDistrId());
+        payM.setDealId(deal_id.toString());
         payM.setAmount(deal.getAmount());
         payM.setEnCredit(enCredit);
         payM.setLi(li);

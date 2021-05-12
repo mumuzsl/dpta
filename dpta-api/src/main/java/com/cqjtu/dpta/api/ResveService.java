@@ -16,4 +16,5 @@ import java.math.BigDecimal;
 public interface ResveService extends CrudService<Resve> {
 
     Boolean useResve (Long distrId,BigDecimal amount,int type);
+    Boolean useResve (Long distrId,BigDecimal amount,int type,Long dealId);
 }

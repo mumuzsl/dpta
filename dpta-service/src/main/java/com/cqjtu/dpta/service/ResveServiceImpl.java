@@ -51,4 +51,31 @@ public class ResveServiceImpl extends ServiceImpl<ResveMapper, Resve> implements
         this.updateById(resve);
         return true;
     }
+
+    @Override
+    public Boolean useResve(Long distrId, BigDecimal amount, int type, Long dealId) {
+        Resve resve = this.getById(distrId);
+        LocalDateTime time = LocalDateTime.now();
+        if (type == Const.PAYMENT || type == Const.REPAYMENT || type == Const.CASH_OUT) {
+            resve.setAmount(resve.getAmount().subtract(amount));
+        }
+        else if (type == Const.RECHARGE || type == Const.COMMISSION) {
+            resve.setAmount(resve.getAmount().add(amount));
+        }
+        else {
+            return false;
+        }
+        resve.setUdtTm(time);
+
+        ResveD resveD = new ResveD();
+        resveD.setAmount(amount);
+        resveD.setDistrId(distrId);
+        resveD.setBalance(resve.getAmount());
+        resveD.setCreateTm(time);
+        resveD.setType(type);
+        resveD.setDealId(dealId);
+        resveDService.save(resveD);
+        this.updateById(resve);
+        return true;
+    }
 }

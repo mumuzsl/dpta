@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.DealService;
 import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.dao.entity.PayM;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
@@ -49,6 +50,11 @@ public class DealController {
     public Result del(@RequestBody List ids) {
         boolean result = dealService.removeByIds(ids);
         return Result.judge(result);
+    }
+
+    @GetMapping("getPayM")
+    public PayM getPayM (@RequestParam Long dealId) {
+        return dealService.payDeal(dealId);
     }
 
 }

@@ -11,7 +11,6 @@ import com.cqjtu.dpta.common.vo.DealVo;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.dao.entity.Distr;
-import com.cqjtu.dpta.dao.entity.RefundR;
 import com.cqjtu.dpta.dao.mapper.CreditMapper;
 import com.cqjtu.dpta.api.CreditService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -62,22 +61,22 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
     /**
      * 使用授信付款
      *
-     * @param id:     授信编码
-     * @param amount: 使用金额
-     * @param dealId: 订单ID
+     * @param id :     授信编码
+     * @param amount : 使用金额
+     * @param dealId : 订单ID
      * @return 成功返回TRUE，失败返回FALSE
      */
     @Override
-    public Boolean useCredit(Long id, Double amount, Long dealId) {
+    public Boolean useCredit(Long id, BigDecimal amount, Long dealId) {
         Credit credit = this.getById(id);
         if (credit == null) {
             return false;
         }
-        BigDecimal usedAmount = credit.getUsedAmout().add(BigDecimal.valueOf(amount));
+        BigDecimal usedAmount = credit.getUsedAmout().add(amount);
         CreditD creditD = new CreditD();
         creditD.setCreditId(id);
         creditD.setType(Const.PAYMENT);
-        creditD.setAmount(BigDecimal.valueOf(amount));
+        creditD.setAmount(amount);
         creditD.setUsedAmount(usedAmount);
         creditD.setDealId(dealId);
         creditD.setCreateTm(LocalDateTime.now());
