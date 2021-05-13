@@ -23,7 +23,7 @@
 <body>
 <div class="page-main">
     <div class="container confirm-box">
-        <form target="_blank" action="#" id="J_payForm" method="post">
+<!--        <form target="_blank" action="#" id="J_payForm" method="post">-->
             <div class="section section-order">
                 <div class="order-info clearfix">
                     <div class="fl">
@@ -43,7 +43,7 @@
             </div>
             <div class="section section-payment">
                 <div style="margin-left: 5%">
-                    <form class="f1">
+<!--                    <form class="f1">-->
                         <div>
                             <input type="hidden" id="amount" th:value="${payM.amount}">
                             <label  th:text="${'待支付总金额: '+ payM.amount +'元'}"></label>
@@ -55,7 +55,6 @@
                         </div>
                         <div>
                             <input type="hidden" id="resve" th:value="${payM.resve}">
-                            <input type="hidden" id="li" th:value="${payM.li}">
                             <label id="uResve" th:text="${'使用预备金: '+payM.amount+'元'}">&nbsp;&nbsp;</label>
                         </div>
                         <div>
@@ -63,12 +62,12 @@
                             <input type="password"  class="form-text" id="password" name="password" required="required">
                         </div>
                         <div>
-                            <button class="btn" onclick="payOrder()">支付</button>
+                            <button class="btn" onclick="payOrder2()">支付</button>
                         </div>
-                    </form>
+<!--                    </form>-->
                 </div>
             </div>
-        </form>
+<!--        </form>-->
     </div>
 </div>
 
@@ -82,16 +81,13 @@
         alert('暂不支持，请耐心等候');
     })
 
-    function payOrder() {
+    function payOrder2() {
         var orderNo = $("#orderNoValue").val();
         var amount = $("#amount").val();
         var enResve = $("#resve").val();
         var uCredit = $("#credit").val();
         var password = $("#password").val();
         var uResve = amount-uCredit;
-        var li = $("#li").val();
-        if (li == "[]")
-            li = []
         if (uResve > enResve) {
             swal("预备金余额不足",{
                 icon: "error",
@@ -102,7 +98,6 @@
                 "dealId":orderNo,
                 "amount":amount,
                 "passwd": password,
-                "li":li,
                 "resve":enResve,
                 "useCredit":uCredit,
                 "useResve":uResve

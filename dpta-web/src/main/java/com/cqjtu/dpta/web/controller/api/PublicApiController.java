@@ -60,7 +60,8 @@ public class PublicApiController {
 
         BigDecimal uCredit = payM.getUseCredit();
         if (uCredit.compareTo(new BigDecimal(0))==1) {
-            for (Credit credit : payM.getLi()) {
+            PayM payM1 = dealService.payDeal(Long.valueOf(payM.getDealId()));
+            for (Credit credit : payM1.getLi()) {
                 if (uCredit.compareTo(new BigDecimal(0))==0) break;
                 int f = credit.getEnCredit().compareTo(uCredit);
                 if (f <= 0) {
