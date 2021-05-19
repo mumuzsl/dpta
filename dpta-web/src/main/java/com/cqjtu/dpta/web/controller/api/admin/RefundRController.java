@@ -113,7 +113,7 @@ public class RefundRController {
     }
 
     @PostMapping("del")
-    public Result del(@RequestBody List ids) {
+    public Result del(@RequestBody List<Long> ids) {
         int sus = refundRService.delList(ids);
         if (ids.size() == sus) {
             return Result.ok();

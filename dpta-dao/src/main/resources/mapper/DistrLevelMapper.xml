@@ -4,4 +4,24 @@
     <select id="getList" resultType="com.cqjtu.dpta.dao.entity.DistrLevel">
         select * from t_distr_level
     </select>
+    <select id="getMonths" resultType="Integer">
+        SELECT
+            TIMESTAMPDIFF(
+                MONTH,
+                t1.SettledTm,
+                DATE_FORMAT(NOW(), '%Y-%m-%d %H:%i:%S')
+            )
+        FROM
+            t_distr t1
+        WHERE
+            t1.DISTR_ID = #{distrId}
+    </select>
+    <select id="getSumPafP" resultType="java.math.BigDecimal">
+        SELECT
+            SUM(PLA_P)
+        FROM
+            t_settle_m
+        WHERE
+            DISTR_ID = #{distrId}
+    </select>
 </mapper>

@@ -259,6 +259,7 @@ function rEdit() {
     $("#refundNm").val(rowData.refundNm);
     $("#type").val(rowData.type);
     $("#reserveTm").val(rowData.reserveTm);
+    $("#refundIf").val(rowData.refundIf);
     $("#fla").val(2);
 }
 

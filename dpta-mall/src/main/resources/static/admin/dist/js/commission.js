@@ -321,6 +321,34 @@ $('#saveButton').click(function () {
     var value = $("#value").val();
     var flag = $("#fla").val();
     //var id = getSelectedRowWithoutAlert();
+    if (rCommNm == "") {
+        swal("规则名称不能为空！",{
+            icon:"error"
+        })
+        return;
+    }
+    if (type == null) {
+        swal("规则类型不能为空！",{
+            icon:"error"
+        })
+        return;
+    }
+    if (type == "比例分润") {
+        if (value <= 0 || value >=1) {
+            swal("分润值的范围应在0-1之间！",{
+                icon:"error"
+            })
+            return;
+        }
+    }
+    else {
+        if (value <= 0 ) {
+            swal("分润值的范围应大于0！",{
+                icon:"error"
+            })
+            return;
+        }
+    }
     var url;
     var data;
     var mes;

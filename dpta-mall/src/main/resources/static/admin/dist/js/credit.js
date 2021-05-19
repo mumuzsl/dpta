@@ -56,7 +56,7 @@ $(function () {
     }
 
     function operateFormatter(cellvalue, rowObject) {
-        return "<a href=\"#myPopup1\" onclick=viewRecords("+rowObject.rowId+") data-rel=\"popup\" class=\"ui-btn\" data-position-to=\"window\">浏览还款记录</a>" +
+        return "<a href=\"#myPopup1\" onclick=viewRecords("+rowObject.rowId+") data-rel=\"popup\" class=\"ui-btn\" data-position-to=\"window\">浏览授信明细</a>" +
             "<a href=\"#myPopup2\" onclick=viewRecords1("+rowObject.rowId+") data-rel=\"popup\" class=\"ui-btn\" data-position-to=\"window\" style=\"margin-left:20px;\">浏览交易记录</a>"
     }
 });
@@ -75,7 +75,7 @@ function viewRecords(id) {
             {label: '类型', name: 'type', index: 'type', width: 200,formatter: typeFormatter},
             {label: '金额', name: 'amount', index: 'amount', width: 200},
             {label: '订单编码', name: 'dealId', index: 'dealId', width: 200},
-            {label: '已用授信金额', name: 'usedAmout', index: 'usedAmout', width: 200},
+            {label: '已用授信金额', name: 'usedAmount', index: 'usedAmount', width: 200},
             {label: '创建日期', name: 'createTm', index: 'createTm', width: 200}
         ],
         height: 500,

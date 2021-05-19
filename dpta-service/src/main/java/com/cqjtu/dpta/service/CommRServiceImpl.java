@@ -58,7 +58,9 @@ public class CommRServiceImpl extends ServiceImpl<CommRMapper, CommR> implements
             wrapper.eq("r_comm_id",id);
             int count = pafCommService.count(wrapper);
             if (count == 0) {
-                sus += baseMapper.deleteById(id);
+                CommR commR = baseMapper.selectById(id);
+                commR.setDeleted(1);
+                sus += baseMapper.updateById(commR);
             }
         }
         return sus;

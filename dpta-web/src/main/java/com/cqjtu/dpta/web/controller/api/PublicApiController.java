@@ -85,7 +85,7 @@ public class PublicApiController {
             }
         }
         if (payM.getUseResve().compareTo(BigDecimal.ZERO)==1) {
-            boolean b = resveService.useResve(distrId,payM.getUseResve(),Const.PAYMENT,Long.valueOf(payM.getDealId()));
+            boolean b = resveService.useResve(distrId,payM.getUseResve(),Long.valueOf(payM.getDealId()));
             if (b == true) {
                 return true;
             }

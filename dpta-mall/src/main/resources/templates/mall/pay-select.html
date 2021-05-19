@@ -129,7 +129,7 @@
             swal("最大可用授信为"+enCredit+"元，请重新输入！", {
                 icon: "error",
             })
-            $("#credit").val(0.00);
+            $("#credit").val(enCredit);
         }
         else {
             var t = '使用预备金:'+(amount-credit)+':00元';
