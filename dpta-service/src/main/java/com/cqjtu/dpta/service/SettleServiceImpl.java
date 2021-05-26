@@ -37,14 +37,16 @@ public class SettleServiceImpl implements SettleService {
     public Boolean dayVerify() {
         QueryWrapper<Order> queryWrapper = new QueryWrapper();
         queryWrapper.eq("state", Const.PAID);
+        // 获取所有已付款的订单
         List<Order> list = orderService.list(queryWrapper);
         for (Order order : list) {
             QueryWrapper<OrderD> queryWrapper1 = new QueryWrapper<>();
             queryWrapper1.eq("order_id",order.getId());
+            // 获取订单的订单明细
             List<OrderD> list1 = orderDService.list(queryWrapper1);
             boolean flage = true;
             for (OrderD orderD : list1) {
-//                if (orderD.getState().equals(1)) continue;
+                // 根据退款规则判断是否超过预留时间
                 Long com = orderDService.outRefundTime(orderD.getCommId(),order.getDatm());
                 if (com == null) {
                     flage = false;
@@ -56,14 +58,14 @@ public class SettleServiceImpl implements SettleService {
                 BigDecimal base = new BigDecimal(0);
                 BigDecimal amount = new BigDecimal(0);
                 for (OrderD orderD : list1) {
-//                    if (orderD.getState().equals(1)) continue;
+                    // 获取绑定的佣金规则
                     CommR commR = orderDService.getCommR(orderD.getCommId());
-                    PafSkuStock pafSkuStock = pafCommService.getByCommIdAndSkuId(orderD.getCommId(),orderD.getSkuId());
-                    base = base.add(pafSkuStock.getSuppPrice());
+                    PafComm pafComm = pafCommService.getById(orderD.getCommId());
+                    base = base.add(pafComm.getSuppPrice().multiply(BigDecimal.valueOf(orderD.getCount())));
                     amount = amount.add(orderD.getPrice().multiply(BigDecimal.valueOf(orderD.getCount())));
                     BigDecimal profit = new BigDecimal(0);
                     if (commR.getType().equals("比例分润")) {
-                        profit = orderD.getPrice().subtract(pafSkuStock.getSuppPrice())
+                        profit = orderD.getPrice().subtract(pafComm.getSuppPrice())
                                 .multiply(BigDecimal.valueOf(orderD.getCount()))
                                 .multiply(commR.getValue());
                     }
@@ -99,6 +101,10 @@ public class SettleServiceImpl implements SettleService {
 
     @Resource
     SettleMMapper settleMMapper;
+
+    @Resource
+    ResveService resveService;
+
     /**
      * 月结算
      *
@@ -107,9 +113,12 @@ public class SettleServiceImpl implements SettleService {
     @Override
     @Scheduled(cron = "0 30 23 28 * ? ")
     public Boolean MonthSettle() {
+        // 获取平台所有的分销商
         List<Distr> list = distrService.list();
         for (Distr distr : list) {
+            // 获取该分销商所有处于已核销状态的订单
             List<Order> list1 = orderService.getOrderListByDistrId(distr.getDistrId());
+            if (list1.size()==0) continue;
             BigDecimal base = new BigDecimal(0);
             BigDecimal amount = new BigDecimal(0);
             BigDecimal profit = new BigDecimal(0);
@@ -120,9 +129,13 @@ public class SettleServiceImpl implements SettleService {
                 order.setState(Const.SETTLE);
                 orderService.updateById(order);
             }
+            // 获取分销商等级
             DistrLevel level = distrLevelService.getById(distr.getLevelId());
+            // 根据等级规则，控制分润
             profit = profit.multiply(level.getYield());
+            // 获取税费计算规则
             TaxR taxR = taxRService.getTaxR(profit);
+            // 计算税费
             BigDecimal tax = profit.multiply(taxR.getRate()).subtract(taxR.getDeduction());
             SettleM settleM = new SettleM();
             settleM.setDistrId(distr.getDistrId());
@@ -132,6 +145,9 @@ public class SettleServiceImpl implements SettleService {
             settleM.setPlaP(amount.subtract(base).subtract(profit));
             settleM.setSettleTm(LocalDateTime.now());
             settleMMapper.insert(settleM);
+            resveService.useResve(distr.getDistrId(),base.add(settleM.getComP()),Const.COMMISSION);
+            // 分销商提升等级
+            distrLevelService.levelUp(distr.getDistrId());
         }
         return true;
     }

@@ -28,9 +28,11 @@ public class ResveServiceImpl extends ServiceImpl<ResveMapper, Resve> implements
     ResveDService resveDService;
     @Override
     public Boolean useResve(Long distrId, BigDecimal amount, int type) {
+        // 获取该分销商的预备金
         Resve resve = this.getById(distrId);
         LocalDateTime time = LocalDateTime.now();
-        if (type == Const.PAYMENT || type == Const.REPAYMENT || type == Const.CASH_OUT) {
+        // 依据不同的类型对预备金进行增加或减少操作
+        if (type == Const.REPAYMENT || type == Const.CASH_OUT) {
             resve.setAmount(resve.getAmount().subtract(amount));
         }
         else if (type == Const.RECHARGE || type == Const.COMMISSION) {
@@ -40,13 +42,33 @@ public class ResveServiceImpl extends ServiceImpl<ResveMapper, Resve> implements
             return false;
         }
         resve.setUdtTm(time);
-
+        // 向预备金明细表写入一条记录
         ResveD resveD = new ResveD();
         resveD.setAmount(amount);
         resveD.setDistrId(distrId);
         resveD.setBalance(resve.getAmount());
         resveD.setCreateTm(time);
         resveD.setType(type);
+        resveDService.save(resveD);
+        // 更新预备金
+        this.updateById(resve);
+        return true;
+    }
+
+    @Override
+    public Boolean useResve(Long distrId, BigDecimal amount, Long dealId) {
+        Resve resve = this.getById(distrId);
+        LocalDateTime time = LocalDateTime.now();
+        resve.setAmount(resve.getAmount().subtract(amount));
+        resve.setUdtTm(time);
+
+        ResveD resveD = new ResveD();
+        resveD.setAmount(amount);
+        resveD.setDistrId(distrId);
+        resveD.setBalance(resve.getAmount());
+        resveD.setCreateTm(time);
+        resveD.setType(Const.PAYMENT);
+        resveD.setDealId(dealId);
         resveDService.save(resveD);
         this.updateById(resve);
         return true;

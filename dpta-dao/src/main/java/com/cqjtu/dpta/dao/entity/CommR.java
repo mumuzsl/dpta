@@ -57,5 +57,8 @@ public class CommR implements Serializable {
     @TableField("VALUE")
     private BigDecimal value;
 
+    @TableField("DELETED")
+    private int deleted;
+
 
 }

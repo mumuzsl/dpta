@@ -16,4 +16,6 @@ import com.cqjtu.dpta.api.support.CrudService;
 public interface DistrLevelService extends CrudService<DistrLevel> {
 
     PageResult getList(PageQueryUtil pageUtil);
+
+    void levelUp (Long distrID);
 }

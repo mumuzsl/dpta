@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.controller.mall;
 
+import com.cqjtu.dpta.dao.entity.PayM;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.common.ServiceResultEnum;
@@ -23,15 +24,13 @@ import ltd.newbee.mall.util.ResultGenerator;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -42,6 +41,8 @@ public class OrderController {
     private NewBeeMallShoppingCartService newBeeMallShoppingCartService;
     @Resource
     private NewBeeMallOrderService newBeeMallOrderService;
+    @Resource
+    RestTemplate restTemplate;
 
     @GetMapping("/orders/{orderNo}")
     public String orderDetailPage(HttpServletRequest request, @PathVariable("orderNo") String orderNo, HttpSession httpSession) {
@@ -117,6 +118,8 @@ public class OrderController {
         NewBeeMallOrder newBeeMallOrder = newBeeMallOrderService.getNewBeeMallOrderByOrderNo(orderNo);
         //todo 判断订单userId
         //todo 判断订单状态
+        PayM payM = restTemplate.getForObject(Constants.JU_URL+"/api/deal/getPayM?dealId="+orderNo,PayM.class);
+        request.setAttribute("payM",payM);
         request.setAttribute("orderNo", orderNo);
         request.setAttribute("totalPrice", newBeeMallOrder.getTotalPrice());
         return "mall/pay-select";
@@ -137,15 +140,19 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/paySuccess")
+    @PostMapping("/paySuccess")
     @ResponseBody
-    public Result paySuccess(@RequestParam("orderNo") String orderNo, @RequestParam("payType") int payType) {
-        String payResult = newBeeMallOrderService.paySuccess(orderNo, payType);
-        if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
-            return ResultGenerator.genSuccessResult();
-        } else {
-            return ResultGenerator.genFailResult(payResult);
+    public Result paySuccess(@RequestBody PayM payM) {
+        Boolean b = restTemplate.postForObject(Constants.JU_URL+"/public/api/distrPay",payM,Boolean.class);
+        if (b) {
+            String payResult = newBeeMallOrderService.paySuccess(payM.getDealId(), 2);
+            if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {
+                return ResultGenerator.genSuccessResult();
+            }else {
+                return ResultGenerator.genFailResult(payResult);
+            }
         }
+        return ResultGenerator.genFailResult("支付密码错误");
     }
 
 }

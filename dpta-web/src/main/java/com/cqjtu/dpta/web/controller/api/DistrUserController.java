@@ -3,9 +3,11 @@ package com.cqjtu.dpta.web.controller.api;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.PhoneUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cqjtu.dpta.api.DistrLevelService;
 import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.DistrUserService;
+import com.cqjtu.dpta.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.dao.entity.Distr;
@@ -13,6 +15,7 @@ import com.cqjtu.dpta.dao.entity.DistrLevel;
 import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.TokenUtils;
+import com.cqjtu.dpta.dao.entity.Resve;
 import com.cqjtu.dpta.web.support.BigUser;
 import com.cqjtu.dpta.common.web.LoginParam;
 import com.cqjtu.dpta.common.web.Info;
@@ -27,6 +30,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -61,6 +65,13 @@ public class DistrUserController {
                 .eq(Distr::getDistrId, info.longId())
                 .one();
         return Result.ok(distr);
+    }
+
+    @GetMapping("getByNm")
+    public DistrUser getByNm(@RequestParam String name) {
+        QueryWrapper<DistrUser> wrapper = new QueryWrapper<>();
+        wrapper.eq("username",name);
+        return distrUserService.getOne(wrapper);
     }
 
     @GetMapping("logout")
@@ -107,6 +118,8 @@ public class DistrUserController {
         }
     }
 
+    @Resource
+    ResveService resveService;
     @PostMapping("register")
     public Result register(@RequestBody LoginParam loginParam,
                            HttpServletResponse response,
@@ -141,6 +154,11 @@ public class DistrUserController {
         distrUser.setUsername(username);
         distrUser.setPassword(passwordEncoder.encode(password));
 
+        Resve resve = new Resve();
+        resve.setDistrId(distr.getDistrId());
+        resve.setAmount(new BigDecimal(0));
+        resve.setUdtTm(LocalDateTime.now());
+        resveService.save(resve);
         boolean b = distrUserService.save(distrUser);
         return Result.judge(b);
     }

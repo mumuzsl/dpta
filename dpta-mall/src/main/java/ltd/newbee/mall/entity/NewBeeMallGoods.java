@@ -37,6 +37,12 @@ public class NewBeeMallGoods {
 
     private Integer createUser;
 
+    private Long suppId;
+
+    private Long rCommId;
+
+    private Long refundId;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
@@ -48,6 +54,30 @@ public class NewBeeMallGoods {
     private String goodsDetailContent;
 
     private Byte isDeleted;
+
+    public Long getSuppId() {
+        return suppId;
+    }
+
+    public Long getrCommId() {
+        return rCommId;
+    }
+
+    public void setrCommId(Long rCommId) {
+        this.rCommId = rCommId;
+    }
+
+    public Long getRefundId() {
+        return refundId;
+    }
+
+    public void setRefundId(Long refundId) {
+        this.refundId = refundId;
+    }
+
+    public void setSuppId(Long suppId) {
+        this.suppId = suppId;
+    }
 
     public Long getGoodsId() {
         return goodsId;

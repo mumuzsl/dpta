@@ -12,12 +12,12 @@
         ORDER BY comm_count desc
     </select>
     <select id="getAll" resultType="com.cqjtu.dpta.dao.entity.CommR">
-        select * from t_comm_r
+        select * from t_comm_r where DELETED = 0;
     </select>
     <select id="getByNm" resultType="com.cqjtu.dpta.dao.entity.CommR">
-        select * from t_comm_r where R_COMM_NM like concat("%",#{name},"%")
+        select * from t_comm_r where R_COMM_NM like concat("%",#{name},"%") and DELETED = 0;
     </select>
     <select id="getAllCommR" resultType="com.cqjtu.dpta.dao.entity.CommR">
-        select * from dpta.t_comm_r c where c.STATE = 1;
+        select * from dpta.t_comm_r c where c.STATE = 1 and c.DELETED = 0;
     </select>
 </mapper>

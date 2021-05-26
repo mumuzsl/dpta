@@ -26,6 +26,8 @@ public class DealD implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
+    private Long dealId;
+
     private Long commId;
 
     private Long skuId;

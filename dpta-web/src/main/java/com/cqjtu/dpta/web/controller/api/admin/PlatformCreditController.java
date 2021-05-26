@@ -191,18 +191,18 @@ public class PlatformCreditController {
         return Result.judge(result);
     }
 
-    @GetMapping("findByNm/{name}")
-    public Result findByNm(@RequestParam Map<String, Object> params,
-                           @PathVariable String name) {
+    @GetMapping("findByNm")
+    public Result findByNm(@RequestParam Map<String, Object> params) {
+        String name = params.get("name").toString();
         if(name.equals("*"))
             name = "";
         PageQueryUtil pageUtil = new PageQueryUtil(params);
         return Result.ok(creditService.findByName(pageUtil,name));
     }
 
-    @GetMapping("findByNm1/{name}")
-    public Result findByNm1(@RequestParam Map<String, Object> params,
-                           @PathVariable String name) {
+    @GetMapping("findByNm1")
+    public Result findByNm1(@RequestParam Map<String, Object> params) {
+        String name = params.get("name").toString();
         if(name.equals("*"))
             name = "";
         PageQueryUtil pageUtil = new PageQueryUtil(params);

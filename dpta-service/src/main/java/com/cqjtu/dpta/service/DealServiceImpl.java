@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cqjtu.dpta.api.*;
+import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.DealMapper;
 import org.apache.ibatis.annotations.Param;
@@ -66,6 +67,7 @@ public class DealServiceImpl extends ServiceImpl<DealMapper, Deal> implements De
             QueryWrapper<Credit> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("SUPP_ID", supp_id);
             queryWrapper.eq("DISTR_ID", deal.getDistrId());
+            queryWrapper.eq("state", Const.ADOPT);
             Credit credit = creditService.getOne(queryWrapper);
             if (credit != null) {
                 BigDecimal balance = credit.getCreditAmout().subtract(credit.getUsedAmout());
@@ -82,11 +84,11 @@ public class DealServiceImpl extends ServiceImpl<DealMapper, Deal> implements De
                     credit.setEnCredit(balance);
                     enCredit = enCredit.add(balance);
                 }
-
+                li.add(credit);
             }
-            li.add(credit);
         }
         Resve resve = resveService.getById(deal.getDistrId());
+        payM.setDealId(deal_id.toString());
         payM.setAmount(deal.getAmount());
         payM.setEnCredit(enCredit);
         payM.setLi(li);

@@ -11,6 +11,7 @@ import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.dao.entity.ShopTop;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
@@ -98,7 +99,6 @@ public class PafCommController {
         barData.add(settleService.platSum(2019));
         barData.add(settleService.platSum(2020));
         barData.add(settleService.platSum(2021));
-
 
         return barData;
     }
@@ -261,5 +261,21 @@ public class PafCommController {
         return "url";
     }
 
+    @GetMapping("getById")
+    public PafComm getById(@RequestParam Long pafCommId) {
+        return pafCommService.getById(pafCommId);
+    }
+
+    @PostMapping("changState/{state}")
+    public Boolean changstate(@RequestBody List<Long> ids,
+                              @PathVariable int state) {
+        QueryWrapper<PafComm> wrapper = new QueryWrapper<>();
+        wrapper.in("comm_id",ids);
+        List<PafComm> list = pafCommService.list(wrapper);
+        for (PafComm comm : list) {
+            comm.setState(state);
+        }
+        return pafCommService.updateBatchById(list);
+    }
 
 }

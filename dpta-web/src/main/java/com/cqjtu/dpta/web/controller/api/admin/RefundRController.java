@@ -75,9 +75,9 @@ public class RefundRController {
         return Result.ok(page);
     }
 
-    @GetMapping("findByNm/{name}")
-    public Result findByNm(@RequestParam Map<String, Object> params,
-                           @PathVariable String name) {
+    @GetMapping("findByNm")
+    public Result findByNm(@RequestParam Map<String, Object> params) {
+        String name = params.get("name").toString();
         if(name.equals("*"))
             name = "";
         PageQueryUtil pageUtil = new PageQueryUtil(params);
@@ -113,7 +113,7 @@ public class RefundRController {
     }
 
     @PostMapping("del")
-    public Result del(@RequestBody List ids) {
+    public Result del(@RequestBody List<Long> ids) {
         int sus = refundRService.delList(ids);
         if (ids.size() == sus) {
             return Result.ok();
@@ -151,7 +151,7 @@ public class RefundRController {
             List<PafComm> list1 = pafCommService.list(wrapper);
             for (PafComm comm : list1) {
                 comm.setState(Const.OUTSELL);
-                comm.setRefundId(null);
+                comm.setRefundId(0L);
                 QueryWrapper<ShpComm> wrapper1 = new QueryWrapper<>();
                 wrapper1.eq("comm_id",comm.getCommId());
                 List<ShpComm> list2 = shpCommService.list(wrapper1);
@@ -169,4 +169,10 @@ public class RefundRController {
         return Result.judge(b);
     }
 
+    @GetMapping("getEnableR")
+    public List<RefundR> getEnableR () {
+        QueryWrapper<RefundR> wrapper = new QueryWrapper<>();
+        wrapper.eq("state",Const.ENABLE);
+        return refundRService.list(wrapper);
+    }
 }

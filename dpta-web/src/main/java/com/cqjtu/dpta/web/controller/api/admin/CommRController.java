@@ -172,9 +172,9 @@ public class CommRController {
         return Result.ok(commRService.getCommRPage(pageUtil));
     }
 
-    @GetMapping("search0/{name}")
-    public Result search(@RequestParam Map<String, Object> params,
-                         @PathVariable String name) {
+    @GetMapping("search0")
+    public Result search(@RequestParam Map<String, Object> params) {
+        String name = params.get("name").toString();
         if (StringUtils.isEmpty(name)) {
             return Result.build(ResultCodeEnum.PARAM_ERROR);
         }
@@ -235,16 +235,16 @@ public class CommRController {
             List<PafComm> list1 = pafCommService.list(wrapper);
             for (PafComm comm : list1) {
                 comm.setState(Const.OUTSELL);
-                comm.setRCommId(null);
+                comm.setRCommId(0L);
                 QueryWrapper<ShpComm> wrapper1 = new QueryWrapper<>();
                 wrapper1.eq("comm_id",comm.getCommId());
                 List<ShpComm> list2 = shpCommService.list(wrapper1);
                 for (ShpComm shpComm : list2) {
                     shpComm.setState(Const.OUTSELL);
                 }
-                shpCommService.updateBatchById(list2);
+                boolean c = shpCommService.updateBatchById(list2);
             }
-            pafCommService.updateBatchById(list1);
+            boolean a = pafCommService.updateBatchById(list1);
             CommR commR = commRService.getById(id);
             commR.setState(Const.DISABLE);
             list.add(commR);
@@ -253,4 +253,10 @@ public class CommRController {
         return Result.judge(b);
     }
 
+    @GetMapping("getEnableR")
+    public List<CommR> getEnableR () {
+        QueryWrapper<CommR> wrapper = new QueryWrapper<>();
+        wrapper.eq("state",Const.ENABLE);
+        return commRService.list(wrapper);
+    }
 }
