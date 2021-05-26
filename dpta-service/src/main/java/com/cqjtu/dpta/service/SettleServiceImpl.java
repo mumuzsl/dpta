@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cqjtu.dpta.api.*;
 import com.cqjtu.dpta.api.support.SettleService;
 import com.cqjtu.dpta.common.lang.Const;
+import com.cqjtu.dpta.common.util.PageQueryUtil;
+import com.cqjtu.dpta.common.util.PageResult;
+import com.cqjtu.dpta.common.vo.SettleMVo;
 import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.SettleMMapper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -15,7 +19,7 @@ import java.text.Bidi;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Component
+@Service
 public class SettleServiceImpl implements SettleService {
 
     @Resource
@@ -155,5 +159,19 @@ public class SettleServiceImpl implements SettleService {
     @Override
     public Integer platSum(int d) {
         return settleMMapper.platSum(d);
+    }
+
+    @Override
+    public PageResult getAll(PageQueryUtil pageUtil) {
+        List<SettleMVo> list = settleMMapper.getAll();
+        PageResult pageResult = new PageResult(list,list.size(),pageUtil.getLimit(),pageUtil.getPage());
+        return pageResult;
+    }
+
+    @Override
+    public PageResult getByMonth(PageQueryUtil pageUtil, String month) {
+        List<SettleMVo> list = settleMMapper.getByMonth(month);
+        PageResult pageResult = new PageResult(list,list.size(),pageUtil.getLimit(),pageUtil.getPage());
+        return pageResult;
     }
 }

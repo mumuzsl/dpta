@@ -5,4 +5,35 @@
     <select id="platSum" resultType="java.lang.Integer">
         select sum(pla_p) , SETTLE_TM from dpta.t_settle_m where SETTLE_TM like concat(#{d},'%')
     </select>
+    <select id="getAll" resultType="com.cqjtu.dpta.common.vo.SettleMVo">
+        SELECT
+            t1.ID id,
+            t2.DISTR_NM distrNm,
+            t1.BAS_P basP,
+            t1.COM_P comP,
+            t1.PLA_P plaP,
+            t1.TAX_P taxP,
+            t1.SETTLE_TM settleTm
+        FROM
+            t_settle_m t1,
+            t_distr t2
+        WHERE
+            t1.DISTR_ID = t2.DISTR_ID
+    </select>
+    <select id="getByMonth" resultType="com.cqjtu.dpta.common.vo.SettleMVo">
+        SELECT
+            t1.ID id,
+            t2.DISTR_NM distrNm,
+            t1.BAS_P basP,
+            t1.COM_P comP,
+            t1.PLA_P plaP,
+            t1.TAX_P taxP,
+            t1.SETTLE_TM settleTm
+        FROM
+            t_settle_m t1,
+            t_distr t2
+        WHERE
+            t1.DISTR_ID = t2.DISTR_ID
+        AND t1.SETTLE_TM LIKE concat(#{month},'%')
+    </select>
 </mapper>

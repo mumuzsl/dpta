@@ -50,11 +50,11 @@ $(function () {
     });
 
     function goodsSellStatusFormatter(cellvalue) {
-        //商品上架状态 0-上架 1-下架
-        if (cellvalue == 0) {
+        //商品上架状态 1-上架 0-下架
+        if (cellvalue == 1) {
             return "<button type=\"button\" class=\"btn btn-block btn-success btn-sm\" style=\"width: 80%;\">销售中</button>";
         }
-        if (cellvalue == 1) {
+        if (cellvalue == 0) {
             return "<button type=\"button\" class=\"btn btn-block btn-secondary btn-sm\" style=\"width: 80%;\">已下架</button>";
         }
     }
@@ -69,7 +69,7 @@ $(function () {
  * jqGrid重新加载
  */
 function reload() {
-    initFlatPickr();
+    //initFlatPickr();
     var page = $("#jqGrid").jqGrid('getGridParam', 'page');
     $("#jqGrid").jqGrid('setGridParam', {
         page: page
@@ -151,8 +151,8 @@ function putUpGoods() {
     }).then((flag) => {
             if (flag) {
                 $.ajax({
-                    type: "PUT",
-                    url: "/admin/goods/status/0",
+                    type: "POST",
+                    url: "/admin/goods/status/1",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
@@ -191,8 +191,8 @@ function putDownGoods() {
     }).then((flag) => {
             if (flag) {
                 $.ajax({
-                    type: "PUT",
-                    url: "/admin/goods/status/1",
+                    type: "POST",
+                    url: "/admin/goods/status/0",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {

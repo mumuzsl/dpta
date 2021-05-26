@@ -13,17 +13,35 @@
         border-radius: 4px;
         box-sizing: border-box;
     }
+    .form-text {
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 20px;
+        font-weight: normal;
+        width: 350px;
+    }
 
     .f1 {
         border-radius: 5px;
         padding: 10px;
-        font-size: 30px;
+        font-size: 26px;
+        font-weight: normal;
+    }
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        border-radius: 8px;
     }
    </style>
 <body>
 <div class="page-main">
     <div class="container confirm-box">
-<!--        <form target="_blank" action="#" id="J_payForm" method="post">-->
             <div class="section section-order">
                 <div class="order-info clearfix">
                     <div class="fl">
@@ -41,33 +59,30 @@
                     </div>
                 </div>
             </div>
-            <div class="section section-payment">
-                <div style="margin-left: 5%">
-<!--                    <form class="f1">-->
-                        <div>
+            <div class="section f1",style="font-size:25px">
+                <div style="margin-left: 10%">
+                        <div style="margin-top: 5%">
                             <input type="hidden" id="amount" th:value="${payM.amount}">
                             <label  th:text="${'待支付总金额: '+ payM.amount +'元'}"></label>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" style="margin-top: 1%">
                             <input type="hidden" id="enCredit" th:value="${payM.enCredit}">
-                            <label for="credit" class="control-label">使用授信支付:&nbsp;</label>
+                            <label for="credit" class="control-label">使用授信支付:&nbsp;&nbsp;&nbsp;&nbsp;</label>
                             <input type="number" min="0.00" th:max="${payM.enCredit}" default="0.00" class="form-text" id="credit" name="credit" th:placeholder="${'最大可用授信'+payM.enCredit+'元'}" required="required">
                         </div>
-                        <div>
+                        <div style="margin-top: 1%">
                             <input type="hidden" id="resve" th:value="${payM.resve}">
                             <label id="uResve" th:text="${'使用预备金: '+payM.amount+'元'}">&nbsp;&nbsp;</label>
                         </div>
-                        <div>
+                        <div style="margin-top: 1%">
                             <label for="password" class="control-label">请输入支付密码:&nbsp;</label>
                             <input type="password"  class="form-text" id="password" name="password" required="required">
                         </div>
-                        <div>
-                            <button class="btn" onclick="payOrder2()">支付</button>
+                        <div style="margin-top: 2%;margin-bottom: 5%;margin-left: 5%">
+                            <button class="button" onclick="payOrder2()">支付</button>
                         </div>
-<!--                    </form>-->
                 </div>
             </div>
-<!--        </form>-->
     </div>
 </div>
 
