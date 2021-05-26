@@ -1,9 +1,8 @@
 package com.cqjtu.dpta.web.support;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cqjtu.dpta.api.DistrUserService;
-import com.cqjtu.dpta.dao.entity.DistrUser;
-import org.springframework.security.core.userdetails.UserDetails;
+import com.cqjtu.dpta.api.UserService;
+import com.cqjtu.dpta.common.util.TokenUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -15,28 +14,20 @@ import javax.servlet.http.HttpServletResponse;
  * author: mumu
  * date: 2021/4/15
  */
-public class DistrUserInterceptor extends HandlerInterceptorAdapter {
+@Component
+public class AdminInterceptor extends HandlerInterceptorAdapter {
     @Resource
-    private DistrUserService distrUserService;
+    private UserService userService;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String token = TokenUtils.getToken(request);
 
-        return false;
+        return token != null && userService.getById(TokenUtils.longId(token)) != null;
     }
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         super.postHandle(request, response, handler, modelAndView);
-    }
-
-    private DistrUser getDistrUser(Object o) {
-        UserDetails ud = (UserDetails) o;
-        String username = ud.getUsername();
-        return distrUserService.getOne(getQueryWrapper(username));
-    }
-
-    private static QueryWrapper<DistrUser> getQueryWrapper(String username) {
-        return new QueryWrapper<DistrUser>().eq("username", username);
     }
 }

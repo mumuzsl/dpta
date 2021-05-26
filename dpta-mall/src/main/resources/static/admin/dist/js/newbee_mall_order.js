@@ -7,7 +7,7 @@ $(function () {
             {label: '订单号', name: 'orderNo', index: 'orderNo', width: 120},
             {label: '订单总价', name: 'totalPrice', index: 'totalPrice', width: 60},
             {label: '订单状态', name: 'orderStatus', index: 'orderStatus', width: 80, formatter: orderStatusFormatter},
-            {label: '支付方式', name: 'payType', index: 'payType', width: 80,formatter:payTypeFormatter},
+            {label: '支付方式', name: 'payType', index: 'payType', width: 80, formatter: payTypeFormatter},
             {label: '收件人地址', name: 'userAddress', index: 'userAddress', width: 10, hidden: true},
             {label: '创建时间', name: 'createTime', index: 'createTime', width: 120},
             {label: '操作', name: 'createTime', index: 'createTime', width: 120, formatter: operateFormatter}
@@ -372,4 +372,33 @@ function reset() {
     $("#totalPrice").val(0);
     $("#userAddress").val('');
     $('#edit-error-msg').css("display", "none");
+}
+
+function searchOrder() {
+    $.ajax({
+        type: 'POST',//方法类型
+        url: '/platform/api/order',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        success: function (result) {
+            if (result.resultCode == 200) {
+                $('#orderInfoModal').modal('hide');
+                swal("保存成功", {
+                    icon: "success",
+                });
+                reload();
+            } else {
+                $('#orderInfoModal').modal('hide');
+                swal(result.message, {
+                    icon: "error",
+                });
+            }
+            ;
+        },
+        error: function () {
+            swal("操作失败", {
+                icon: "error",
+            });
+        }
+    });
 }

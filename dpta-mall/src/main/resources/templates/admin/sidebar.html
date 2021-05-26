@@ -117,10 +117,18 @@
                         </p>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a th:href="@{/admin/all_order}" th:class="${path}=='all_orders'?'nav-link active':'nav-link'">
+                        <i class="fa fa-money nav-icon" aria-hidden="true"></i>
+                        <p>
+                            平台订单管理
+                        </p>
+                    </a>
+                </li>
 
                 <li class="nav-header">授信管理</li>
                 <li class="nav-item">
-                    <a href="/admin/credit"  th:class="${path}=='credit'?'nav-link active':'nav-link'">
+                    <a href="/admin/credit" th:class="${path}=='credit'?'nav-link active':'nav-link'">
                         <i class="fa fa-money nav-icon" aria-hidden="true"></i>
                         <p>
                             授信列表
@@ -169,21 +177,21 @@
                         </p>
                     </a>
                 </li>
-<!--                <li class="nav-header">商家</li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a th:href=""-->
-<!--                        th:class="">-->
-<!--                        <i class="fa fa-archive nav-icon"></i>-->
-<!--                        <p>商家管理</p>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a th:href=""-->
-<!--                        th:class="">-->
-<!--                        <i class="fa fa-money nav-icon"></i>-->
-<!--                        <p>分销配置</p>-->
-<!--                    </a>-->
-<!--                </li>-->
+                <!--                <li class="nav-header">商家</li>-->
+                <!--                <li class="nav-item">-->
+                <!--                    <a th:href=""-->
+                <!--                        th:class="">-->
+                <!--                        <i class="fa fa-archive nav-icon"></i>-->
+                <!--                        <p>商家管理</p>-->
+                <!--                    </a>-->
+                <!--                </li>-->
+                <!--                <li class="nav-item">-->
+                <!--                    <a th:href=""-->
+                <!--                        th:class="">-->
+                <!--                        <i class="fa fa-money nav-icon"></i>-->
+                <!--                        <p>分销配置</p>-->
+                <!--                    </a>-->
+                <!--                </li>-->
                 <li class="nav-header">系统管理</li>
                 <li class="nav-item">
                     <a th:href="@{/admin/profile}"

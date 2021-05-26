@@ -3,6 +3,7 @@ package com.cqjtu.dpta.common.web;
 import com.cqjtu.dpta.common.vo.CommVo;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -12,9 +13,19 @@ import java.util.List;
  */
 @Data
 public class OrderParam {
+    private Long id;
 
     private Long shopId;
 
     private List<CommVo> comms;
 
+    private String address;
+
+    private String phone;
+
+    private String receiver;
+
+    private BigDecimal expressMoney;
+
+    private String expressNo;
 }

@@ -12,7 +12,6 @@ import java.util.List;
  * date: 2021/4/26
  */
 public abstract class AbstractUserDetailsService implements UserDetailsService {
-
     private List<GrantedAuthority> authorities;
 
     public AbstractUserDetailsService() {
@@ -27,9 +26,5 @@ public abstract class AbstractUserDetailsService implements UserDetailsService {
 
     protected List<GrantedAuthority> getAuthorities() {
         return authorities;
-    }
-
-    protected void user(){
-
     }
 }

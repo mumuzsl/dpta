@@ -1,9 +1,7 @@
 package com.cqjtu.dpta.cg;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.setting.Setting;
 import com.baomidou.mybatisplus.core.toolkit.StringPool;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.InjectionConfig;
 import com.baomidou.mybatisplus.generator.config.*;
@@ -12,7 +10,10 @@ import com.baomidou.mybatisplus.generator.config.rules.NamingStrategy;
 import com.baomidou.mybatisplus.generator.engine.FreemarkerTemplateEngine;
 import com.cqjtu.dpta.api.support.CrudService;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 该类基于MyBatis-Plus提供的支持实现代码生成
@@ -62,7 +63,7 @@ public class CodeGenerator {
         strategy.setTablePrefix("t_");
         strategy.setSuperServiceClass(CrudService.class);
 //        strategy.setInclude("t_paf_sku_stock","t_distr","t_paf_comm","t_shop_comm","t_deal","t_deal_d","t_distr_sku_stock");
-        strategy.setInclude("t_shp_comm");
+        strategy.setInclude("t_order");
 
         Map<String, String> map = new HashMap<>();
 //        map.put(ConstVal.MAPPER_PATH, projectPath + "\\dpta-dao\\src\\main\\java\\com\\cqjtu\\dpta\\dao\\mapper");

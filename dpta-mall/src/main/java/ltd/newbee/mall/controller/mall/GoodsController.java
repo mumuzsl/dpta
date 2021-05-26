@@ -9,6 +9,7 @@
 package ltd.newbee.mall.controller.mall;
 
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.common.util.ResultUtils;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.common.ServiceResultEnum;
@@ -21,16 +22,18 @@ import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Controller
+@CrossOrigin
 public class GoodsController {
 
     @Resource
@@ -91,5 +94,22 @@ public class GoodsController {
         return "mall/detail";
     }
 
-
+    @GetMapping("/goods/{goodsId}")
+    @ResponseBody
+    public Result detail(@PathVariable("goodsId") Long goodsId) {
+        if (goodsId < 1) {
+            return ResultUtils.keyError();
+        }
+        NewBeeMallGoods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        if (goods == null) {
+            return Result.fail(ServiceResultEnum.GOODS_NOT_EXIST);
+        }
+        if (Constants.SELL_STATUS_UP != goods.getGoodsSellStatus()) {
+            return Result.fail(ServiceResultEnum.GOODS_PUT_DOWN);
+        }
+        NewBeeMallGoodsDetailVO goodsDetailVO = new NewBeeMallGoodsDetailVO();
+        BeanUtil.copyProperties(goods, goodsDetailVO);
+        goodsDetailVO.setGoodsCarouselList(goods.getGoodsCarousel().split(","));
+        return Result.ok(goodsDetailVO);
+    }
 }

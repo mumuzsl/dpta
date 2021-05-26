@@ -5,8 +5,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.TokenUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -22,13 +20,9 @@ import java.io.IOException;
 public class TokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = TokenUtils.getHeader(request);
+        String token = TokenUtils.getToken(request);
 
-        if (StringUtils.isBlank(token)) {
-            token = request.getParameter("token");
-        }
-
-        if (StringUtils.isNotBlank(token)) {
+        if (token != null) {
             try {
                 TokenUtils.verifier().verify(token);
                 TokenUtils.setAttribute(request, token);
@@ -41,8 +35,9 @@ public class TokenFilter extends OncePerRequestFilter {
             }
         }
 
-        response.setStatus(HttpStatus.FORBIDDEN.value());
-        response.setContentType("application/json");
+//        response.setStatus(HttpStatus.FORBIDDEN.value());
+        logger.info(request.getRequestURL());
+        response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(JSON.toJSONString(Result.build(ResultCodeEnum.USER_NO_OR_IllEGAL_TOKEN)));
     }
 }

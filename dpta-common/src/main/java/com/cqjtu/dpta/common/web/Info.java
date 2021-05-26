@@ -19,13 +19,18 @@ public class Info {
 
     private String avatar;
 
+    private String role;
+
+    private Long id;
+
     public long id() {
-        return TokenUtils.longId(token);
+        return id;
     }
 
     public static Info of(String token) {
         Info info = new Info();
         info.setToken(token);
+        info.setId(TokenUtils.longId(token));
         return info;
     }
 }

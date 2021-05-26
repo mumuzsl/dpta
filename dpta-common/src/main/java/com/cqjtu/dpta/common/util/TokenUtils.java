@@ -96,21 +96,23 @@ public abstract class TokenUtils {
         return String.valueOf(request.getAttribute(TOKEN_NAME));
     }
 
+    public static String getToken(HttpServletRequest request) {
+        String token = TokenUtils.getHeader(request);
 
-    public static void main(String[] args) {
-//        Instant instant = TokenUtils.decode(token).getExpiresAt().toInstant();
-//        ZoneId zoneId = ZoneId.systemDefault();
-//        LocalDateTime localDateTime = LocalDateTime.ofInstant(instant, zoneId);
-//        String s = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.CHINA).format(localDateTime);
-//        System.out.println(s);
-//        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMDAyIiwiZXhwIjoxNjIzNTQ2MjI0fQ.MGED68hkVIWqdpJxfIxCazDC0nk0VqJrrDapOZuPlnc";
-//        Date expiresAt = TokenUtils.decode(token).getExpiresAt();
-//        String format = DateUtil.format(expiresAt, "yyyy-MM-dd HH:mm:ss");
-//        System.out.println(format);
-//        System.out.println(DateUtil.formatDateTime(expiresAt()));
-//        String s = create(1002, null);
-//        System.out.println(s);
-//        System.out.println(s);
+        if (token == null) {
+            token = request.getParameter("token");
+        }
 
+        Cookie[] cookies = null;
+        if (token == null && (cookies = request.getCookies()) != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
+
+        return token;
     }
 }

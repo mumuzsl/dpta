@@ -37,24 +37,24 @@ public class CreditServiceImpl extends ServiceImpl<CreditMapper, Credit> impleme
     private CreditDService creditDService;
 
     public IPage<Credit> pageByDistrAndState(Long distrId, Pageable pageable, String keyword, Integer state) {
-        SearchPage<Credit> page = SearchPage.toPage(pageable, keyword);
+        SearchPage<Credit> page = toPage(pageable, keyword);
         return baseMapper.pageByDistrAndState(page, distrId, state);
     }
 
     public IPage<Distr> pageBySuppAndState(Long suppId, Pageable pageable, String keyword, Integer state) {
-        SearchPage<Credit> page = SearchPage.toPage(pageable, keyword);
+        SearchPage<Credit> page = toPage(pageable, keyword);
         return baseMapper.pageBySuppAndState(page, suppId, state);
     }
 
     @Override
     public IPage<Credit> applyBySuppNm(Pageable pageable, String keyword, Integer state) {
-        SearchPage<Credit> page = SearchPage.toPage(pageable, keyword);
+        SearchPage<Credit> page = toPage(pageable, keyword);
         return baseMapper.applyBySuppNm(page, state);
     }
 
     @Override
     public IPage<Credit> applyByDistrNm(Pageable pageable, String keyword, Integer state) {
-        SearchPage<Credit> page = SearchPage.toPage(pageable, keyword);
+        SearchPage<Credit> page = toPage(pageable, keyword);
         return baseMapper.applyByDistrNm(page, state);
     }
 

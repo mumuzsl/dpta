@@ -7,13 +7,13 @@ import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /**
  * author: mumu
  * date: 2021/4/13
  */
 @ControllerAdvice
-//@RestControllerAdvice({"com.cqjtu.dpta.controller.rest"})
 public class ControllerExceptionHandler {
     @ExceptionHandler(RedisDisabledException.class)
     @ResponseBody
@@ -52,4 +52,11 @@ public class ControllerExceptionHandler {
         e.printStackTrace();
         return Result.fail("没有token");
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    @ResponseBody
+    public Result handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        return Result.fail("方法参数类不匹配");
+    }
+
 }

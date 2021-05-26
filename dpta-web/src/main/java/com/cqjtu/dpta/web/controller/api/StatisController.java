@@ -2,17 +2,18 @@ package com.cqjtu.dpta.web.controller.api;
 
 import com.cqjtu.dpta.api.StatisService;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.common.result.ResultCodeEnum;
+import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.vo.CommStatisVo;
 import com.cqjtu.dpta.common.vo.StatisVo;
-import com.cqjtu.dpta.common.vo.XyVo;
+import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.dao.repository.VisitsRepository;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,58 +23,77 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/distr/api/statis")
+//@Cacheable("statis")
 public class StatisController {
 
     @Resource
     private StatisService statisService;
+    @Resource
+    RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    VisitsRepository visitsRepository;
 
-    private static List<Object> ydata = new ArrayList<>(7);
+    @GetMapping("recent/person")
+    public Result person(@RequestParam(value = "day", required = false, defaultValue = "7") int day,
+                         Info info) {
+        List<Object> data = new ArrayList<>(day + 1);
+        String[] cols = {"date", "访问人次", "访问人数"};
+        data.add(cols);
 
-    static {
-        ydata.add(168);
-        ydata.add(169);
-        ydata.add(160);
-        ydata.add(159);
-        ydata.add(170);
-        ydata.add(155);
-        ydata.add(166);
-    }
-
-    @GetMapping("recent/person-time")
-    public Result personTime(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
-        Result<XyVo> result = Result.ok();
-        if (day > 7) {
-            result.setMessage(ResultCodeEnum.DATA_BIG_DAY_ERROR.getMessage());
+        for (int i = day; i > 0; i--) {
+            ArrayList<Object> y = new ArrayList<>(cols.length);
+            y.add(DptaUtils.nowMinusDaysStr(i - 1));
+            data.add(y);
         }
-        XyVo xyVo = XyVo.of(day);
-        LocalDateTime now = LocalDateTime.now();
+
         for (int i = 0; i < day; i++) {
-            xyVo.getXdata().add(now.minusDays(i + 1).toLocalDate());
+            int count1 = DptaUtils.nowMinusDays(day - i - 1, (d1, d2) -> visitsRepository.countByDistrIdAndDateBetween(info.id(), d1, d2));
+            int count2 = DptaUtils.nowMinusDays(day - i - 1, (d1, d2) -> visitsRepository.countByUser(info.id(), d1, d2));
+            List list = (List) data.get(i + 1);
+            list.add(count1);
+            list.add(count2);
         }
-        List<Object> newYData = new ArrayList<>(day);
-        for (Object o : ydata) {
-            newYData.add((int) o * 3);
-        }
-        xyVo.setYdata(newYData);
-        result.setData(xyVo);
-        return result;
+
+        return Result.ok(data);
     }
 
-    @GetMapping("recent/person-number")
-    public Result recent(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
-        Result<XyVo> result = Result.ok();
-        if (day > 7) {
-            result.setMessage(ResultCodeEnum.DATA_BIG_DAY_ERROR.getMessage());
-        }
-        XyVo xyVo = XyVo.of(day);
-        LocalDateTime now = LocalDateTime.now();
-        for (int i = 0; i < day; i++) {
-            xyVo.getXdata().add(now.minusDays(i + 1).toLocalDate());
-        }
-        xyVo.setYdata(ydata);
-        result.setData(xyVo);
-        return result;
-    }
+
+//    @GetMapping("recent/person-time")
+//    public Result personTime(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
+//        Result<XyVo> result = Result.ok();
+//        if (day > 7) {
+//            result.setMessage(ResultCodeEnum.DATA_BIG_DAY_ERROR.getMessage());
+//        }
+//        XyVo xyVo = XyVo.of(day);
+//        LocalDateTime now = LocalDateTime.now();
+//        for (int i = 0; i < day; i++) {
+//            xyVo.getXdata().add(now.minusDays(i + 1).toLocalDate());
+//        }
+//        List<Object> newYData = new ArrayList<>(day);
+//        for (Object o : ydata) {
+//            newYData.add((int) o * 3);
+//        }
+//        xyVo.setYdata(newYData);
+//        result.setData(xyVo);
+//        return result;
+//    }
+//
+//    @GetMapping("recent/person-number")
+//    public Result recent(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
+//        Result<XyVo> result = Result.ok();
+//        if (day > 7) {
+//            result.setMessage(ResultCodeEnum.DATA_BIG_DAY_ERROR.getMessage());
+//        }
+//        XyVo xyVo = XyVo.of(day);
+//        LocalDateTime now = LocalDateTime.now();
+//        for (int i = 0; i < day; i++) {
+//            xyVo.getXdata().add(now.minusDays(i + 1).toLocalDate());
+//        }
+//        xyVo.setYdata(ydata);
+//        result.setData(xyVo);
+//        return result;
+//    }
+
 
     @GetMapping("all")
     public Result all() {
@@ -124,5 +144,12 @@ public class StatisController {
         return Result.ok(r);
     }
 
-
+    //    @CachePut("statis")
+//    public Result add() {
+//        int size = ydata.size();
+//        Object o = ydata.get(size - 1);
+//        long n = Long.parseLong(String.valueOf(o));
+//        ydata.set(size - 1, n);
+//        return Result.ok(ydata);
+//    }
 }

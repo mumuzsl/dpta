@@ -1,4 +1,4 @@
-package com.cqjtu.dpta.web.controller.api;
+package com.cqjtu.dpta.web.controller.api.open;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CreditService;
@@ -19,9 +19,14 @@ import com.cqjtu.dpta.web.support.OptionsUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -33,8 +38,8 @@ import java.util.List;
  * @since 2021-04-13
  */
 @RestController
-@RequestMapping("/public/api")
-public class PublicApiController {
+@RequestMapping("/open/api")
+public class DistrOpenApi {
 
     @Resource
     private DistrAppService distrAppService;
@@ -47,11 +52,16 @@ public class PublicApiController {
     @Resource
     private DistrService distrService;
 
-
     private static final String[] COLUMNS = {"APP_ID"};
 
+//    @GetMapping("order-state")
+//    public Result orderState(){
+//        OptionsUtils.list()
+//    }
+
     @GetMapping("distr-app")
-    public Result distrApp(@RequestParam(value = "keyword", required = false) String keyword) {
+    public Result distrApp(@RequestParam(value = "keyword", required = false) String keyword,
+                           HttpSession httpSession) {
         List<Options<Long>> options = OptionsUtils
                 .list(() -> ControllerUtils.quick(distrAppService, keyword, DistrApp::getAppNm),
                         DistrApp::getAppId,

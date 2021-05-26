@@ -1,12 +1,11 @@
 package com.cqjtu.dpta.dao.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.dao.entity.OrderD;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 /**
  * <p>
@@ -38,4 +37,6 @@ public interface OrderDMapper extends BaseMapper<OrderD> {
      * 返回订单数
      */
     Long getOrderSum();
+
+    Integer clearBad(Long orderId);
 }

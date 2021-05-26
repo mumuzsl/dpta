@@ -7,121 +7,232 @@
         <result property="price" column="detail_price"/>
         <result property="profit" column="detail_profit"/>
         <result property="state" column="detail_state"/>
-        <association property="pafComm" javaType="com.cqjtu.dpta.dao.entity.PafComm">
-            <id property="commId" column="comm_id"/>
-            <result property="commNm" column="comm_nm"/>
-        </association>
-        <association property="sku" javaType="com.cqjtu.dpta.dao.entity.Sku">
-            <id property="id" column="sku_id"/>
-            <result property="spec" column="sku_spec"/>
-        </association>
+        <result property="commId" column="detail_comm_id"/>
+        <result property="goodsName" column="detail_goods_name"/>
+        <result property="goodsCoverImg" column="detail_goods_cover_img"/>
     </resultMap>
 
     <resultMap id="OrderDto" type="com.cqjtu.dpta.dao.dto.OrderDto">
         <id property="id" column="order_id"/>
         <result property="profit" column="order_profit"/>
+        <result property="distrId" column="order_distr_id"/>
         <result property="datm" column="order_datm"/>
         <result property="amount" column="order_amount"/>
         <result property="state" column="order_state"/>
         <result property="verifyTm" column="order_verify_tm"/>
         <result property="baseP" column="order_base_p"/>
-        <association property="shop" javaType="com.cqjtu.dpta.dao.entity.Shop">
-            <id property="shopId" column="shop_id"/>
-            <result property="shopNm" column="shop_nm"/>
-        </association>
-        <collection property="details" resultMap="OrderDDto">
+        <result property="address" column="order_address"/>
+        <result property="payTime" column="order_pay_time"/>
+        <result property="receiver" column="order_receiver"/>
+        <result property="phone" column="order_phone"/>
+        <result property="shopId" column="order_shop_id"/>
+        <result property="shopNm" column="order_shop_name"/>
+        <result property="expressMoney" column="order_express_money"/>
+        <result property="expressNo" column="order_express_no"/>
+        <result property="deleted" column="order_deleted"/>
+    </resultMap>
+
+    <resultMap id="orderIndex" type="com.cqjtu.dpta.dao.repository.OrderIndex">
+        <id property="id" column="order_id"/>
+        <result property="distrId" column="order_distr_id"/>
+        <result property="distrNm" column="order_distr_name"/>
+        <result property="datm" column="order_datm"/>
+        <result property="state" column="order_state"/>
+        <result property="receiver" column="order_receiver"/>
+        <result property="phone" column="order_phone"/>
+        <result property="shopNm" column="order_shop_name"/>
+        <result property="deleted" column="order_deleted"/>
+        <result property="amount" column="order_amount"/>
+        <result property="profit" column="order_profit"/>
+        <collection property="details" ofType="java.lang.String" column="order_detail">
         </collection>
     </resultMap>
 
-    <select id="pageHalfOrderDto" resultMap="OrderDto">
-        select t.ID        as order_id,
-               t.STATE     as order_state,
-               t.AMOUNT    as order_amount,
-               t.DATM      as order_datm,
-               t.PROFIT    as order_profit,
-               t.VERIFY_TM as order_verify_tm,
-               t.BASE_P    as order_base_p,
-               ts.SHOP_ID  as shop_id,
-               ts.SHOP_NM  as shop_nm
-        from t_shop ts
-                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID and ts.DISTR_ID = #{distrId}
+    <select id="findByBetween" resultType="com.cqjtu.dpta.dao.entity.Order" parameterType="java.util.Map">
+        select *
+        from t_order t inner join t_shop ts
+        on ts.SHOP_ID = t.SHOP_ID
+        <if test="params.distrId!=null">
+            and ts.DISTR_ID = #{params.distrId}
+        </if>
+        <if test="params.start!=null">
+            and t.DATM &gt;= #{params.start}
+        </if>
+        <if test="params.end!=null">
+            and t.DATM &lt;= #{params.end}
+        </if>
+        <if test="params.deleted!=null">
+            and t.deleted = #{params.deleted}
+        </if>
     </select>
 
-    <select id="getFullDetail" resultMap="OrderDDto">
-        select tod.ID      as detail_id,
-               tod.COUNT   as detail_count,
-               tod.PRICE   as detail_price,
-               tod.PROFIT  as detail_profit,
-               tod.STATE   as detail_state,
-               tpc.COMM_ID as comm_id,
-               tpc.COMM_NM as comm_nm,
-               tsku.id     as sku_id,
-               tsku.spec   as sku_spec
-        from t_order t
-                 inner join t_order_d tod on t.ID = tod.ORDER_ID and t.ID = #{id}
-                 inner join t_sku tsku on tod.sku_id = tsku.id
-                 inner join t_paf_comm tpc
-                            on tod.COMM_ID = tpc.COMM_ID
+    <select id="countAndSum" resultType="com.cqjtu.dpta.dao.dto.OrderStatisDto" parameterType="java.util.Map">
+        select
+        <if test="params.isStateGroup">
+            t.STATE as state,
+        </if>
+        count(t.ID) as count,
+        sum(t.AMOUNT) as sum,
+        max(t.DATM) as maxTime,
+        min(t.DATM) as minTime
+        from t_order t inner join t_shop ts
+        on ts.SHOP_ID = t.SHOP_ID
+        and ts.DISTR_ID = #{params.distrId}
+        <if test="params.shopId!=null">
+            and ts.SHOP_ID = #{params.shopId}
+        </if>
+        <if test="params.state!=null">
+            and t.STATE = #{params.state}
+        </if>
+        <if test="params.amount!=null">
+            and t.STATE >= #{params.amount}
+        </if>
+        <if test="params.start!=null">
+            and t.DATM &gt;= #{params.start}
+        </if>
+        <if test="params.end!=null">
+            and t.DATM &lt;= #{params.end}
+        </if>
+        <if test="params.deleted!=null">
+            and t.deleted = #{params.deleted}
+        </if>
+        <if test="params.isStateGroup">
+            group by t.STATE
+        </if>
     </select>
 
-    <select id="getFullOrderDto" resultMap="OrderDto">
-        select t.ID        as order_id,
-               t.STATE     as order_state,
-               t.AMOUNT    as order_amount,
-               t.DATM      as order_datm,
-               t.PROFIT    as order_profit,
-               t.VERIFY_TM as order_verify_tm,
-               t.BASE_P    as order_base_p,
-               ts.SHOP_ID  as shop_id,
-               ts.SHOP_NM  as shop_nm,
-               tod.ID      as detail_id,
-               tod.COUNT   as detail_count,
-               tod.PRICE   as detail_price,
-               tod.PROFIT  as detail_profit,
-               tod.STATE   as detail_state,
-               tpc.COMM_ID as comm_id,
-               tpc.COMM_NM as comm_nm,
-               tsku.id     as sku_id,
-               tsku.spec   as sku_spec
+    <select id="getDetails" resultMap="OrderDDto">
+        select
+        tod.ID as detail_id,
+        tod.COUNT as detail_count,
+        tod.PRICE as detail_price,
+        tod.PROFIT as detail_profit,
+        tod.STATE as detail_state,
+        tod.COMM_ID as detail_comm_id,
+        gi.goods_name as detail_goods_name,
+        gi.goods_cover_img as detail_goods_cover_img
+        from t_order_d tod inner join newbee_mall_db.tb_newbee_mall_goods_info gi
+        on tod.COMM_ID = gi.goods_id and tod.ORDER_ID = #{orderId}
+    </select>
+
+    <select id="getOrderDtoNotDetails" resultMap="OrderDto">
+        select
+        <include refid="order_dto_sql"/>
         from t_shop ts
-                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID and t.ID = #{id}
-                 inner join t_order_d tod on t.ID = tod.ORDER_ID
-                 inner join t_sku tsku on tod.sku_id = tsku.id
-                 inner join t_paf_comm tpc
-                            on tod.COMM_ID = tpc.COMM_ID
+        inner join t_order t on ts.SHOP_ID = t.SHOP_ID
+        and t.ID = #{id}
+        <if test="deleted!=null">
+            and t.deleted = #{deleted}
+        </if>
+    </select>
+
+    <select id="pageOrderDtoNotDetails" resultMap="OrderDto">
+        select
+        <include refid="order_dto_sql"/>
+        from t_shop ts
+        inner join t_order t on ts.SHOP_ID = t.SHOP_ID
+        <if test="distrId!=null">
+            and ts.DISTR_ID = #{distrId}
+        </if>
+        <if test="state!=null">
+            and t.STATE = #{state}
+        </if>
+        <if test="deleted!=null">
+            and t.deleted = #{deleted}
+        </if>
+    </select>
+
+    <sql id="order_dto_sql">
+        t.ID as order_id,
+        t.STATE as order_state,
+        t.AMOUNT as order_amount,
+        t.DATM as order_datm,
+        t.PROFIT as order_profit,
+        t.VERIFY_TM as order_verify_tm,
+        t.BASE_P as order_base_p,
+        t.pay_time as order_pay_time,
+        t.address as order_address,
+        t.phone as order_phone,
+        t.receiver as order_receiver,
+        t.express_no as order_express_no,
+        t.express_money as order_express_money,
+        t.deleted as order_deleted,
+        ts.SHOP_ID as order_shop_id,
+        ts.SHOP_NM as order_shop_name,
+        ts.DISTR_ID as order_distr_id
+    </sql>
+
+    <select id="getOrderIndex" resultMap="orderIndex">
+select
+        t.ID as order_id,
+        t.STATE as order_state,
+        t.DATM as order_datm,
+        t.phone as order_phone,
+        t.receiver as order_receiver,
+        t.deleted as order_deleted,
+        t.amount as order_amount,
+        ts.SHOP_NM as order_shop_name,
+        as order_distr_name,
+        ts.DISTR_ID as order_distr_id,
+                gi.goods_name as detail_goods_name
+ from t_order t left join t_shop ts on ts.SHOP_ID = t.SHOP_ID
+ left join t_distr on ts.DISTR_ID = t.DISTR_NM
+    </select>
+
+    <select id="pageOrderDtoNotDetailsByStates" resultMap="OrderDto">
+        select
+        <include refid="order_dto_sql"/>
+        from t_shop ts
+        inner join t_order t on ts.SHOP_ID = t.SHOP_ID
+        and ts.DISTR_ID = #{distrId}
+        <if test="state!=null">
+            and t.STATE in
+            <foreach collection="state" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="deleted!=null">
+            and t.deleted = #{deleted}
+        </if>
     </select>
 
     <select id="pageByDistrAndShop" resultMap="OrderDto">
-        select  t.ID        as order_id,
-                t.STATE     as order_state,
-                t.AMOUNT    as order_amount,
-                t.DATM      as order_datm,
-                t.PROFIT    as order_profit,
-                t.VERIFY_TM as order_verify_tm,
-                t.BASE_P    as order_base_p,
-                ts.SHOP_ID  as shop_id,
-                ts.SHOP_NM  as shop_nm
+        select t.ID as order_id,
+        t.STATE as order_state,
+        t.AMOUNT as order_amount,
+        t.DATM as order_datm,
+        t.PROFIT as order_profit,
+        t.VERIFY_TM as order_verify_tm,
+        t.BASE_P as order_base_p,
+        ts.SHOP_ID as shop_id,
+        ts.SHOP_NM as shop_nm
         from t_shop ts
-                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID
-            and ts.DISTR_ID = #{distrId} and ts.SHOP_NM like concat('%', #{pg.keyword}, '%')
+        inner join t_order t on ts.SHOP_ID = t.SHOP_ID
+        <if test="state!=null">
+            and t.STATE= #{state}
+        </if>
+        and ts.DISTR_ID = #{distrId} and ts.SHOP_NM like concat('%', #{pg.keyword}, '%')
     </select>
 
 
     <select id="pageByDistrAndComm" resultMap="OrderDto">
-        select  t.ID        as order_id,
-                t.STATE     as order_state,
-                t.AMOUNT    as order_amount,
-                t.DATM      as order_datm,
-                t.PROFIT    as order_profit,
-                t.VERIFY_TM as order_verify_tm,
-                t.BASE_P    as order_base_p,
-                ts.SHOP_ID  as shop_id,
-                ts.SHOP_NM  as shop_nm
+        select t.ID as order_id,
+        t.STATE as order_state,
+        t.AMOUNT as order_amount,
+        t.DATM as order_datm,
+        t.PROFIT as order_profit,
+        t.VERIFY_TM as order_verify_tm,
+        t.BASE_P as order_base_p,
+        ts.SHOP_ID as shop_id,
+        ts.SHOP_NM as shop_nm
         from t_shop ts
-                 inner join t_order t on ts.SHOP_ID = t.SHOP_ID and ts.DISTR_ID = #{distrId}
-                 inner join t_order_d tod on t.ID = tod.ORDER_ID
-                 inner join t_paf_comm tpc
-                            on tod.COMM_ID = tpc.COMM_ID and tpc.COMM_NM like concat('%', #{pg.keyword}, '%')
+        inner join t_order t on ts.SHOP_ID = t.SHOP_ID and ts.DISTR_ID = #{distrId}
+        <if test="state!=null">
+            and t.STATE= #{state}
+        </if>
+        inner join t_order_d tod on t.ID = tod.ORDER_ID
+        inner join t_paf_comm tpc
+        on tod.COMM_ID = tpc.COMM_ID and tpc.COMM_NM like concat('%', #{pg.keyword}, '%')
         group by t.ID
     </select>
 
@@ -144,7 +255,7 @@
         select t1.*
         from t_order t1
                  inner join t_shop ts on t1.SHOP_ID = ts.SHOP_ID
-            and ts.DISTR_ID = #{distrId}
+            and ts.DISTR_ID = #{distrId} and t1.STATE = #{state}
     </select>
 
     <select id="getDistrId" resultType="java.lang.Long">
@@ -197,6 +308,7 @@
             FROM t_shop
             WHERE distr_id = #{distr_id}
         )
-          AND state = 2
+          AND state = #{state}
     </select>
+
 </mapper>

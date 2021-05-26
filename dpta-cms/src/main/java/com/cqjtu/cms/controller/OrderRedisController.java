@@ -7,14 +7,14 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 /**
  * author: mumu
@@ -54,5 +54,34 @@ public class OrderRedisController {
         System.out.println(order);
         return order;
     }
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderRedisController.class);
+
+//    @Autowired
+//    private AmqpTemplate rabbitTemplate;
+//
+//    /**
+//     * 模拟提交订单
+//     *
+//     * @return java.lang.Object
+//     * @author nxq
+//     */
+//    @GetMapping("")
+//    public Object submit() {
+//        String orderId = UUID.randomUUID().toString();
+//        logger.info("submit order {}", orderId);
+//        this.rabbitTemplate.convertAndSend(
+//                RabbitMQConfiguration.orderExchange, //发送至订单交换机
+//                RabbitMQConfiguration.routingKeyOrder, //订单定routingKey
+//                orderId//订单号   这里可以传对象 比如直接传订单对象
+//                , message -> {
+//                    // 如果配置了 params.put("x-message-ttl", 5 * 1000);
+//                    // 那么这一句也可以省略,具体根据业务需要是声明 Queue 的时候就指定好延迟时间还是在发送自己控制时间
+//                    message.getMessageProperties().setExpiration(1000 * 10 + "");
+//                    return message;
+//                });
+//
+//        return "{'orderId':'" + orderId + "'}";
+//    }
 
 }

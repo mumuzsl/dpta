@@ -1,9 +1,6 @@
 package com.cqjtu.dpta.common.vo;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /**
  * author: mumu
@@ -11,6 +8,8 @@ import java.math.BigDecimal;
  */
 @Data
 public class CommVo {
+
+    private Long commId;
 
     private Long skuStockId;
 

@@ -31,7 +31,28 @@
              ) as t1
                  inner join t_paf_comm tpc on t1.COMM_ID = tpc.COMM_ID
         order by amount desc
-        limit 1
+        limit #{limit}
+    </select>
+
+    <select id="getCommVo" resultMap="CommVo">
+        select tpc.COMM_NM comm_name,
+               t1.COMM_ID,
+               max_price,
+               min_price,
+               avg_price,
+               count,
+               amount
+        from (
+                 select COMM_ID,
+                        avg(PRICE)         avg_price,
+                        max(PRICE)         max_price,
+                        min(PRICE)         min_price,
+                        sum(COUNT)         count,
+                        sum(COUNT * PRICE) amount
+                 from t_order_d
+                 group by COMM_ID
+             ) as t1
+                 inner join t_paf_comm tpc on t1.COMM_ID = tpc.COMM_ID
     </select>
 
 </mapper>

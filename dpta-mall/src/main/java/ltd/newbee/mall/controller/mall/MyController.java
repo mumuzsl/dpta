@@ -31,12 +31,12 @@ public class MyController {
         parameterMap.forEach((name, values) -> {
             list.add(name + '=' + values[0]);
         });
-        Result result = restTemplate.getForObject("http://localhost:8080" + uri + "?" + StrUtil.join("&", list), Result.class);
+        Result result = restTemplate.getForObject("http://localhost:8081" + uri + "?" + StrUtil.join("&", list), Result.class);
         return result;
     }
 
     @PostMapping("/platform/**")
-    public Result post(@RequestBody Object object,
+    public Result post(@RequestBody(required = false) Object object,
                        HttpServletRequest request) {
         String uri = request.getRequestURI();
         Map<String, String[]> parameterMap = request.getParameterMap();
@@ -44,7 +44,7 @@ public class MyController {
         parameterMap.forEach((name, values) -> {
             list.add(name + '=' + values[0]);
         });
-        Result result = restTemplate.postForObject("http://localhost:8080" + uri + "?" + StrUtil.join("&", list), object, Result.class);
+        Result result = restTemplate.postForObject("http://localhost:8081" + uri + "?" + StrUtil.join("&", list), object, Result.class);
         return result;
     }
 

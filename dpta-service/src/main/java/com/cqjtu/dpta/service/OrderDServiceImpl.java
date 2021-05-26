@@ -29,7 +29,7 @@ public class OrderDServiceImpl extends ServiceImpl<OrderDMapper, OrderD> impleme
      */
     @Override
     public Long outRefundTime(Long comm_id, LocalDateTime time) {
-        return baseMapper.outRefundTime(comm_id,time);
+        return baseMapper.outRefundTime(comm_id, time);
     }
 
     /**
@@ -46,5 +46,9 @@ public class OrderDServiceImpl extends ServiceImpl<OrderDMapper, OrderD> impleme
     @Override
     public Long getOrderSum() {
         return baseMapper.getOrderSum();
+    }
+
+    public Integer clearBad(Long orderId) {
+        return baseMapper.clearBad(orderId);
     }
 }

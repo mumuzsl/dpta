@@ -1,20 +1,18 @@
 package com.cqjtu.dpta.web.config;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.alibaba.fastjson.support.spring.JSONPResponseBodyAdvice;
 import com.cqjtu.dpta.web.filter.OptionsRequestFilter;
 import com.cqjtu.dpta.web.filter.TokenFilter;
 import com.cqjtu.dpta.web.security.InfoHandlerMethodArgumentResolver;
-import com.cqjtu.dpta.web.support.DistrUserInterceptor;
 import com.cqjtu.dpta.web.security.UniqueUserHandlerMethodArgumentResolver;
-import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConfiguration;
-import org.springframework.boot.web.error.ErrorAttributeOptions;
+import com.cqjtu.dpta.web.support.AdminInterceptor;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
-import org.springframework.boot.web.servlet.RegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -24,13 +22,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.HandlerExceptionResolver;
-import org.springframework.web.servlet.View;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 
@@ -69,6 +65,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<TokenFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new TokenFilter());
         registrationBean.addUrlPatterns("/distr/api/*");
+        registrationBean.addUrlPatterns("/platform/api/*");
 
         return registrationBean;
     }
@@ -80,6 +77,49 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         registrationBean.addUrlPatterns("/*");
 
         return registrationBean;
+    }
+
+    @Resource
+    private AdminInterceptor adminInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(adminInterceptor).addPathPatterns("/platform/api/**");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new UniqueUserHandlerMethodArgumentResolver());
+        resolvers.add(new InfoHandlerMethodArgumentResolver());
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+
+        FastJsonConfig config = new FastJsonConfig();
+        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        config.setSerializerFeatures(SerializerFeature.WriteEnumUsingToString);
+
+        converter.setFastJsonConfig(config);
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
+        converters.add(0, converter);
+    }
+
+    @Bean
+    public ErrorPageRegistrar errorPageRegistrar() {
+        return new ErrorPageRegistrarImpl();
+    }
+
+    static class ErrorPageRegistrarImpl implements ErrorPageRegistrar {
+        @Override
+        public void registerErrorPages(ErrorPageRegistry registry) {
+            ErrorPage globalErrorPage = new ErrorPage("/error/global");
+            ErrorPage errorPage500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/5xx");
+            ErrorPage errorPage400 = new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400");
+            ErrorPage errorPage404 = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404");
+            registry.addErrorPages(errorPage400, errorPage404, errorPage500, globalErrorPage);
+        }
     }
 
     @Override
@@ -103,40 +143,6 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
 //        registry.addViewController("/error/400").setViewName("error/error_400");
 //        registry.addViewController("/error/404").setViewName("error/error_404");
 //        registry.addRedirectViewController("/error", "/error/global");
-    }
-
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new UniqueUserHandlerMethodArgumentResolver());
-        resolvers.add(new InfoHandlerMethodArgumentResolver());
-    }
-
-    @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
-
-        FastJsonConfig config = new FastJsonConfig();
-        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
-
-        converter.setFastJsonConfig(config);
-        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
-        converters.add(0, converter);
-    }
-
-    @Bean
-    public ErrorPageRegistrar errorPageRegistrar() {
-        return new ErrorPageRegistrarImpl();
-    }
-
-    static class ErrorPageRegistrarImpl implements ErrorPageRegistrar {
-        @Override
-        public void registerErrorPages(ErrorPageRegistry registry) {
-            ErrorPage globalErrorPage = new ErrorPage("/error/global");
-            ErrorPage errorPage500 = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/error/5xx");
-            ErrorPage errorPage400 = new ErrorPage(HttpStatus.BAD_REQUEST, "/error/400");
-            ErrorPage errorPage404 = new ErrorPage(HttpStatus.NOT_FOUND, "/error/404");
-            registry.addErrorPages(errorPage400, errorPage404, errorPage500, globalErrorPage);
-        }
     }
 }
 

@@ -1,8 +1,6 @@
 package com.cqjtu.dpta.common.extension;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import lombok.Data;
-import org.springframework.data.domain.Pageable;
 
 /**
  * 搜索分页类，继承至mybatis-plus的Page类，包含搜索时的关键字
@@ -30,11 +28,11 @@ public class SearchPage<T> extends Page<T> {
         this.keyword = keyword;
     }
 
-    public static <T> SearchPage<T> toPage(Pageable pageable) {
-        return new SearchPage<T>(pageable.getPageNumber(), pageable.getPageSize());
-    }
-
-    public static <T> SearchPage<T> toPage(Pageable pageable, String keyword) {
-        return new SearchPage<T>(pageable.getPageNumber(), pageable.getPageSize(), keyword);
-    }
+//    public static <T> SearchPage<T> toPage(Pageable pageable) {
+//        return new SearchPage<T>(pageable.getPageNumber(), pageable.getPageSize());
+//    }
+//
+//    public static <T> SearchPage<T> toPage(Pageable pageable, String keyword) {
+//        return new SearchPage<T>(pageable.getPageNumber(), pageable.getPageSize(), keyword);
+//    }
 }

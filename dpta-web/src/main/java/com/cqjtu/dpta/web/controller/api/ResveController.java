@@ -64,6 +64,15 @@ public class ResveController {
         return Result.ok(page);
     }
 
+    @GetMapping
+    public Result page(@PageableDefault Pageable pageable, Info info) {
+        Page<ResveD> page = resveDService
+                .lambdaQuery()
+                .eq(ResveD::getDistrId, info.id())
+                .page(resveDService.toPage(pageable));
+        return Result.ok(page);
+    }
+
     /**
      * 根据分销商编码获得分销商的预备金明细
      *

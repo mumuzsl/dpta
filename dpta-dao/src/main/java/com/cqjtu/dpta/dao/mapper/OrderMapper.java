@@ -1,15 +1,18 @@
 package com.cqjtu.dpta.dao.mapper;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cqjtu.dpta.common.extension.SearchPage;
 import com.cqjtu.dpta.dao.dto.OrderDDto;
 import com.cqjtu.dpta.dao.dto.OrderDto;
+import com.cqjtu.dpta.dao.dto.OrderStatisDto;
 import com.cqjtu.dpta.dao.entity.Order;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cqjtu.dpta.dao.repository.OrderIndex;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -20,19 +23,39 @@ import java.util.List;
  * @since 2021-04-06
  */
 public interface OrderMapper extends BaseMapper<Order> {
-    List<OrderDDto> getFullDetail(Long id);
+    List<Order> findByBetween(@Param("params") Map<String, Object> map);
 
-    IPage<OrderDto> pageHalfOrderDto(Page<?> page, @Param("distrId") Long distrIdd);
+    OrderIndex getOrderIndex();
 
-    OrderDto getFullOrderDto(Long id);
+    List<OrderStatisDto> countAndSum(@Param("params") Map<String, Object> map);
 
-    IPage<OrderDto> pageByDistrAndShop(@Param("pg") SearchPage<?> page, @Param("distrId") Long distrId);
+    List<OrderDDto> getDetails(Long orderId);
 
-    IPage<OrderDto> pageByDistrAndComm(@Param("pg") SearchPage<?> page, @Param("distrId") Long distrId);
+    IPage<OrderDto> pageOrderDtoNotDetails(Page<?> page,
+                                           @Param("distrId") Long distrId,
+                                           @Param("state") Integer state,
+                                           @Param("deleted") Integer deleted);
+
+    IPage<OrderDto> pageOrderDtoNotDetailsByStates(Page<?> page,
+                                                   @Param("distrId") Long distrId,
+                                                   @Param("state") List<Integer> state,
+                                                   @Param("deleted") Integer deleted);
+
+    OrderDto getOrderDtoNotDetails(@Param("id") Long orderId, @Param("deleted") Integer deleted);
+
+    IPage<OrderDto> pageByDistrAndShop(@Param("pg") SearchPage<?> page,
+                                       @Param("distrId") Long distrId,
+                                       @Param("state") Integer state);
+
+    IPage<OrderDto> pageByDistrAndComm(@Param("pg") SearchPage<?> page,
+                                       @Param("distrId") Long distrId,
+                                       @Param("state") Integer state);
 
     IPage<OrderDto> pageByDistrAndState(@Param("pg") SearchPage<?> page, @Param("distrId") Long distrId);
 
-    IPage<Order> pageByDistr(Page<?> page, @Param("distrId") Long distrId);
+    IPage<Order> pageByDistr(Page<?> page,
+                             @Param("distrId") Long distrId,
+                             @Param("state") Integer state);
 
     /**
      * 获取分销商id
@@ -79,6 +102,6 @@ public interface OrderMapper extends BaseMapper<Order> {
      * @param distr_id 分销商编码
      * @return
      */
-    List<Order> getOrderListByDistrId(@Param("distr_id") Long distr_id);
+    List<Order> getOrderListByDistrId(@Param("distr_id") Long distr_id, @Param("state") Integer state);
 
 }

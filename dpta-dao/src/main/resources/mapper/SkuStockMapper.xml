@@ -5,22 +5,20 @@
     <select id="lockStock" resultType="java.lang.Integer">
         update t_sku_stock
         set locked_stock=locked_stock + #{num}
-        where id = #{id}
+        where shop_comm_id = #{scid}
     </select>
 
     <select id="subtractStock" resultType="java.lang.Integer">
         update t_sku_stock
         set locked_stock=locked_stock - #{num},
             stock=stock - #{num}
-        where paf_comm_id = #{pcid}
-          and sku_id = #{sid}
+        where shop_comm_id = #{scid}
     </select>
 
     <select id="freeStock" resultType="java.lang.Integer">
         update t_sku_stock
         set locked_stock=locked_stock - #{num}
-        where paf_comm_id = #{pcid}
-          and sku_id = #{sid}
+        where shop_comm_id = #{scid}
     </select>
 
 </mapper>

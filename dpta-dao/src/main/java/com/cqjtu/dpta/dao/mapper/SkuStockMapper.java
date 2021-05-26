@@ -13,9 +13,9 @@ import org.apache.ibatis.annotations.Param;
  * @since 2021-04-23
  */
 public interface SkuStockMapper extends BaseMapper<SkuStock> {
-    int lockStock(@Param("id") long id, @Param("num") int num);
+    Integer lockStock(@Param("scid") long id, @Param("num") int num);
 
-    int subtractStock(@Param("pcid") long pcid, @Param("sid") long sid, @Param("num") int num);
+    Integer subtractStock(@Param("scid") long id, @Param("num") int num);
 
-    int freeStock(@Param("pcid") long pcid, @Param("sid") long sid, @Param("num") int num);
+    Integer freeStock(@Param("scid") long id, @Param("num") int num);
 }

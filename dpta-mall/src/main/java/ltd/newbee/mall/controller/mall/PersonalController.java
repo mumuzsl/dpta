@@ -9,10 +9,10 @@
 package ltd.newbee.mall.controller.mall;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.common.web.LoginParam;
+import lombok.extern.slf4j.Slf4j;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 public class PersonalController {
     @Resource
@@ -97,18 +98,23 @@ public class PersonalController {
         //todo 清verifyCode
         String loginResult = newBeeMallUserService.login(loginName, MD5Util.MD5Encode(password, "UTF-8"), httpSession);
 
-        LoginParam loginParam = new LoginParam();
-        loginParam.setUsername(loginName);
-        loginParam.setPassword(password);
-        com.cqjtu.dpta.common.result.Result<Info> result = postForObject("/distr/login", loginParam, com.cqjtu.dpta.common.web.Info.class);
+        try {
+            LoginParam loginParam = new LoginParam();
+            loginParam.setUsername(loginName);
+            loginParam.setPassword(password);
+            com.cqjtu.dpta.common.result.Result<Info> result = postForObject("/distr/login", loginParam, Info.class);
+            response.addCookie(new Cookie("token", result.getData().getToken()));
+            log.info(result.getMessage());
+        } catch (Exception e) {
+            log.error("登录失败");
+        }
 
         //登录成功
-        if (ServiceResultEnum.SUCCESS.getResult().equals(loginResult) && isOk(result)) {
-            response.addCookie(new Cookie("token", result.getData().getToken()));
+        if (ServiceResultEnum.SUCCESS.getResult().equals(loginResult)) {
             return ResultGenerator.genSuccessResult();
         }
         //登录失败
-        return ResultGenerator.genFailResult(loginResult + " " + result.getMessage());
+        return ResultGenerator.genFailResult(loginResult);
     }
 
     <T> TypeReference<com.cqjtu.dpta.common.result.Result<T>> buildType(Class<T> clazz) {
@@ -117,7 +123,7 @@ public class PersonalController {
 
     <T> com.cqjtu.dpta.common.result.Result<T> postForObject(String path, Object request, Class<T> clazz) {
         String json = restTemplate
-                .postForObject("http://localhost:8080" + path,
+                .postForObject("http://localhost:8081" + path,
                         request,
                         String.class);
         return JSON.parseObject(json, buildType(clazz));

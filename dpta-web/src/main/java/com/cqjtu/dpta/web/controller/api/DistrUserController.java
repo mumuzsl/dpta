@@ -5,21 +5,21 @@ import com.cqjtu.dpta.api.DistrLevelService;
 import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.DistrUserService;
 import com.cqjtu.dpta.common.lang.Const;
+import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
+import com.cqjtu.dpta.common.util.TokenUtils;
+import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.common.web.LoginParam;
 import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrLevel;
 import com.cqjtu.dpta.dao.entity.DistrUser;
-import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.common.util.TokenUtils;
-import com.cqjtu.dpta.web.support.BigUser;
-import com.cqjtu.dpta.common.web.LoginParam;
-import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.web.support.LoginSupport;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.util.StringUtils;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping("/distr")
-public class DistrUserController {
+public class DistrUserController extends LoginSupport {
 
     @Resource
     private DistrUserService distrUserService;
@@ -49,9 +49,6 @@ public class DistrUserController {
     @Resource(name = "distrUserDetailsServiceImpl")
     private UserDetailsService userDetailsService;
 
-    @Resource
-    private PasswordEncoder passwordEncoder;
-
     @GetMapping("api/detail")
     public Result detail(Info info) {
         Distr distr = distrService
@@ -61,19 +58,22 @@ public class DistrUserController {
         return Result.ok(distr);
     }
 
-    @GetMapping("logout")
-    public Result logout(HttpServletResponse response) {
-        TokenUtils.clearHeader(response);
-        return Result.ok();
-    }
-
     @GetMapping("info")
     public Result info(String token) {
         String subject = TokenUtils.subject(token);
+
         DistrUser distrUser = distrUserService.getById(subject);
+        if (distrUser == null) {
+            return Result.fail("用户不存在");
+        }
+
+        Distr distr = distrService.getById(distrUser.getDistrId());
+
         Info info = new Info();
-        info.setAvatar(distrUser.getUsername());
+        info.setAvatar(distr.getDistrNm());
         info.setName(distrUser.getUsername());
+        info.setRole("distr");
+
         return Result.ok(info);
     }
 
@@ -81,28 +81,15 @@ public class DistrUserController {
     public Result login(@RequestBody LoginParam loginParam,
                         HttpServletResponse response,
                         HttpServletRequest request) {
-        String username = loginParam.getUsername();
-        String password = loginParam.getPassword();
-
-        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
-            return Result.build(ResultCodeEnum.USER_LOGIN_PARAM_ERROR);
-        }
-
-        BigUser distrUser = null;
-        try {
-            distrUser = (BigUser) userDetailsService.loadUserByUsername(username);
-            if (!passwordEncoder.matches(password, distrUser.getPassword())) {
-                return Result.build(ResultCodeEnum.USER_PASSWORD_NOT_MATCH);
-            }
-            String token = TokenUtils.create(distrUser.getId(), password);
-            Info info = new Info();
-            info.setToken(token);
+        return postLogin(loginParam, token -> {
             Cookie cookie = TokenUtils.cookie(token);
             response.addCookie(cookie);
-            return Result.ok(info);
-        } catch (UsernameNotFoundException e) {
-            return Result.build(ResultCodeEnum.USER_NOT_FOUNT_USER);
-        }
+        });
+    }
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return userDetailsService;
     }
 
     @PostMapping("register")
@@ -137,7 +124,7 @@ public class DistrUserController {
         distrUser = new DistrUser();
         distrUser.setDistrId(distr.getDistrId());
         distrUser.setUsername(username);
-        distrUser.setPassword(passwordEncoder.encode(password));
+        distrUser.setPassword(passwordEncoder().encode(password));
 
         boolean b = distrUserService.save(distrUser);
         return Result.judge(b);
@@ -155,31 +142,6 @@ public class DistrUserController {
     }
 
     String defaultPayPwd() {
-        return passwordEncoder.encode("000000");
+        return passwordEncoder().encode("000000");
     }
-
-//    @GetMapping
-//    public Result page(@PageableDefault Pageable pageable) {
-//        IPage<DistrUser> page = distrUserService.page(pageable);
-//        return Result.ok(page);
-//    }
-//
-//    @PostMapping("modif")
-//    public Result modif(@RequestBody DistrUser distrUser) {
-//        boolean result = distrUserService.updateById(distrUser);
-//        return Result.judge(result);
-//    }
-//
-//    @PostMapping("add")
-//    public Result add(@RequestBody DistrUser distrUser) {
-//        boolean result = distrUserService.save(distrUser);
-//        return Result.judge(result);
-//    }
-//
-//    @PostMapping("del")
-//    public Result del(@RequestBody List ids) {
-//        boolean result = distrUserService.removeByIds(ids);
-//        return Result.judge(result);
-//    }
-
 }

@@ -1,7 +1,5 @@
 package com.cqjtu.dpta.common.lang;
 
-import com.cqjtu.dpta.common.util.Status;
-
 /**
  * author: mumu
  * date: 2021/4/14
@@ -34,6 +32,17 @@ public interface Const {
     int COMMISSION = 5;  // 佣金划入
 
     int PAID = 1;     // 已付款
-    int VERIFY = 2;   // 已核销
-    int SETTLE = 3;   // 已结算
+    int VERIFY = 20;   // 已核销
+    int SETTLE = 30;   // 已结算
+
+    // 订单状态:
+    int WAIT_PAY = 0;//0.待支付
+    int PAYED = 1;// 1.已支付
+    int DISTRIBUTION_FINISH = 2; // 2.配货完成
+    int STOCK_FINISH = 3;// 3:出库成功
+    int SUCCESS = 4;// 4.交易成功
+    int CLOSE = -1;// -1.手动关闭
+    int OVRE_TIME_CLOSE = -2;// -2.超时关闭
+    int SHOP_CLOSE = -3;// -3.商家关闭
 }
+

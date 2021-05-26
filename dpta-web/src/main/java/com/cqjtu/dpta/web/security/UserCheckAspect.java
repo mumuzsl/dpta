@@ -1,12 +1,7 @@
 package com.cqjtu.dpta.web.security;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cqjtu.dpta.api.DistrUserService;
 import com.cqjtu.dpta.dao.entity.DistrUser;
-import com.cqjtu.dpta.web.security.UserCheck;
-import com.cqjtu.dpta.web.security.UserChecker;
-import com.cqjtu.dpta.web.support.BigUser;
-import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -14,18 +9,11 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Proxy;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * author: mumu
@@ -33,7 +21,7 @@ import java.util.function.Function;
  */
 @Aspect
 @Component
-public class UserCheckAspect implements ApplicationContextAware {
+public class  UserCheckAspect implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 
