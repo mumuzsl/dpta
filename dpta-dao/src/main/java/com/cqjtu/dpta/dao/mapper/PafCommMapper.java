@@ -63,4 +63,9 @@ public interface PafCommMapper extends BaseMapper<PafComm> {
      * @return
      */
     List<Date> getAllDate();
+
+    /**
+     * 返回预测的销售额
+     */
+    List<ShopPredict> getSPredict();
 }

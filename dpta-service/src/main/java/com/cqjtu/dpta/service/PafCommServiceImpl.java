@@ -67,4 +67,9 @@ public class PafCommServiceImpl extends ServiceImpl<PafCommMapper, PafComm> impl
         return baseMapper.getAllDate();
     }
 
+    @Override
+    public List<ShopPredict> getSPredict() {
+        return baseMapper.getSPredict();
+    }
+
 }

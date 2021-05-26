@@ -94,7 +94,7 @@ public class PafCommController {
     @ResponseBody
     public List<Object> findBybar(Model model){
         List barData = new ArrayList();
-
+        Date date = new Date();
         barData.add(settleService.platSum(2019));
         barData.add(settleService.platSum(2020));
         barData.add(settleService.platSum(2021));
@@ -168,17 +168,10 @@ public class PafCommController {
                     String a = arrayList.get(i);
                     arrayList.set(i,arrayList.get(j));
                     arrayList.set(j,a);
-//                    arrayList.sort(new Comparator<String>() {
-//                        @Override
-//                        public int compare(String o1, String o2) {
-//                            return 0;
-//                        }
-//                    });
                 }
             }
         }
 
-//        Arrays.s
         return arrayList;
     }
 
@@ -226,6 +219,25 @@ public class PafCommController {
         return data;
     }
 
+    @RequestMapping("/yuCe")
+    @ResponseBody
+    public List<Object> shopPredict(){
+        List data = new ArrayList<>();
+        List<String> name = new ArrayList<>();
+        List<BigDecimal> price = new ArrayList<>();
+        List<Integer> sale = new ArrayList<>();
+        for (int i=0;i<pafCommService.getSPredict().size();i++){
+            name.add(pafCommService.getSPredict().get(i).getName());
+            price.add(pafCommService.getSPredict().get(i).getPrice());
+            sale.add(pafCommService.getSPredict().get(i).getSale());
+        }
+        data.add(name);
+        data.add(price);
+        data.add(sale);
+
+        return data;
+    }
+
     @RequestMapping("/show/pie")
     @ResponseBody
     public List<Object> findByPie(){
@@ -248,5 +260,6 @@ public class PafCommController {
 
         return "url";
     }
+
 
 }

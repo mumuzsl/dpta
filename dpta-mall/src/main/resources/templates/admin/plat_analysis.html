@@ -119,8 +119,6 @@
                                 <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${orderSum}">
                                 </div>
                                 <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
-                                    比昨天 <a style="color: #1aa094">▲0.12</a><br>
-                                    比七日 <a style="color: #bd3004">▼0.06</a>
                                 </div>
                             </div>
                         </div>
@@ -136,8 +134,6 @@
                                 <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${rOrderSum}">
                                 </div>
                                 <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
-                                    比昨天 <a style="color: #1aa094">▲0.12</a><br>
-                                    比七日 <a style="color: #bd3004">▼0.06</a>
                                 </div>
                             </div>
                         </div>
@@ -216,58 +212,17 @@
                     <div class="layui-card top-panel3">
                         <div class="panel panel-info">
                             <!-- Default panel contents -->
-                            <div class="panel-heading">平台活动案例</div>
+                            <div class="panel-heading">预测销售额</div>
 
                             <!-- Table -->
                             <table class="table">
-<!--                                <thead>-->
+                                <thead>
                                 <tr>
-                                    <th>活动主题</th>
-                                    <th>日期</th>
+                                    <th>商品名</th>
+                                    <th>本月平均价格</th>
+                                    <th>预测下个月销售额</th>
                                 </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月4日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月5日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月6日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月7日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月8日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月9日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月10日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月11日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月12日</th>
-                                </tr>
-                                <tr>
-                                    <th>活动大促销</th>
-                                    <th>2021年5月13日</th>
-                                </tr>
-
-
-<!--                                </thead>-->
+                                </thead>
                                 <tbody id="tbdoy_result3"></tbody>
                             </table>
                         </div>
@@ -276,6 +231,12 @@
             </div>
 
         </div>
+
+<!--        <div class="layui-row layui-col-space15">-->
+<!--            <div class="layui-col-xs12 layui-col-md6">-->
+<!--                <div id="echarts-dataset2" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>-->
+<!--            </div>-->
+<!--        </div>-->
     </div>
 
 </div>
@@ -579,6 +540,32 @@
             }
             })
 
+        // var echartsDataset2 = echarts.init(document.getElementById('echarts-dataset2'), 'walden');
+        // var optionDataset = {
+        //     legend: {},
+        //     tooltip: {},
+        //     dataset: {
+        //         dimensions: ['product', '春', '夏', '秋', '冬'],
+        //         source: [
+        //             {product: 'Matcha Latte', '春': 43.3, '夏': 85.8, '秋': 93.7,'冬':30.0},
+        //             {product: 'Milk Tea', '春': 83.1, '夏': 73.4, '秋': 55.1,'冬':30.0},
+        //             {product: 'Cheese Cocoa', '春': 86.4, '夏': 65.2, '秋': 82.5,'冬':30.0},
+        //             {product: 'Walnut Brownie', '春': 72.4, '夏': 53.9, '秋': 39.1,'冬':30.0}
+        //         ]
+        //     },
+        //     xAxis: {type: 'category'},
+        //     yAxis: {
+        //
+        //     },
+        //     series: [
+        //         {type: 'bar'},
+        //         {type: 'bar'},
+        //         {type: 'bar'},
+        //         {type: 'bar'}
+        //     ]
+        // };
+        // echartsDataset2.setOption(optionDataset);
+
 
         /**
          * 折线图
@@ -714,6 +701,30 @@
             }
         })
 
+        var str_3="";
+        var tbody_3 = window.document.getElementById("tbdoy_result3");
+        $.ajax({
+            type : "post",
+            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url : "http://localhost:8081/platform/api/paf-comm/yuCe",    //请求发送到/admin/show处
+            data : {},
+            dataType : "json",        //返回数据形式为json
+            success : function(data){
+                if(data){
+                    for(var i = 0;i<data[0].length;i++){
+                        str_3 += "<tr>" +
+                            "<td>" + data[0][i]+ "</td>" +
+                            "<td>" + data[1][i] + "</td>" +
+                            "<td>" + data[2][i] + "</td>" +
+                            "</tr>";
+                    }
+                    tbody_3.innerHTML = str_3;
+                }
+            },
+            error: function () {
+                alert("查询失败")
+            }
+        })
 
     });
 </script>

@@ -64,4 +64,9 @@ public interface PafCommService extends CrudService<PafComm> {
      * @return
      */
     List<Date> getAllDate();
+
+    /**
+     * 返回预测的销售额
+     */
+    List<ShopPredict> getSPredict();
 }
