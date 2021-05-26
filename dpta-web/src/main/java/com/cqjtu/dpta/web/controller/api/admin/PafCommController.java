@@ -9,6 +9,7 @@ import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.dao.entity.ShopTop;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.annotations.Param;
@@ -74,15 +75,15 @@ public class PafCommController {
     }
 
     @PostMapping("modif")
-    public Result modif(@RequestBody PafComm pafComm) {
+    public Boolean modif(@RequestBody PafComm pafComm) {
         boolean result = pafCommService.updateById(pafComm);
-        return Result.judge(result);
+        return result;
     }
 
     @PostMapping("add")
-    public Result add(@RequestBody PafComm pafComm) {
+    public Boolean add(@RequestBody PafComm pafComm) {
         boolean result = pafCommService.save(pafComm);
-        return Result.judge(result);
+        return result;
     }
 
     @PostMapping("del")
