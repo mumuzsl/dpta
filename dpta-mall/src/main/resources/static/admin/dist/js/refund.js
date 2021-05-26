@@ -3,7 +3,7 @@ $(function () {
     if (name=="")
         name="*";
     $("#jqGrid").jqGrid({
-        url: '/platform/api/refund-rule/findByNm/'+name,
+        url: '/platform/api/refund-rule/findByNm?name='+name,
         datatype: "json",
         colModel: [
             {label: '规则编码', name: 'refundId', index: 'refundId', width: 60, key: true},
@@ -193,7 +193,7 @@ function search() {
     if (name == "") {
         name = "*";
     }
-    $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/refund-rule/findByNm/'+name}).trigger('reloadGrid');
+    $('#jqGrid').jqGrid('setGridParam', {url: '/platform/api/refund-rule/findByNm?name='+name}).trigger('reloadGrid');
 }
 /**
  * 禁用规则
@@ -259,6 +259,7 @@ function rEdit() {
     $("#refundNm").val(rowData.refundNm);
     $("#type").val(rowData.type);
     $("#reserveTm").val(rowData.reserveTm);
+    $("#refundIf").val(rowData.refundIf);
     $("#fla").val(2);
 }
 

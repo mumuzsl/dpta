@@ -53,6 +53,12 @@
         order by sum(s.com_p) asc
         limit 2
     </select>
+    <select id="getAllDate" resultType="java.util.Date">
+        select settle_tm from dpta.t_settle_m
+    </select>
+    <select id="getSPredict" resultType="com.cqjtu.dpta.dao.entity.ShopPredict">
+        select name name ,price price,sale sale from dpta.t_data_pla
+    </select>
 
 
 </mapper>

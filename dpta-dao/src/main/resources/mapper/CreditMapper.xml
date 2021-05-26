@@ -81,6 +81,7 @@
             t_paf_comm t3
         WHERE
             t1.DISTR_ID = #{distrId}
+        AND t1.DEAL_ID = t2.deal_id
         AND t2.comm_id = t3.COMM_ID
         AND t3.SUPP_ID = #{suppId}
     </select>

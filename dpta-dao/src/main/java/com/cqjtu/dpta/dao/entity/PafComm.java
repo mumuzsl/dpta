@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -41,7 +44,7 @@ public class PafComm implements Serializable {
      * 类型
      */
     @TableField("CATEGORY_ID")
-    private String categoryId;
+    private Long categoryId;
 
     /**
      * 供应商编码

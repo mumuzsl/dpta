@@ -31,12 +31,12 @@ public interface CreditService extends CrudService<Credit> {
     /**
      * 使用授信付款
      *
-     * @param id:     授信编码
-     * @param amount: 使用金额
-     * @param dealId: 订单ID
+     * @param id :     授信编码
+     * @param amount : 使用金额
+     * @param dealId : 订单ID
      * @return 成功返回TRUE，失败返回FALSE
      */
-    Boolean useCredit(Long id, Double amount, Long dealId);
+    Boolean useCredit(Long id, BigDecimal amount, Long dealId);
 
     /**
      * 恢复授信额度

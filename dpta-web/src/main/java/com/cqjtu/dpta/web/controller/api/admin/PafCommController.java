@@ -11,6 +11,7 @@ import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.dao.entity.ShopTop;
 import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
@@ -20,8 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * <p>
@@ -92,8 +93,9 @@ public class PafCommController {
 
     @RequestMapping("/show/bar")
     @ResponseBody
-    public List<Integer> findBybar(Model model){
+    public List<Object> findBybar(Model model){
         List barData = new ArrayList();
+        Date date = new Date();
         barData.add(settleService.platSum(2019));
         barData.add(settleService.platSum(2020));
         barData.add(settleService.platSum(2021));
@@ -107,24 +109,74 @@ public class PafCommController {
         List store  = new ArrayList();
         List<String> names = new ArrayList<>();
         List<BigDecimal> prices = new ArrayList<>();
-        String a = pafCommService.getDistrSumM(2021).get(0).getDistrName();
-        String b = pafCommService.getDistrSumM(2021).get(1).getDistrName();
-        String c = pafCommService.getDistrSumN(2021).get(0).getDistrName();
-        String d = pafCommService.getDistrSumN(2021).get(1).getDistrName();
+
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy");
+        Date date = new Date();
+        String dateReal = formatter.format(date);
+
+        String a = pafCommService.getDistrSumM(dateReal).get(0).getDistrName();
+        String b = pafCommService.getDistrSumM(dateReal).get(1).getDistrName();
+        String c = pafCommService.getDistrSumN(dateReal).get(0).getDistrName();
+        String d = pafCommService.getDistrSumN(dateReal).get(1).getDistrName();
         names.add(a);
         names.add(b);
         names.add(c);
         names.add(d);
-        for(int i=2016;i<=2021;i++){
-            prices.add(pafCommService.getDistrSum(a,i));
-            prices.add(pafCommService.getDistrSum(b,i));
-            prices.add(pafCommService.getDistrSum(c,i));
-            prices.add(pafCommService.getDistrSum(d,i));
+
+        for(int j=0;j<sortQ().size();j++){
+            prices.add(pafCommService.getDistrSum(a,Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(b,Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(c,Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(d,Integer.parseInt(sortQ().get(j))));
         }
         store.add(names);
         store.add(prices);
         return store;
     }
+
+    /**
+     * 去掉重复的数
+     * @param al
+     * @return
+     */
+    public ArrayList sort(ArrayList al) {
+        ArrayList list = new ArrayList();
+        for (int i = 0; i < al.size(); i++) {
+            if (!list.contains(al.get(i))) {
+                list.add(al.get(i));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 排序
+     * @return
+     */
+    public ArrayList<String> sortQ(){
+        List<String> datas = new ArrayList<>();
+        ArrayList<String> arrayList = new ArrayList();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
+        for (int i = 0; i < pafCommService.getAllDate().size(); i++) {
+            Date date = pafCommService.getAllDate().get(i);
+            datas.add(formatter.format(date));
+        }
+        arrayList = sort((ArrayList) datas);
+        for (int i=0;i<arrayList.size();i++){
+            for (int j=i;j<arrayList.size();j++){
+                if(Integer.parseInt(arrayList.get(i))>Integer.parseInt(arrayList.get(j))){
+                    String a = arrayList.get(i);
+                    arrayList.set(i,arrayList.get(j));
+                    arrayList.set(j,a);
+                }
+            }
+        }
+
+        return arrayList;
+    }
+
+
+
 
     @RequestMapping("/topComm")
     @ResponseBody
@@ -167,6 +219,25 @@ public class PafCommController {
         return data;
     }
 
+    @RequestMapping("/yuCe")
+    @ResponseBody
+    public List<Object> shopPredict(){
+        List data = new ArrayList<>();
+        List<String> name = new ArrayList<>();
+        List<BigDecimal> price = new ArrayList<>();
+        List<Integer> sale = new ArrayList<>();
+        for (int i=0;i<pafCommService.getSPredict().size();i++){
+            name.add(pafCommService.getSPredict().get(i).getName());
+            price.add(pafCommService.getSPredict().get(i).getPrice());
+            sale.add(pafCommService.getSPredict().get(i).getSale());
+        }
+        data.add(name);
+        data.add(price);
+        data.add(sale);
+
+        return data;
+    }
+
     @RequestMapping("/show/pie")
     @ResponseBody
     public List<Object> findByPie(){
@@ -188,6 +259,23 @@ public class PafCommController {
         model.addAttribute("orderSum",2);
 
         return "url";
+    }
+
+    @GetMapping("getById")
+    public PafComm getById(@RequestParam Long pafCommId) {
+        return pafCommService.getById(pafCommId);
+    }
+
+    @PostMapping("changState/{state}")
+    public Boolean changstate(@RequestBody List<Long> ids,
+                              @PathVariable int state) {
+        QueryWrapper<PafComm> wrapper = new QueryWrapper<>();
+        wrapper.in("comm_id",ids);
+        List<PafComm> list = pafCommService.list(wrapper);
+        for (PafComm comm : list) {
+            comm.setState(state);
+        }
+        return pafCommService.updateBatchById(list);
     }
 
 }

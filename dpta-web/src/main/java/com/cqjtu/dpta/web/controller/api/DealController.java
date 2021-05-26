@@ -6,6 +6,7 @@ import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.dao.entity.DealD;
+import com.cqjtu.dpta.dao.entity.PayM;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,5 +49,10 @@ public class DealController {
         return Result.ok(list);
     }
 
+
+    @GetMapping("getPayM")
+    public PayM getPayM (@RequestParam Long dealId) {
+        return dealService.payDeal(dealId);
+    }
 
 }

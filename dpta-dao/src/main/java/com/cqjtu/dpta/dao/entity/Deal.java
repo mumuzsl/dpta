@@ -29,7 +29,7 @@ public class Deal implements Serializable {
     /**
      * 订单编码
      */
-    @TableId(value = "DEAL_ID", type = IdType.AUTO)
+    @TableId("DEAL_ID")
     private Long dealId;
 
     /**

@@ -8,6 +8,13 @@
  */
 package ltd.newbee.mall.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.cqjtu.dpta.api.DistrUserService;
+import com.cqjtu.dpta.dao.entity.Deal;
+import com.cqjtu.dpta.dao.entity.DealD;
+import com.cqjtu.dpta.dao.entity.DistrUser;
+import com.cqjtu.dpta.dao.mapper.DealDMapper;
+import com.cqjtu.dpta.dao.mapper.DealMapper;
 import ltd.newbee.mall.common.*;
 import ltd.newbee.mall.controller.vo.NewBeeMallOrderDetailVO;
 import ltd.newbee.mall.controller.vo.NewBeeMallOrderItemVO;
@@ -32,9 +39,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.xml.crypto.Data;
+import java.math.BigDecimal;
+import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -188,6 +199,8 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
         return ServiceResultEnum.DATA_NOT_EXIST.getResult();
     }
 
+    @Resource
+    RestTemplate restTemplate;
     @Override
     @Transactional
     public String saveOrder(NewBeeMallUserVO user, List<NewBeeMallShoppingCartItemVO> myShoppingCartItems) {
@@ -230,6 +243,12 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
                 newBeeMallOrder.setOrderNo(orderNo);
                 newBeeMallOrder.setUserId(user.getUserId());
                 newBeeMallOrder.setUserAddress(user.getAddress());
+
+                Deal deal = new Deal();
+                deal.setDealId(Long.valueOf(orderNo));
+                DistrUser distrUser = restTemplate.getForObject("http://localhost:8081/distr/getByNm?name="+user.getLoginName(),DistrUser.class);
+                deal.setDistrId(distrUser.getDistrId());
+
                 //总价
                 for (NewBeeMallShoppingCartItemVO newBeeMallShoppingCartItemVO : myShoppingCartItems) {
                     priceTotal += newBeeMallShoppingCartItemVO.getGoodsCount() * newBeeMallShoppingCartItemVO.getSellingPrice();
@@ -238,11 +257,14 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
                     NewBeeMallException.fail(ServiceResultEnum.ORDER_PRICE_ERROR.getResult());
                 }
                 newBeeMallOrder.setTotalPrice(priceTotal);
+                deal.setAmount(new BigDecimal(priceTotal));
+                deal.setCreateTime(LocalDateTime.now());
                 //todo 订单body字段，用来作为生成支付单描述信息，暂时未接入第三方支付接口，故该字段暂时设为空字符串
                 String extraInfo = "";
                 newBeeMallOrder.setExtraInfo(extraInfo);
                 //生成订单项并保存订单项纪录
                 if (newBeeMallOrderMapper.insertSelective(newBeeMallOrder) > 0) {
+                    URI uri = restTemplate.postForLocation("http://localhost:8081/api/deal/add",deal,Boolean.class);
                     //生成所有的订单项快照，并保存至数据库
                     List<NewBeeMallOrderItem> newBeeMallOrderItems = new ArrayList<>();
                     for (NewBeeMallShoppingCartItemVO newBeeMallShoppingCartItemVO : myShoppingCartItems) {
@@ -252,6 +274,13 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
                         //NewBeeMallOrderMapper文件insert()方法中使用了useGeneratedKeys因此orderId可以获取到
                         newBeeMallOrderItem.setOrderId(newBeeMallOrder.getOrderId());
                         newBeeMallOrderItems.add(newBeeMallOrderItem);
+
+                        DealD dealD = new DealD();
+                        dealD.setDealId(deal.getDealId());
+                        dealD.setCommId(newBeeMallShoppingCartItemVO.getGoodsId());
+                        dealD.setCount(newBeeMallShoppingCartItemVO.getGoodsCount());
+                        dealD.setPrice(new BigDecimal(newBeeMallShoppingCartItemVO.getSellingPrice()));
+                        URI uri1 = restTemplate.postForLocation("http://localhost:8081/api/dealD/add",dealD,Boolean.class);
                     }
                     //保存至数据库
                     if (newBeeMallOrderItemMapper.insertBatch(newBeeMallOrderItems) > 0) {
