@@ -13,6 +13,7 @@ import com.alipay.api.response.AlipayFundTransUniTransferResponse;
 import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.alipay.api.response.AlipayTradePayResponse;
 import com.alipay.api.response.AlipayTradeQueryResponse;
+import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.ResveDService;
 import com.cqjtu.dpta.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
@@ -92,6 +93,8 @@ public class PayController {
         return "fail";
     }
 
+    @Resource
+    DistrService distrService;
     @PostMapping("transfer")
     public void transfer (@RequestBody Map<String,String> pa) throws AlipayApiException {
         Long distrId = Long.valueOf(pa.get("distrId"));
@@ -99,8 +102,9 @@ public class PayController {
         String out_biz_no = pa.get("out_biz_no");
         AlipayFundTransUniTransferRequest request = new AlipayFundTransUniTransferRequest();
 
+        String account = distrService.getById(distrId).getAccount();
         Map<String,String> map = new HashMap<>();
-        map.put("identity","xrmchf7247@sandbox.com");
+        map.put("identity",account);
         map.put("identity_type","ALIPAY_LOGON_ID");
         map.put("name","xrmchf7247");
         Map<String, Object> params = new HashMap<>();

@@ -58,6 +58,8 @@ public class Distr implements Serializable {
 
     private String payPwd;
 
+    private String account;
+
     @TableField("SettledTm")
     private LocalDateTime settledTm;
 }
