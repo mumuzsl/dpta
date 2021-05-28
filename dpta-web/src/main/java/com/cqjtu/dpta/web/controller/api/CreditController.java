@@ -2,10 +2,7 @@ package com.cqjtu.dpta.web.controller.api;
 
 import cn.hutool.core.util.NumberUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.CreditDService;
-import com.cqjtu.dpta.api.CreditService;
-import com.cqjtu.dpta.api.DealService;
-import com.cqjtu.dpta.api.ResveService;
+import com.cqjtu.dpta.api.*;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.ResultUtils;
@@ -15,6 +12,7 @@ import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.web.support.ControllerUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -54,11 +52,21 @@ public class CreditController {
         return Result.ok(page);
     }
 
+    @Resource
+    PasswordEncoder passwordEncoder;
+    @Resource
+    DistrService distrService;
+
     @PostMapping("refund")
     public Result refund(@RequestBody Map<String, String> map,
                          Info info) {
+        String pw = map.get("password");
         String credit_id = map.get("credit_id");
         String refund_value = map.get("refund_value");
+
+
+        if(!passwordEncoder.matches(pw,distrService.getById(info.getId()).getPayPwd()))
+            return Result.fail("支付密码错误！");
 
         BigDecimal refundValue = Optional
                 .ofNullable(refund_value)
