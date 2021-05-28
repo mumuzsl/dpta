@@ -65,7 +65,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         FilterRegistrationBean<TokenFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new TokenFilter());
         registrationBean.addUrlPatterns("/distr/api/*");
-        registrationBean.addUrlPatterns("/platform/api/*");
+//        registrationBean.addUrlPatterns("/platform/api/*");
 
         return registrationBean;
     }

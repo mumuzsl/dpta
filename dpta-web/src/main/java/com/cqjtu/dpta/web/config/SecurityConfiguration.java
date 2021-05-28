@@ -1,6 +1,5 @@
 package com.cqjtu.dpta.web.config;
 
-import com.cqjtu.dpta.common.util.TokenUtils;
 import com.cqjtu.dpta.web.filter.OptionsRequestFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.filter.CorsFilter;
 
 
@@ -45,12 +43,12 @@ public class SecurityConfiguration {
             http.csrf().disable();
             http.cors();
 
-            http.logout(logout ->
-                    logout
-                            .addLogoutHandler(TokenUtils.tokenLogoutHandler())
-                            .logoutRequestMatcher(new AntPathRequestMatcher("logout", "GET"))
-                            .permitAll()
-            );
+//            http.logout(logout ->
+//                    logout
+//                            .addLogoutHandler(TokenUtils.tokenLogoutHandler())
+//                            .logoutRequestMatcher(new AntPathRequestMatcher("logout", "GET"))
+//                            .permitAll()
+//            );
 
             customConfigure(http);
         }
@@ -104,19 +102,19 @@ public class SecurityConfiguration {
 
         @Override
         protected void customConfigure(HttpSecurity http) throws Exception {
-            http.antMatcher("/platform/**");
-
-            http.authorizeRequests(authorizeRequests ->
-                    authorizeRequests
-                            .anyRequest().hasRole("ADMIN")
-            );
-
-            http.formLogin(formLogin ->
-                    formLogin
-                            .loginPage("/admin/login")
-                            .loginProcessingUrl("/platform/login")
-                            .permitAll()
-            );
+//            http.antMatcher("/platform/**");
+//
+//            http.authorizeRequests(authorizeRequests ->
+//                    authorizeRequests
+//                            .anyRequest().hasRole("ADMIN")
+//            );
+//
+//            http.formLogin(formLogin ->
+//                    formLogin
+//                            .loginPage("/admin/login")
+//                            .loginProcessingUrl("/platform/login")
+//                            .permitAll()
+//            );
         }
     }
 
