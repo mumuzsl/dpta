@@ -71,6 +71,7 @@ public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
         registry.addViewController("/admin/level").setViewName("admin/level_manage");
         registry.addViewController("/admin/commr").setViewName("admin/commission_manage");
         registry.addViewController("/admin/all_order").setViewName("admin/all_order");
+        registry.addViewController("/admin/settle").setViewName("admin/settleM");
     }
 
     public void addInterceptors(InterceptorRegistry registry) {

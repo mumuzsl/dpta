@@ -279,9 +279,9 @@ public class NewBeeMallGoodsController {
     /**
      * 批量修改销售状态
      */
-    @RequestMapping(value = "/goods/status/{sellStatus}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/goods/status/{sellStatus}", method = RequestMethod.POST)
     @ResponseBody
-    public Result delete(@RequestBody List<Long> ids, @PathVariable("sellStatus") int sellStatus) {
+    public Result changeSellStatus(@RequestBody List<Long> ids, @PathVariable("sellStatus") int sellStatus) {
         if (ids.size() < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }

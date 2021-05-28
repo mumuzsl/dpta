@@ -21,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 
 import javax.annotation.Resource;
@@ -225,6 +226,8 @@ public class CommRController {
     }
     @Resource
     ShpCommService shpCommService;
+    @Resource
+    RestTemplate restTemplate;
     @PostMapping("disable")
     public Result disable(@RequestBody List<Long> ids) {
         List<CommR> list = new ArrayList<>();
@@ -244,6 +247,7 @@ public class CommRController {
                 }
                 boolean c = shpCommService.updateBatchById(list2);
             }
+            restTemplate.postForObject("http://localhost:8080/admin/goods/status/0",list1,Object.class);
             boolean a = pafCommService.updateBatchById(list1);
             CommR commR = commRService.getById(id);
             commR.setState(Const.DISABLE);
@@ -257,6 +261,7 @@ public class CommRController {
     public List<CommR> getEnableR () {
         QueryWrapper<CommR> wrapper = new QueryWrapper<>();
         wrapper.eq("state",Const.ENABLE);
+        wrapper.eq("deleted",0);
         return commRService.list(wrapper);
     }
 }
