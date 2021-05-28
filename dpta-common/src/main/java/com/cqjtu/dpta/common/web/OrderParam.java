@@ -1,6 +1,5 @@
 package com.cqjtu.dpta.common.web;
 
-import com.cqjtu.dpta.common.vo.CommVo;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -17,7 +16,7 @@ public class OrderParam {
 
     private Long shopId;
 
-    private List<CommVo> comms;
+    private List<CommParam> comms;
 
     private String address;
 

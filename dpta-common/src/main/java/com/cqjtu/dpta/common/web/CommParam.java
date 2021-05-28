@@ -1,4 +1,4 @@
-package com.cqjtu.dpta.common.vo;
+package com.cqjtu.dpta.common.web;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import lombok.Data;
  * date: 2021/4/22
  */
 @Data
-public class CommVo {
+public class CommParam {
 
     private Long commId;
 

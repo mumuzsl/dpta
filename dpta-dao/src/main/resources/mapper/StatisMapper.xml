@@ -20,16 +20,19 @@
                count,
                amount
         from (
-                 select COMM_ID,
-                        avg(PRICE)         avg_price,
-                        max(PRICE)         max_price,
-                        min(PRICE)         min_price,
-                        sum(COUNT)         count,
-                        sum(COUNT * PRICE) amount
-                 from t_order_d
-                 group by COMM_ID
+                 select tod.COMM_ID,
+                        avg(tod.PRICE)             avg_price,
+                        max(tod.PRICE)             max_price,
+                        min(tod.PRICE)             min_price,
+                        sum(tod.COUNT)             count,
+                        sum(tod.COUNT * tod.PRICE) amount
+                 from t_shop ts
+                          inner join t_order t on ts.SHOP_ID = t.SHOP_ID and ts.DISTR_ID = #{distrId}
+                          inner join t_order_d tod on tod.ORDER_ID = t.ID and t.STATE > 0
+                 group by tod.COMM_ID
              ) as t1
                  inner join t_paf_comm tpc on t1.COMM_ID = tpc.COMM_ID
+
         order by amount desc
         limit #{limit}
     </select>

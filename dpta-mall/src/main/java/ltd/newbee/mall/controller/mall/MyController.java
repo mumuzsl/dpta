@@ -2,6 +2,7 @@ package ltd.newbee.mall.controller.mall;
 
 import cn.hutool.core.util.StrUtil;
 import com.cqjtu.dpta.common.result.Result;
+import ltd.newbee.mall.config.DptaProperties;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -22,29 +24,35 @@ import java.util.Map;
 public class MyController {
     @Resource
     private RestTemplate restTemplate;
+    @Resource
+    private DptaProperties dptaProperties;
 
     @GetMapping("/platform/**")
-    public Result get(HttpServletRequest request) {
+    public Result get(HttpServletRequest request,
+                      HttpSession session) {
         String uri = request.getRequestURI();
         Map<String, String[]> parameterMap = request.getParameterMap();
         List<String> list = new ArrayList<>(parameterMap.size());
         parameterMap.forEach((name, values) -> {
             list.add(name + '=' + values[0]);
         });
-        Result result = restTemplate.getForObject("http://localhost:8081" + uri + "?" + StrUtil.join("&", list), Result.class);
+        list.add("token=" + session.getAttribute("token"));
+        Result result = restTemplate.getForObject(dptaProperties.getUrl() + uri + "?" + StrUtil.join("&", list), Result.class);
         return result;
     }
 
     @PostMapping("/platform/**")
     public Result post(@RequestBody(required = false) Object object,
-                       HttpServletRequest request) {
+                       HttpServletRequest request,
+                       HttpSession session) {
         String uri = request.getRequestURI();
         Map<String, String[]> parameterMap = request.getParameterMap();
         List<String> list = new ArrayList<>(parameterMap.size());
         parameterMap.forEach((name, values) -> {
             list.add(name + '=' + values[0]);
         });
-        Result result = restTemplate.postForObject("http://localhost:8081" + uri + "?" + StrUtil.join("&", list), object, Result.class);
+        list.add("token=" + session.getAttribute("token"));
+        Result result = restTemplate.postForObject(dptaProperties.getUrl() + uri + "?" + StrUtil.join("&", list), object, Result.class);
         return result;
     }
 

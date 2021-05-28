@@ -12,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/lib/layui-v2.6.3/css/layui.css}" media="all">
     <link rel="stylesheet" th:href="@{/lib/font-awesome-4.7.0/css/font-awesome.min.css}" media="all">
     <link rel="stylesheet" th:href="@{/css/public.css}" media="all">
-<!--    <link rel="stylesheet" th:href="@{/admin/plugins/bootstrap/css/bootstrap3.3.7.min.css}">-->
+    <!--    <link rel="stylesheet" th:href="@{/admin/plugins/bootstrap/css/bootstrap3.3.7.min.css}">-->
 
     <div th:replace="admin/header::header-fragment"></div>
 
@@ -22,53 +22,61 @@
             border-radius: 5px;
             text-align: center;
         }
-        .top-panel > .layui-card-body{
+
+        .top-panel > .layui-card-body {
             height: 60px;
         }
-        .top-panel-number{
-            line-height:40px;
+
+        .top-panel-number {
+            line-height: 40px;
             font-size: 30px;
-            border-right:1px solid #eceff9;
+            border-right: 1px solid #eceff9;
         }
-        .top-panel-tips{
-            line-height:20px;
+
+        .top-panel-tips {
+            line-height: 20px;
             font-size: 12px;
         }
+
         .ui-jqgrid tr.jqgrow td {
             white-space: normal !important;
             height: auto;
             vertical-align: text-top;
             padding-top: 2px;
         }
-        .table{
+
+        .table {
             font-size: 15px;
         }
+
         .top-panel1 {
             border: 1px solid #eceff9;
             border-radius: 5px;
             text-align: center;
-            width: 500px;
+            /*width: 100%;*/
         }
+
         .top-panel2 {
             border: 1px solid #eceff9;
             border-radius: 5px;
             text-align: center;
-            width: 500px;
-            margin-left: 100px;
+            /*width: 100%;*/
+            /*margin-left: 100px;*/
         }
+
         .top-panel3 {
             border: 1px solid #eceff9;
             border-radius: 5px;
             text-align: center;
-            width: 500px;
-            margin-left: 200px;
+            /*width: 100%;*/
+            /*margin-left: 100px;*/
         }
     </style>
 </head>
 <!--<body class="hold-transition sidebar-mini">-->
 <body>
 <div>
-<!--<div class="wrapper">-->
+    <!--<div class="wrapper">-->
     <div th:replace="admin/header::header-nav"></div>
     <div th:replace="admin/sidebar::sidebar-fragment(${path})"></div>
     <div class="content-wrapper">
@@ -86,10 +94,10 @@
                             <div class="layui-row layui-col-space5">
                                 <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${shopSum}">
                                 </div>
-<!--                                <div class="layui-col-xs3 layui-col-md3 top-panel-tips">-->
-<!--                                    比昨天 <a style="color: #1aa094">▲0.12</a><br>-->
-<!--                                    比七日 <a style="color: #bd3004">▼0.06</a>-->
-<!--                                </div>-->
+                                <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
+                                    比昨天 <a style="color: #1aa094">▲0.12</a><br>
+                                    比七日 <a style="color: #bd3004">▼0.06</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -119,6 +127,8 @@
                                 <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${orderSum}">
                                 </div>
                                 <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
+                                    比昨天 <a style="color: #1aa094">▲0.12</a><br>
+                                    比七日 <a style="color: #bd3004">▼0.06</a>
                                 </div>
                             </div>
                         </div>
@@ -134,6 +144,8 @@
                                 <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${rOrderSum}">
                                 </div>
                                 <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
+                                    比昨天 <a style="color: #1aa094">▲0.12</a><br>
+                                    比七日 <a style="color: #bd3004">▼0.06</a>
                                 </div>
                             </div>
                         </div>
@@ -161,7 +173,7 @@
             </div>
 
             <div class="layui-row layui-col-space15">
-                <div class="layui-col-xs12 layui-col-md3">
+                <div class="layui-col-xs12 layui-col-md4">
 
                     <div class="layui-card top-panel1">
                         <div class="panel panel-info">
@@ -171,12 +183,12 @@
                             <!-- Table -->
                             <table class="table">
                                 <thead>
-                                    <tr>
-                                        <th>产品名称</th>
-                                        <th>规格</th>
-                                        <th>价格</th>
-                                        <th>销售量</th>
-                                    </tr>
+                                <tr>
+                                    <th>产品名称</th>
+                                    <th>规格</th>
+                                    <th>价格</th>
+                                    <th>销售量</th>
+                                </tr>
                                 </thead>
                                 <tbody id="tbdoy_result1"></tbody>
                             </table>
@@ -185,7 +197,7 @@
                     </div>
                 </div>
 
-                <div class="layui-col-xs12 layui-col-md3">
+                <div class="layui-col-xs12 layui-col-md4">
 
                     <div class="layui-card top-panel2">
                         <div class="panel panel-info">
@@ -197,7 +209,7 @@
                                 <thead>
                                 <tr>
                                     <th>分销商名称</th>
-<!--                                    <th>商品</th>-->
+                                    <!--                                    <th>商品</th>-->
                                     <th>销售额</th>
                                 </tr>
                                 </thead>
@@ -207,7 +219,7 @@
                     </div>
                 </div>
 
-                <div class="layui-col-xs12 layui-col-md3">
+                <div class="layui-col-xs12 layui-col-md4">
 
                     <div class="layui-card top-panel3">
                         <div class="panel panel-info">
@@ -232,11 +244,11 @@
 
         </div>
 
-<!--        <div class="layui-row layui-col-space15">-->
-<!--            <div class="layui-col-xs12 layui-col-md6">-->
-<!--                <div id="echarts-dataset2" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>-->
-<!--            </div>-->
-<!--        </div>-->
+        <!--        <div class="layui-row layui-col-space15">-->
+        <!--            <div class="layui-col-xs12 layui-col-md6">-->
+        <!--                <div id="echarts-dataset2" style="background-color:#ffffff;min-height:300px;padding: 10px"></div>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 
 </div>
@@ -337,21 +349,22 @@
         // };
 
         // echartsRecords.showLoading();
-        var peopleNum=[];
-        var orderNum=[];
-        var showTime=[];
+        var peopleNum = [];
+        var orderNum = [];
+        var showTime = [];
         $.ajax({
-            type : "post",
-            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url : "/admin/show",    //请求发送到/admin/show处
-            data : {},
-            dataType : "json",        //返回数据形式为json
-            success : function(data) {
-                if(data){
-                    for(var i=0;i<data[0].length;i++){
-                        var p=data[0][i];
-                        var o=data[1][i];
-                        var s=data[2][i];
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/admin/show",    //请求发送到/admin/show处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success: function (resp) {
+                var data = resp
+                if (data) {
+                    for (var i = 0; i < data[0].length; i++) {
+                        var p = data[0][i];
+                        var o = data[1][i];
+                        var s = data[2][i];
 
                         peopleNum.push(s);
                         orderNum.push(o);
@@ -374,7 +387,7 @@
                                 }
                             },
                             legend: {
-                                data: ['人数','订单数']
+                                data: ['人数', '订单数']
                             },
                             toolbox: {
                                 feature: {
@@ -425,19 +438,20 @@
          * 玫瑰图表
          */
         var echartsPies = echarts.init(document.getElementById('echarts-pies'), 'walden');
-        var values=[];
+        var values = [];
         echartsPies.showLoading();
 
         $.ajax({
-            type : "post",
-            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url : "http://localhost:8081/platform/api/paf-comm/show/pie",    //请求发送到/admin/show处
-            data : {},
-            dataType : "json",        //返回数据形式为json
-            success : function(data){
-                if(data){
-                    for (var i=0;i<data.length;i++){
-                        var test={"value":data[i].value,"name":data[i].rCommNm}
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/platform/api/paf-comm/show/pie",    //请求发送到/admin/show处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success: function (resp) {
+                var data = resp.data
+                if (data) {
+                    for (var i = 0; i < data.length; i++) {
+                        var test = {"value": data[i].value, "name": data[i].rCommNm}
                         values.push(test);
                     }
                     echartsPies.hideLoading();
@@ -510,12 +524,13 @@
         // };
         // echartsDataset.setOption(optionDataset);
         $.ajax({
-            type : "post",
-            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url : "http://localhost:8081/platform/api/paf-comm/show/bar",    //请求发送到/admin/show处
-            data : {},
-            dataType : "json",        //返回数据形式为json
-            success : function(data) {
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/platform/api/paf-comm/show/bar",    //请求发送到/admin/show处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success: function (resp) {
+                var data = resp.data
                 echartsDataset.hideLoading();
                 echartsDataset.setOption({
                     title: {
@@ -524,9 +539,9 @@
                     legend: {},
                     tooltip: {},
                     dataset: {
-                        dimensions: ['product', '2019','2020','2021'],
+                        dimensions: ['product', '2019', '2020', '2021'],
                         source: [
-                            {product: '平台收益', '2019':data[0],'2020':data[1],'2021':data[2]}
+                            {product: '平台收益', '2019': data[0], '2020': data[1], '2021': data[2]}
                         ]
                     },
                     xAxis: {type: 'category'},
@@ -538,7 +553,7 @@
                     ]
                 })
             }
-            })
+        })
 
         // var echartsDataset2 = echarts.init(document.getElementById('echarts-dataset2'), 'walden');
         // var optionDataset = {
@@ -571,14 +586,15 @@
          * 折线图
          */
         var echartsMap = echarts.init(document.getElementById('echarts-map'), 'walden');
-
+        echartsMap.showLoading();
         $.ajax({
             type: "post",
             async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url: "http://localhost:8081/platform/api/paf-comm/show/store",    //请求发送到/admin/show处
+            url: "/platform/api/paf-comm/show/store",    //请求发送到/admin/show处
             data: {},
             dataType: "json",        //返回数据形式为json
-            success: function (data) {
+            success : function(resp) {
+                var data = resp.data
                 echartsMap.hideLoading();
                 echartsMap.setOption({
                     title: {
@@ -647,19 +663,20 @@
         /**
          * 往表格填充数据 商品排行榜
          */
-        var str_1="";
+        var str_1 = "";
         var tbody_1 = window.document.getElementById("tbdoy_result1");
         $.ajax({
-            type : "post",
-            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url : "http://localhost:8081/platform/api/paf-comm/topComm",    //请求发送到/admin/show处
-            data : {},
-            dataType : "json",        //返回数据形式为json
-            success : function(data){
-                if(data){
-                    for(var i = 0;i<data[0].length;i++){
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/platform/api/paf-comm/topComm",    //请求发送到/admin/show处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success : function(resp) {
+                var data = resp.data
+                if (data) {
+                    for (var i = 0; i < data[0].length; i++) {
                         str_1 += "<tr>" +
-                            "<td>" + data[0][i]+ "</td>" +
+                            "<td>" + data[0][i] + "</td>" +
                             "<td>" + data[1][i] + "</td>" +
                             "<td>" + data[2][i] + "</td>" +
                             "<td>" + data[3][i] + "</td>" +
@@ -676,19 +693,20 @@
         /**
          * 往表格填充数据 分销商排行榜
          */
-        var str_2="";
+        var str_2 = "";
         var tbody_2 = window.document.getElementById("tbdoy_result2");
         $.ajax({
-            type : "post",
-            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url : "http://localhost:8081/platform/api/paf-comm/topDistr",    //请求发送到/admin/show处
-            data : {},
-            dataType : "json",        //返回数据形式为json
-            success : function(data){
-                if(data){
-                    for(var i = 0;i<data[0].length;i++){
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/platform/api/paf-comm/topDistr",    //请求发送到/admin/show处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success : function(resp) {
+                var data = resp.data
+                if (data) {
+                    for (var i = 0; i < data[0].length; i++) {
                         str_2 += "<tr>" +
-                            "<td>" + data[0][i]+ "</td>" +
+                            "<td>" + data[0][i] + "</td>" +
                             "<td>" + data[1][i] + "</td>" +
                             // "<td>" + data[2][i] + "</td>" +
                             "</tr>";
@@ -701,19 +719,20 @@
             }
         })
 
-        var str_3="";
+        var str_3 = "";
         var tbody_3 = window.document.getElementById("tbdoy_result3");
         $.ajax({
-            type : "post",
-            async : true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url : "http://localhost:8081/platform/api/paf-comm/yuCe",    //请求发送到/admin/show处
-            data : {},
-            dataType : "json",        //返回数据形式为json
-            success : function(data){
-                if(data){
-                    for(var i = 0;i<data[0].length;i++){
+            type: "post",
+            async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
+            url: "/platform/api/paf-comm/yuCe",    //请求发送到/admin/show处
+            data: {},
+            dataType: "json",        //返回数据形式为json
+            success : function(resp) {
+                var data = resp.data
+                if (data) {
+                    for (var i = 0; i < data[0].length; i++) {
                         str_3 += "<tr>" +
-                            "<td>" + data[0][i]+ "</td>" +
+                            "<td>" + data[0][i] + "</td>" +
                             "<td>" + data[1][i] + "</td>" +
                             "<td>" + data[2][i] + "</td>" +
                             "</tr>";

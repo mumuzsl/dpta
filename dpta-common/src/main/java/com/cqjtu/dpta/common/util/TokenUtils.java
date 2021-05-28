@@ -17,7 +17,7 @@ import java.util.Date;
  * date: 2021/4/29
  */
 public abstract class TokenUtils {
-    private static final long EXPIRES_STEP = 3600 * 1000;
+    private static final long EXPIRES_STEP = 2 * 3600 * 1000;
     private static final String TOKEN_NAME = "token";
     private static final String TOKEN_HEADER_NAME = "X-Token";
     private static LogoutHandler logoutHandler = new CookieClearingLogoutHandler(TOKEN_NAME);
@@ -115,4 +115,5 @@ public abstract class TokenUtils {
 
         return token;
     }
+
 }

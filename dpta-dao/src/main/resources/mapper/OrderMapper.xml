@@ -16,6 +16,7 @@
         <id property="id" column="order_id"/>
         <result property="profit" column="order_profit"/>
         <result property="distrId" column="order_distr_id"/>
+        <result property="distrNm" column="order_distr_name"/>
         <result property="datm" column="order_datm"/>
         <result property="amount" column="order_amount"/>
         <result property="state" column="order_state"/>
@@ -84,8 +85,8 @@
         <if test="params.state!=null">
             and t.STATE = #{params.state}
         </if>
-        <if test="params.amount!=null">
-            and t.STATE >= #{params.amount}
+        <if test="params.startState!=null">
+            and t.STATE >= #{params.startState}
         </if>
         <if test="params.start!=null">
             and t.DATM &gt;= #{params.start}
@@ -119,11 +120,11 @@
         select
         <include refid="order_dto_sql"/>
         from t_shop ts
-        inner join t_order t on ts.SHOP_ID = t.SHOP_ID
-        and t.ID = #{id}
+        inner join t_order t on ts.SHOP_ID = t.SHOP_ID and t.ID = #{id}
         <if test="deleted!=null">
             and t.deleted = #{deleted}
         </if>
+        inner join t_distr td on ts.DISTR_ID = td.DISTR_ID
     </select>
 
     <select id="pageOrderDtoNotDetails" resultMap="OrderDto">
@@ -140,6 +141,7 @@
         <if test="deleted!=null">
             and t.deleted = #{deleted}
         </if>
+        inner join t_distr td on ts.DISTR_ID = td.DISTR_ID
     </select>
 
     <sql id="order_dto_sql">
@@ -159,25 +161,9 @@
         t.deleted as order_deleted,
         ts.SHOP_ID as order_shop_id,
         ts.SHOP_NM as order_shop_name,
-        ts.DISTR_ID as order_distr_id
-    </sql>
-
-    <select id="getOrderIndex" resultMap="orderIndex">
-select
-        t.ID as order_id,
-        t.STATE as order_state,
-        t.DATM as order_datm,
-        t.phone as order_phone,
-        t.receiver as order_receiver,
-        t.deleted as order_deleted,
-        t.amount as order_amount,
-        ts.SHOP_NM as order_shop_name,
-        as order_distr_name,
         ts.DISTR_ID as order_distr_id,
-                gi.goods_name as detail_goods_name
- from t_order t left join t_shop ts on ts.SHOP_ID = t.SHOP_ID
- left join t_distr on ts.DISTR_ID = t.DISTR_NM
-    </select>
+        td.DISTR_NM as order_distr_name
+    </sql>
 
     <select id="pageOrderDtoNotDetailsByStates" resultMap="OrderDto">
         select
@@ -194,6 +180,7 @@ select
         <if test="deleted!=null">
             and t.deleted = #{deleted}
         </if>
+        inner join t_distr td on ts.DISTR_ID = td.DISTR_ID
     </select>
 
     <select id="pageByDistrAndShop" resultMap="OrderDto">

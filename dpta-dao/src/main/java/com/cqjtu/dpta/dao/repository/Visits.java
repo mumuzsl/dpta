@@ -22,7 +22,9 @@ public class Visits {
 
     @Field(targetType = FieldType.DATE_TIME)
     private LocalDateTime date;
+
     private Long shopId;
+
     private String userId;
 
     @Indexed

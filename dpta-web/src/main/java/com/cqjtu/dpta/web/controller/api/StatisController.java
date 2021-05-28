@@ -1,5 +1,6 @@
 package com.cqjtu.dpta.web.controller.api;
 
+import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.StatisService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.DptaUtils;
@@ -32,6 +33,8 @@ public class StatisController {
     RedisTemplate<String, Object> redisTemplate;
     @Resource
     VisitsRepository visitsRepository;
+    @Resource
+    private PafCommService pafCommService;
 
     @GetMapping("recent/person")
     public Result person(@RequestParam(value = "day", required = false, defaultValue = "7") int day,
@@ -139,9 +142,13 @@ public class StatisController {
      * @param limit top榜数量限制，默认是10
      */
     @GetMapping("top")
-    public Result top(@RequestParam(value = "limit", defaultValue = "10") Integer limit) {
-        List<CommStatisVo> r = statisService.topComm(limit);
-        return Result.ok(r);
+    public Result top(@RequestParam(value = "limit", defaultValue = "10") Integer limit,
+                      Info info) {
+        List<CommStatisVo> vos = statisService.topComm(info.id(), limit);
+
+        vos.forEach(vo -> vo.setGoodsVo(pafCommService.commDetail(vo.getCommId())));
+
+        return Result.ok(vos);
     }
 
     //    @CachePut("statis")

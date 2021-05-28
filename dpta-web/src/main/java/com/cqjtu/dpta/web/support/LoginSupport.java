@@ -5,6 +5,7 @@ import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.TokenUtils;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.common.web.LoginParam;
+import com.cqjtu.dpta.dao.repository.SessionRepository;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +23,9 @@ import java.util.function.Consumer;
 public abstract class LoginSupport {
     @Resource
     private PasswordEncoder passwordEncoder;
+    @Resource
+    private SessionRepository sessionRepository;
+
 
     public Result postLogout(HttpServletResponse response) {
         TokenUtils.clearHeader(response);
@@ -42,7 +46,9 @@ public abstract class LoginSupport {
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 return Result.build(ResultCodeEnum.USER_PASSWORD_NOT_MATCH);
             }
+
             String token = TokenUtils.create(user.getId(), password);
+
             Info info = new Info();
             info.setToken(token);
             consumer.accept(token);

@@ -38,6 +38,8 @@ public class OrderDto {
 
     private Long distrId;
 
+    private String distrNm;
+
     /**
      * 商铺编码
      */

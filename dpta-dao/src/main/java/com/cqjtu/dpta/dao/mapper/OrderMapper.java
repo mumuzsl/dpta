@@ -8,7 +8,6 @@ import com.cqjtu.dpta.dao.dto.OrderDDto;
 import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.dto.OrderStatisDto;
 import com.cqjtu.dpta.dao.entity.Order;
-import com.cqjtu.dpta.dao.repository.OrderIndex;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,8 +23,6 @@ import java.util.Map;
  */
 public interface OrderMapper extends BaseMapper<Order> {
     List<Order> findByBetween(@Param("params") Map<String, Object> map);
-
-    OrderIndex getOrderIndex();
 
     List<OrderStatisDto> countAndSum(@Param("params") Map<String, Object> map);
 

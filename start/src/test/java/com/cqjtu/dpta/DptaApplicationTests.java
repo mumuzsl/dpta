@@ -1,24 +1,13 @@
 package com.cqjtu.dpta;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cqjtu.dpta.api.CommRService;
-import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.api.OrderDService;
 import com.cqjtu.dpta.api.PafCommService;
-import com.cqjtu.dpta.api.support.SettleService;
-import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.CommRMapper;
-import com.cqjtu.dpta.dao.mapper.PafCommMapper;
-import com.cqjtu.dpta.service.OrderDServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Pageable;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,30 +31,6 @@ public class DptaApplicationTests {
     void d(){
 //        OrderDServiceImpl orderDService = new OrderDServiceImpl();
         System.out.println(orderDService.getOrderSum());
-    }
-
-    @Test
-    void c(){
-        List store  = new ArrayList();
-        List<String> names = new ArrayList<>();
-        List<BigDecimal> prices = new ArrayList<>();
-        String a = pafCommService.getDistrSumM(2021).get(0).getDistrName();
-        String b = pafCommService.getDistrSumM(2021).get(1).getDistrName();
-        String c = pafCommService.getDistrSumN(2021).get(0).getDistrName();
-        String d = pafCommService.getDistrSumN(2021).get(1).getDistrName();
-        names.add(a);
-        names.add(b);
-        names.add(c);
-        names.add(d);
-        for(int i=2016;i<=2021;i++){
-            prices.add(pafCommService.getDistrSum(a,i));
-            prices.add(pafCommService.getDistrSum(b,i));
-            prices.add(pafCommService.getDistrSum(c,i));
-            prices.add(pafCommService.getDistrSum(d,i));
-        }
-        store.add(names);
-        store.add(prices);
-        System.out.println(store);
     }
 
     @Test

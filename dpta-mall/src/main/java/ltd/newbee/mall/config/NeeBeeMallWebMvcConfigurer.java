@@ -14,6 +14,7 @@ import ltd.newbee.mall.interceptor.AdminLoginInterceptor;
 import ltd.newbee.mall.interceptor.NewBeeMallCartNumberInterceptor;
 import ltd.newbee.mall.interceptor.NewBeeMallLoginInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -28,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 
 
+@EnableConfigurationProperties(DptaProperties.class)
 @Configuration
 public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
 
@@ -95,7 +97,7 @@ public class NeeBeeMallWebMvcConfigurer implements WebMvcConfigurer {
                 .addPathPatterns("/shop-cart/**")
                 .addPathPatterns("/saveOrder")
                 .addPathPatterns("/orders")
-                .addPathPatterns("/orders/**")            
+                .addPathPatterns("/orders/**")
                 .addPathPatterns("/personal")
                 .addPathPatterns("/personal/updateInfo")
                 .addPathPatterns("/selectPayType")

@@ -1,7 +1,5 @@
 package com.cqjtu.dpta.web.security;
 
-import com.cqjtu.dpta.common.exception.NoTokenException;
-import com.cqjtu.dpta.common.util.TokenUtils;
 import com.cqjtu.dpta.common.web.Info;
 import org.springframework.core.MethodParameter;
 import org.springframework.util.Assert;
@@ -26,10 +24,7 @@ public class InfoHandlerMethodArgumentResolver implements HandlerMethodArgumentR
     public Info resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = webRequest.getNativeRequest(HttpServletRequest.class);
         Assert.notNull(request, "request not be null");
-        String token = TokenUtils.getAttribute(request);
-        if (token == null) {
-            throw new NoTokenException();
-        }
-        return Info.of(token);
+        String userId = String.valueOf(request.getAttribute("userId"));
+        return Info.of(Long.parseLong(userId));
     }
 }

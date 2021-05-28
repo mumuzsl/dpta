@@ -27,7 +27,7 @@ public class StatisServiceImpl implements StatisService {
     private PafCommService pafCommService;
 
     @Override
-    public List<CommStatisVo> topComm(Integer limit) {
-        return statisMapper.topComm(limit);
+    public List<CommStatisVo> topComm(Long distrId, Integer limit) {
+        return statisMapper.topComm(distrId, limit);
     }
 }

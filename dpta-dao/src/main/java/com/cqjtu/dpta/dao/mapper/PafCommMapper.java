@@ -1,7 +1,8 @@
 package com.cqjtu.dpta.dao.mapper;
 
-import com.cqjtu.dpta.dao.entity.*;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cqjtu.dpta.common.vo.GoodsVo;
+import com.cqjtu.dpta.dao.entity.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -19,7 +20,6 @@ import java.util.List;
 public interface PafCommMapper extends BaseMapper<PafComm> {
 
     /**
-     *
      * @param comm_id 商品编码
      * @param sku_id
      * @return
@@ -28,6 +28,7 @@ public interface PafCommMapper extends BaseMapper<PafComm> {
 
     /**
      * 返回销售量前十商品
+     *
      * @return
      */
     List<ShopTop> getShopTop();
@@ -56,10 +57,11 @@ public interface PafCommMapper extends BaseMapper<PafComm> {
     /**
      * 返回每年的收益
      */
-    BigDecimal getDistrSum(@Param("d") String d,@Param("b") int b);
+    BigDecimal getDistrSum(@Param("d") String d, @Param("b") int b);
 
     /**
      * 返回数据库中所有的店铺结算金额的时间
+     *
      * @return
      */
     List<Date> getAllDate();
@@ -68,4 +70,6 @@ public interface PafCommMapper extends BaseMapper<PafComm> {
      * 返回预测的销售额
      */
     List<ShopPredict> getSPredict();
+
+    GoodsVo commDetail(Long id);
 }

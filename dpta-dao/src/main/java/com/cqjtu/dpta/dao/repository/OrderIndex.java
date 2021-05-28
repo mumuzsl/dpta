@@ -37,7 +37,7 @@ public class OrderIndex {
     /**
      * 创建日期
      */
-    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second)
+    @Field(type = FieldType.Date, format = DateFormat.basic_date_time)
     private LocalDateTime datm;
 
     /**

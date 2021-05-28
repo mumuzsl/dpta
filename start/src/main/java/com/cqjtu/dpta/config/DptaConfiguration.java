@@ -2,11 +2,13 @@ package com.cqjtu.dpta.config;
 
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.cqjtu.dpta.auto.AutoCheck;
 import com.cqjtu.dpta.auto.AutoCreate;
 import com.cqjtu.dpta.auto.BuildEs;
 import com.cqjtu.dpta.common.config.DptaProperties;
 import com.cqjtu.dpta.web.security.DefaultUserChecker;
 import com.cqjtu.dpta.web.security.UserChecker;
+import com.cqjtu.dpta.web.support.OrderRedisSupport;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -37,6 +39,17 @@ public class DptaConfiguration {
     @Bean
     public BuildEs buildEs() {
         return new BuildEs();
+    }
+
+    @ConditionalOnProperty(prefix = "dpta", name = "auto-check", havingValue = "true")
+    @Bean
+    public AutoCheck autoCheck() {
+        return new AutoCheck();
+    }
+
+    @Bean
+    public OrderRedisSupport orderRedisSupport() {
+        return new OrderRedisSupport();
     }
 
     @Bean

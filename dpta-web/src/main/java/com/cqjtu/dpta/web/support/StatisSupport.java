@@ -41,13 +41,14 @@ public class StatisSupport {
     @Resource(name = "elasticsearchTemplate")
     protected ElasticsearchOperations elasticsearchOperations;
 
+    public static final String NOW = "now+8h";
     public static final String FORMAT = "yyyy-MM-dd";
     public static final ZoneId ZONE_ID = ZoneId.of("Asia/Shanghai");
 
     protected final NativeSearchQueryBuilder DEFAULT_QUERY = queryBuilder(7);
 
     public NativeSearchQueryBuilder queryBuilder(int day) {
-        String from = "now-" + (day - 1) + "d/d";
+        String from = NOW + "-" + (day - 1) + "d/d";
         return new NativeSearchQueryBuilder()
                 .withPageable(PageRequest.of(0, 1))
                 .addAggregation(
@@ -56,20 +57,22 @@ public class StatisSupport {
                                 .field("datm")
                                 .format(FORMAT)
                                 .timeZone(ZONE_ID)
-                                .addRange(from, "now")
+                                .addRange(from, NOW)
                                 .subAggregation(
                                         AggregationBuilders
                                                 .terms("state")
-                                                .field("state").subAggregation(
-                                                AggregationBuilders
-                                                        .dateHistogram("date")
-                                                        .field("datm")
-                                                        .calendarInterval(DateHistogramInterval.DAY)
-                                                        .format("yyyy-MM-dd")
-                                                        .minDocCount(0)
-                                                        .keyed(true)
-                                                        .extendedBounds(new ExtendedBounds(from, "now"))
-                                        )
+                                                .field("state")
+                                                .minDocCount(0)
+                                                .subAggregation(
+                                                        AggregationBuilders
+                                                                .dateHistogram("date")
+                                                                .field("datm")
+                                                                .calendarInterval(DateHistogramInterval.DAY)
+                                                                .format("yyyy-MM-dd")
+                                                                .minDocCount(0)
+                                                                .keyed(true)
+                                                                .extendedBounds(new ExtendedBounds(from, NOW))
+                                                )
                                 )
                 );
     }
@@ -137,7 +140,7 @@ public class StatisSupport {
         return AggregationBuilders
                 .dateRange(statisName(name))
                 .field("datm")
-                .addRange(from, "now")
+                .addRange(from, NOW)
                 .format(FORMAT)
                 .timeZone(ZONE_ID)
                 .subAggregation(amount(name));
@@ -158,8 +161,8 @@ public class StatisSupport {
     protected NativeSearchQueryBuilder statisQueryBuilder() {
         return new NativeSearchQueryBuilder()
                 .withPageable(PageRequest.of(0, 1))
-                .addAggregation(dateh("day", "now/d"))
-                .addAggregation(dateh("month", "now/M"))
+                .addAggregation(dateh("day", NOW + "/d"))
+                .addAggregation(dateh("month", NOW + "/M"))
                 .addAggregation(amount("all"));
     }
 

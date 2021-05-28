@@ -3,6 +3,7 @@ package com.cqjtu.dpta.api;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.PageResult;
+import com.cqjtu.dpta.common.vo.CommRVo;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.api.support.CrudService;
 import org.springframework.data.domain.Pageable;
@@ -33,5 +34,5 @@ public interface CommRService extends CrudService<CommR> {
      * 返回佣金规则
      * @return
      */
-    List<CommR> getAllCommR();
+    List<CommRVo> getAllCommR();
 }

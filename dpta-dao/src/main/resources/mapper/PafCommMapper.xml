@@ -3,62 +3,75 @@
 <mapper namespace="com.cqjtu.dpta.dao.mapper.PafCommMapper">
 
     <select id="getByCommIdAndSkuId" resultType="com.cqjtu.dpta.dao.entity.PafSkuStock">
-        SELECT
-        *
-        FROM
-        t_paf_sku_stock
-        WHERE
-        comm_id = #{comm_id}
-        AND sku_id = #{sku_id}
+        SELECT *
+        FROM t_paf_sku_stock
+        WHERE comm_id = #{comm_id}
+          AND sku_id = #{sku_id}
     </select>
     <select id="getShopTop" resultType="com.cqjtu.dpta.dao.entity.ShopTop">
-        select p.COMM_NM commName,su.spec spec,sk.recom_price rePrice,p.SALES_VOLUME saVolume
+        select p.COMM_NM commName, su.spec spec, sk.recom_price rePrice, p.SALES_VOLUME saVolume
         from dpta.t_paf_comm p
-        left join dpta.t_category c on p.category_id = c.category_id
-        left join dpta.t_paf_sku_stock sk on p.COMM_ID=sk.comm_id
-        left join dpta.t_sku su on sk.sku_id = su.id
-        order by p.sales_volume desc limit 10
+                 left join dpta.t_category c on p.category_id = c.category_id
+                 left join dpta.t_paf_sku_stock sk on p.COMM_ID = sk.comm_id
+                 left join dpta.t_sku su on sk.sku_id = su.id
+        order by p.sales_volume desc
+        limit 10
     </select>
     <select id="getDistrTop" resultType="com.cqjtu.dpta.dao.entity.DistrTop">
-        select d.DISTR_NM distrNm,sum(sm.COM_P) comP from dpta.t_distr d
-        left join dpta.t_settle_m sm on d.DISTR_ID = sm.DISTR_ID
+        select d.DISTR_NM distrNm, sum(sm.COM_P) comP
+        from dpta.t_distr d
+                 left join dpta.t_settle_m sm on d.DISTR_ID = sm.DISTR_ID
         group by d.DISTR_NM
-        order by sum(sm.COM_P) desc limit 10
+        order by sum(sm.COM_P) desc
+        limit 10
     </select>
     <select id="getMaxShop" resultType="java.lang.String">
-        select a.COMM_NM from (select p.comm_nm,max(p.SALES_VOLUME) FROM dpta.t_paf_comm p
-        left join dpta.t_shp_comm sc on p.comm_id = sc.COMM_ID
-        left join dpta.t_shop s on sc.SHOP_ID = s.SHOP_ID
-        left join dpta.t_distr d on s.DISTR_ID = d.DISTR_ID
-        where d.DISTR_NM = #{d}) a
+        select a.COMM_NM
+        from (select p.comm_nm, max(p.SALES_VOLUME)
+              FROM dpta.t_paf_comm p
+                       left join dpta.t_shp_comm sc on p.comm_id = sc.COMM_ID
+                       left join dpta.t_shop s on sc.SHOP_ID = s.SHOP_ID
+                       left join dpta.t_distr d on s.DISTR_ID = d.DISTR_ID
+              where d.DISTR_NM = #{d}) a
     </select>
     <select id="getDistrSumM" resultType="com.cqjtu.dpta.dao.entity.DistrSumM">
-        select d.DISTR_NM distrName,sum(s.com_p) distrM from dpta.t_distr d
-        left join dpta.t_settle_m s on d.DISTR_ID = s.DISTR_ID
-        where s.SETTLE_TM like concat(#{d},'%')
+        select d.DISTR_NM distrName, sum(s.com_p) distrM
+        from dpta.t_distr d
+                 left join dpta.t_settle_m s on d.DISTR_ID = s.DISTR_ID
+        where s.SETTLE_TM like concat(#{d}, '%')
         group by d.DISTR_NM
         order by sum(s.com_p) desc
         limit 2
     </select>
     <select id="getDistrSum" resultType="java.math.BigDecimal">
-         select sum(s.com_p) from dpta.t_distr d
-        left join dpta.t_settle_m s on d.DISTR_ID = s.DISTR_ID
-        where d.DISTR_NM = #{d} and s.SETTLE_TM like concat(#{b},'%')
+        select sum(s.com_p)
+        from dpta.t_distr d
+                 left join dpta.t_settle_m s on d.DISTR_ID = s.DISTR_ID
+        where d.DISTR_NM = #{d}
+          and s.SETTLE_TM like concat(#{b}, '%')
     </select>
     <select id="getDistrSumN" resultType="com.cqjtu.dpta.dao.entity.DistrSumM">
-        select d.DISTR_NM distrName,sum(s.com_p) distrM from dpta.t_distr d
-        left join dpta.t_settle_m s on d.DISTR_ID = s.DISTR_ID
-        where s.SETTLE_TM like concat(#{d},'%')
+        select d.DISTR_NM distrName, sum(s.com_p) distrM
+        from dpta.t_distr d
+                 left join dpta.t_settle_m s on d.DISTR_ID = s.DISTR_ID
+        where s.SETTLE_TM like concat(#{d}, '%')
         group by d.DISTR_NM
         order by sum(s.com_p) asc
         limit 2
     </select>
     <select id="getAllDate" resultType="java.util.Date">
-        select settle_tm from dpta.t_settle_m
+        select settle_tm
+        from dpta.t_settle_m
     </select>
     <select id="getSPredict" resultType="com.cqjtu.dpta.dao.entity.ShopPredict">
-        select name name ,price price,sale sale from dpta.t_data_pla
+        select name name, price price, sale sale
+        from dpta.t_data_pla
     </select>
 
+    <select id="commDetail" resultType="com.cqjtu.dpta.common.vo.GoodsVo">
+        SELECT *
+        FROM newbee_mall_db.`tb_newbee_mall_goods_info`
+        WHERE goods_id = #{id};
+    </select>
 
 </mapper>

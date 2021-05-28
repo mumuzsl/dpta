@@ -8,13 +8,9 @@
  */
 package ltd.newbee.mall.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cqjtu.dpta.api.DistrUserService;
 import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.dao.entity.DealD;
 import com.cqjtu.dpta.dao.entity.DistrUser;
-import com.cqjtu.dpta.dao.mapper.DealDMapper;
-import com.cqjtu.dpta.dao.mapper.DealMapper;
 import ltd.newbee.mall.common.*;
 import ltd.newbee.mall.controller.vo.NewBeeMallOrderDetailVO;
 import ltd.newbee.mall.controller.vo.NewBeeMallOrderItemVO;
@@ -34,7 +30,6 @@ import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.NumberUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -42,7 +37,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import javax.xml.crypto.Data;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.time.LocalDateTime;

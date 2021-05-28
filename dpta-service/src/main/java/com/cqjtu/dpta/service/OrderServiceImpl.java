@@ -1,6 +1,5 @@
 package com.cqjtu.dpta.service;
 
-import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cqjtu.dpta.api.OrderDService;
@@ -13,8 +12,7 @@ import com.cqjtu.dpta.common.extension.SearchPage;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
-import com.cqjtu.dpta.common.vo.CommVo;
-import com.cqjtu.dpta.common.web.OrderParam;
+import com.cqjtu.dpta.common.web.CommParam;
 import com.cqjtu.dpta.dao.dto.OrderDDto;
 import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.dto.OrderStatisDto;
@@ -135,14 +133,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     public IPage<OrderDto> pageOrderDtoByStatesAll(Pageable pageable, Long distrId, List<Integer> state, Integer deleted) {
-        IPage<OrderDto> page = baseMapper.pageOrderDtoNotDetailsByStates(toPage(pageable), distrId, state, DeletedEnum.NOT_DELETE.value());
+        IPage<OrderDto> page = baseMapper.pageOrderDtoNotDetailsByStates(toPage(pageable), distrId, state, deleted);
         page.getRecords().forEach(orderDto -> orderDto.setDetails(getDetails(orderDto.getId())));
         return page;
     }
 
     @Override
     public IPage<OrderDto> pageOrderDtoAll(Pageable pageable, Long distrId, Integer state, Integer deleted) {
-        IPage<OrderDto> page = baseMapper.pageOrderDtoNotDetails(toPage(pageable), distrId, state, DeletedEnum.NOT_DELETE.value());
+        IPage<OrderDto> page = baseMapper.pageOrderDtoNotDetails(toPage(pageable), distrId, state, deleted);
         page.getRecords().forEach(orderDto -> orderDto.setDetails(getDetails(orderDto.getId())));
         return page;
     }
@@ -171,7 +169,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     @Override
-    public int sendComm(OrderParam orderParam) {
+    public int sendComm(com.cqjtu.dpta.common.web.OrderParam orderParam) {
         Order order = changeState(orderParam.getId(), OrderState.STOCK_FINISH);
         order.setExpressNo(orderParam.getExpressNo());
         return baseMapper.updateById(order);
@@ -208,7 +206,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 break;
             case STOCK_FINISH:
             default:
-                throw new BadRequestException("不符合订单取消条件");
+                throw new BadRequestException("不符合订单取消条件" + id);
         }
 
         order.setState(OrderState.HAND_CLOSE.state());
@@ -294,11 +292,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     @Transactional
-    public Long create(OrderParam vo) {
+    public Long create(com.cqjtu.dpta.common.web.OrderParam vo) {
         Order order = new Order();
         order.setShopId(vo.getShopId());
-//        order.setDatm(LocalDateTime.now());
-        order.setDatm(LocalDateTime.now().minusDays(RandomUtil.randomInt(365)));
+        order.setDatm(LocalDateTime.now());
         order.setState(OrderState.WAIT_PAY.state());
         order.setId(DptaUtils.defautlNextId());
         order.setAddress(vo.getAddress());
@@ -316,10 +313,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
 
-    private BigDecimal createDetail(OrderParam vo, Long orderId) {
+    private BigDecimal createDetail(com.cqjtu.dpta.common.web.OrderParam vo, Long orderId) {
         BigDecimal amount = new BigDecimal(0);
-        List<CommVo> comms = vo.getComms();
-        for (CommVo curComm : comms) {
+        List<CommParam> comms = vo.getComms();
+        for (CommParam curComm : comms) {
             ShpComm shpComm = getShpComm(curComm.getCommId(), vo.getShopId());
 
             SkuStock skuStock = skuStockService.getSkuStockByShopCommId(shpComm.getShopCommId());

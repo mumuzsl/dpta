@@ -83,6 +83,7 @@ public class OrderController extends StatisSupport {
                         @RequestParam(value = "end", required = false) String end,
                         @RequestParam(value = "shop_id", required = false) Long shopId,
                         @RequestParam(value = "is_state_group", required = false) boolean isStateGroup,
+                        @RequestParam(value = "statis_payed", required = false, defaultValue = "false") Boolean statisPayed,
                         Info info) {
         Map<String, Object> params = new HashMap<>(4);
         params.put("state", state);
@@ -92,7 +93,7 @@ public class OrderController extends StatisSupport {
         params.put("distrId", info.id());
         params.put("isStateGroup", isStateGroup);
         params.put("deleted", DeletedEnum.NOT_DELETE.value());
-        params.put("amount", OrderState.PAYED.state());
+        params.put("startState", statisPayed ? OrderState.PAYED.state() : null);
         List<OrderStatisDto> list = orderService.countAndSum(params);
 
         return Result.ok(list);

@@ -9,7 +9,7 @@ import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.web.OrderParam;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.web.support.OrderEventListener;
-import com.cqjtu.dpta.web.support.RedisSupport;
+import com.cqjtu.dpta.web.support.OrderRedisSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -35,7 +35,7 @@ public class OrderOpenApi extends OrderEventListener {
     @Resource
     private OrderIndexService orderIndexService;
     @Resource
-    private RedisSupport redisSupport;
+    private OrderRedisSupport orderRedisSupport;
 
     public OrderOpenApi(RedisMessageListenerContainer listenerContainer) {
         super(listenerContainer);
@@ -43,16 +43,21 @@ public class OrderOpenApi extends OrderEventListener {
 
     @Override
     public void handle(String id) {
-        Long v = Long.valueOf(id);
-        orderService.overTimeClose(v);
-        orderIndexService.updateState(v, OrderState.OVRE_TIME_CLOSE);
-        log.info("已取消订单: " + id);
+        overTimeClose(Long.valueOf(id));
+    }
+
+    public void overTimeClose(Long id) {
+        if (orderService.overTimeClose(id) != 0) {
+            orderIndexService.updateState(id, OrderState.OVRE_TIME_CLOSE);
+            log.info("已取消订单: " + id);
+        }
     }
 
     @PostMapping("close")
     public Result close(@RequestBody Map<String, Object> map) {
         long order_id = DptaUtils.getOrderId(map);
         orderService.handClose(order_id);
+        orderIndexService.updateState(order_id, OrderState.OVRE_TIME_CLOSE);
 
         return Result.ok();
     }
@@ -62,7 +67,7 @@ public class OrderOpenApi extends OrderEventListener {
         long order_id = DptaUtils.getOrderId(map);
         orderService.payOrder(NumberUtil.parseLong(StrUtil.toString(order_id)));
         orderIndexService.updateState(order_id, OrderState.PAYED);
-        redisSupport.remove(order_id);
+        orderRedisSupport.remove(order_id);
         return Result.ok(order_id);
     }
 
@@ -87,8 +92,8 @@ public class OrderOpenApi extends OrderEventListener {
     @PostMapping("create")
     public Result add(@RequestBody OrderParam orderParam) {
         Long id = orderService.create(orderParam);
-        orderIndexService.create(orderService.getOrderDto(id));
-        redisSupport.put(id);
+        orderIndexService.create(orderService.getOrderDto(id, null));
+        orderRedisSupport.put(id);
         return Result.ok(id);
     }
 
@@ -114,4 +119,5 @@ public class OrderOpenApi extends OrderEventListener {
         orderIndexService.updateState(orderParam.getId(), OrderState.STOCK_FINISH);
         return Result.ok(orderParam.getId());
     }
+
 }

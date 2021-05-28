@@ -13,8 +13,12 @@ import java.util.function.Predicate;
 public class LoginParam {
     //    private String token;
     private String nickname;
+
     private String username;
+
     private String password;
+
+    private String sessionId;
 
     public boolean isInvalid() {
         return StringUtils.isEmpty(username) || StringUtils.isEmpty(password);

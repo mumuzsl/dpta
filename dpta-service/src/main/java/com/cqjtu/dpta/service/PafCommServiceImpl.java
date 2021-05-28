@@ -1,5 +1,6 @@
 package com.cqjtu.dpta.service;
 
+import com.cqjtu.dpta.common.vo.GoodsVo;
 import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.PafCommMapper;
 import com.cqjtu.dpta.api.PafCommService;
@@ -29,7 +30,7 @@ public class PafCommServiceImpl extends ServiceImpl<PafCommMapper, PafComm> impl
      */
     @Override
     public PafSkuStock getByCommIdAndSkuId(Long comm_id, Long sku_id) {
-        return baseMapper.getByCommIdAndSkuId(comm_id,sku_id);
+        return baseMapper.getByCommIdAndSkuId(comm_id, sku_id);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class PafCommServiceImpl extends ServiceImpl<PafCommMapper, PafComm> impl
 
     @Override
     public BigDecimal getDistrSum(String d, int b) {
-        return baseMapper.getDistrSum(d,b);
+        return baseMapper.getDistrSum(d, b);
     }
 
     @Override
@@ -72,4 +73,15 @@ public class PafCommServiceImpl extends ServiceImpl<PafCommMapper, PafComm> impl
         return baseMapper.getSPredict();
     }
 
+    @Override
+    public GoodsVo commDetail(Long id) {
+        return baseMapper.commDetail(id);
+    }
+
+    @Override
+    public boolean updateSalesVolume(Long id, Integer count) {
+        PafComm pafComm = getById(id);
+        pafComm.setSalesVolume(count);
+        return updateById(pafComm);
+    }
 }

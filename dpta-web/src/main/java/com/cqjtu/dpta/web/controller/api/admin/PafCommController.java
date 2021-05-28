@@ -7,11 +7,7 @@ import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.support.SettleService;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.Shop;
-import com.cqjtu.dpta.dao.entity.ShopTop;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
@@ -49,6 +45,7 @@ public class PafCommController {
 
     /**
      * 模糊搜索
+     *
      * @param pageable
      * @param keyword
      * @param type     商品类型
@@ -93,24 +90,24 @@ public class PafCommController {
 
     @RequestMapping("/show/bar")
     @ResponseBody
-    public List<Object> findBybar(Model model){
+    public Result<List> findBybar(Model model) {
         List barData = new ArrayList();
         Date date = new Date();
         barData.add(settleService.platSum(2019));
         barData.add(settleService.platSum(2020));
         barData.add(settleService.platSum(2021));
 
-        return barData;
+        return Result.ok(barData);
     }
 
     @RequestMapping("/show/store")
     @ResponseBody
-    public List<Object> findByStore(){
-        List store  = new ArrayList();
+    public Result findByStore() {
+        List store = new ArrayList();
         List<String> names = new ArrayList<>();
         List<BigDecimal> prices = new ArrayList<>();
 
-        SimpleDateFormat formatter= new SimpleDateFormat("yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
         Date date = new Date();
         String dateReal = formatter.format(date);
 
@@ -123,19 +120,20 @@ public class PafCommController {
         names.add(c);
         names.add(d);
 
-        for(int j=0;j<sortQ().size();j++){
-            prices.add(pafCommService.getDistrSum(a,Integer.parseInt(sortQ().get(j))));
-            prices.add(pafCommService.getDistrSum(b,Integer.parseInt(sortQ().get(j))));
-            prices.add(pafCommService.getDistrSum(c,Integer.parseInt(sortQ().get(j))));
-            prices.add(pafCommService.getDistrSum(d,Integer.parseInt(sortQ().get(j))));
+        for (int j = 0; j < sortQ().size(); j++) {
+            prices.add(pafCommService.getDistrSum(a, Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(b, Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(c, Integer.parseInt(sortQ().get(j))));
+            prices.add(pafCommService.getDistrSum(d, Integer.parseInt(sortQ().get(j))));
         }
         store.add(names);
         store.add(prices);
-        return store;
+        return Result.ok(store);
     }
 
     /**
      * 去掉重复的数
+     *
      * @param al
      * @return
      */
@@ -151,9 +149,10 @@ public class PafCommController {
 
     /**
      * 排序
+     *
      * @return
      */
-    public ArrayList<String> sortQ(){
+    public ArrayList<String> sortQ() {
         List<String> datas = new ArrayList<>();
         ArrayList<String> arrayList = new ArrayList();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy");
@@ -162,12 +161,12 @@ public class PafCommController {
             datas.add(formatter.format(date));
         }
         arrayList = sort((ArrayList) datas);
-        for (int i=0;i<arrayList.size();i++){
-            for (int j=i;j<arrayList.size();j++){
-                if(Integer.parseInt(arrayList.get(i))>Integer.parseInt(arrayList.get(j))){
+        for (int i = 0; i < arrayList.size(); i++) {
+            for (int j = i; j < arrayList.size(); j++) {
+                if (Integer.parseInt(arrayList.get(i)) > Integer.parseInt(arrayList.get(j))) {
                     String a = arrayList.get(i);
-                    arrayList.set(i,arrayList.get(j));
-                    arrayList.set(j,a);
+                    arrayList.set(i, arrayList.get(j));
+                    arrayList.set(j, a);
                 }
             }
         }
@@ -176,17 +175,15 @@ public class PafCommController {
     }
 
 
-
-
     @RequestMapping("/topComm")
     @ResponseBody
-    public List<Object> topComm(Model model){
+    public Result topComm(Model model) {
         List data = new ArrayList<>();
         List<String> commNames = new ArrayList<>();
         List<String> specs = new ArrayList<>();
         List<BigDecimal> rePrices = new ArrayList<>();
         List<Integer> saVolumes = new ArrayList<>();
-        for (int i=0;i<pafCommService.getShopTop().size();i++){
+        for (int i = 0; i < pafCommService.getShopTop().size(); i++) {
             commNames.add(pafCommService.getShopTop().get(i).getCommName());
             specs.add(pafCommService.getShopTop().get(i).getSpec());
             rePrices.add(pafCommService.getShopTop().get(i).getRePrice());
@@ -196,17 +193,17 @@ public class PafCommController {
         data.add(specs);
         data.add(rePrices);
         data.add(saVolumes);
-        return data;
+        return Result.ok(data);
     }
 
     @RequestMapping("/topDistr")
     @ResponseBody
-    public List<Object> topDistr(){
+    public Result topDistr() {
         List data = new ArrayList<>();
         List<String> distrNms = new ArrayList<>();
         List<BigDecimal> comPs = new ArrayList<>();
         List<String> commNames = new ArrayList<>();
-        for (int i = 0;i<pafCommService.getDistrTop().size();i++){
+        for (int i = 0; i < pafCommService.getDistrTop().size(); i++) {
             distrNms.add(pafCommService.getDistrTop().get(i).getDistrNm());
 
             commNames.add(pafCommService.getMaxShop(pafCommService.getDistrTop().get(i).getDistrNm()));
@@ -216,17 +213,17 @@ public class PafCommController {
         data.add(distrNms);
 //        data.add(commNames);
         data.add(comPs);
-        return data;
+        return Result.ok(data);
     }
 
     @RequestMapping("/yuCe")
     @ResponseBody
-    public List<Object> shopPredict(){
+    public Result shopPredict() {
         List data = new ArrayList<>();
         List<String> name = new ArrayList<>();
         List<BigDecimal> price = new ArrayList<>();
         List<Integer> sale = new ArrayList<>();
-        for (int i=0;i<pafCommService.getSPredict().size();i++){
+        for (int i = 0; i < pafCommService.getSPredict().size(); i++) {
             name.add(pafCommService.getSPredict().get(i).getName());
             price.add(pafCommService.getSPredict().get(i).getPrice());
             sale.add(pafCommService.getSPredict().get(i).getSale());
@@ -235,19 +232,19 @@ public class PafCommController {
         data.add(price);
         data.add(sale);
 
-        return data;
+        return Result.ok(data);
     }
 
     @RequestMapping("/show/pie")
     @ResponseBody
-    public List<Object> findByPie(){
-        List data = new ArrayList();
+    public Result findByPie() {
+//        List data = new ArrayList();
+//
+//        for (int i = 0; i < commRService.getAllCommR().size(); i++) {
+//            data.add(commRService.getAllCommR().get(i));
+//        }
 
-        for (int i = 0;i<commRService.getAllCommR().size();i++){
-            data.add(commRService.getAllCommR().get(i));
-        }
-
-        return data;
+        return Result.ok(commRService.getAllCommR());
     }
 
     @GetMapping("plat_analysis")
@@ -255,27 +252,28 @@ public class PafCommController {
         request.setAttribute("path", "plat_analysis");
 //        Integer shopSum = newBeeMallUserService.shopSum();
 //        Integer orderSum = newBeeMallOrderService.orderSum();
-        model.addAttribute("shopSum",1);
-        model.addAttribute("orderSum",2);
+        model.addAttribute("shopSum", 1);
+        model.addAttribute("orderSum", 2);
 
         return "url";
     }
 
     @GetMapping("getById")
-    public PafComm getById(@RequestParam Long pafCommId) {
-        return pafCommService.getById(pafCommId);
+    public Result getById(@RequestParam Long pafCommId) {
+        PafComm pafComm = pafCommService.getById(pafCommId);
+        return Result.ok(pafComm);
     }
 
     @PostMapping("changState/{state}")
-    public Boolean changstate(@RequestBody List<Long> ids,
-                              @PathVariable int state) {
+    public Result changstate(@RequestBody List<Long> ids,
+                             @PathVariable int state) {
         QueryWrapper<PafComm> wrapper = new QueryWrapper<>();
-        wrapper.in("comm_id",ids);
+        wrapper.in("comm_id", ids);
         List<PafComm> list = pafCommService.list(wrapper);
         for (PafComm comm : list) {
             comm.setState(state);
         }
-        return pafCommService.updateBatchById(list);
+        return Result.judge(pafCommService.updateBatchById(list));
     }
 
 }

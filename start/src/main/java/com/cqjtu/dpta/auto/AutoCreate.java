@@ -3,14 +3,15 @@ package com.cqjtu.dpta.auto;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.cqjtu.dpta.api.OrderIndexService;
 import com.cqjtu.dpta.api.OrderService;
+import com.cqjtu.dpta.api.VisitsService;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.common.vo.CommVo;
-import com.cqjtu.dpta.common.web.OrderParam;
+import com.cqjtu.dpta.common.web.CommParam;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.web.controller.api.open.OrderOpenApi;
-import com.cqjtu.dpta.web.support.RedisSupport;
+import com.cqjtu.dpta.web.support.OrderRedisSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -36,7 +37,11 @@ public class AutoCreate {
     @Resource
     private OrderOpenApi orderOpenApi;
     @Resource
-    private RedisSupport redisSupport;
+    private OrderRedisSupport orderRedisSupport;
+    @Resource
+    private OrderIndexService orderIndexService;
+    @Resource
+    private VisitsService visitsService;
 
     private int count = 0;
 
@@ -44,11 +49,20 @@ public class AutoCreate {
         log.info("自动生成订单: " + id);
     }
 
-    @Scheduled(cron = "0/1 * * * * ?")
+    private void randDatm(Long id) {
+        Order order = orderService.getById(id);
+        LocalDateTime localDateTime = LocalDateTime.now().minusDays(RandomUtil.randomInt(7));
+        order.setDatm(localDateTime);
+        orderService.updateById(order);
+        orderIndexService.update(id, orderIndex -> orderIndex.setDatm(localDateTime));
+    }
+
+    @Scheduled(cron = "0/30 * * * * ?")
     private void testController() {
         try {
             if (count <= 0) {
-                Result add = orderOpenApi.add(buildOrderParam(3));
+                Result<Long> add = orderOpenApi.add(buildOrderParam(3));
+                randDatm(add.getData());
                 print(add.getData());
                 if (error) {
                     task();
@@ -64,10 +78,10 @@ public class AutoCreate {
         }
     }
 
-    @Scheduled(cron = "0/5 * * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     private void payService() {
         Set<String> set = redisTemplate.keys("o_*");
-        OrderParam orderParam = new OrderParam();
+        com.cqjtu.dpta.common.web.OrderParam orderParam = new com.cqjtu.dpta.common.web.OrderParam();
         orderParam.setExpressNo("YT5388162807091");
         for (String s : set) {
             String ss = StrUtil.split(s, "_")[1];
@@ -105,17 +119,17 @@ public class AutoCreate {
 //        print(id);
 //    }
 
-    boolean error = true;
+    boolean error = false;
 
     public void help() {
-        LocalDateTime limit = LocalDateTime.now().minusSeconds(RedisSupport.EXPIRE);
+        LocalDateTime limit = LocalDateTime.now().minusSeconds(OrderRedisSupport.EXPIRE);
         List<Order> list = orderService
                 .query()
-                .gt("DATM", LocalDateTimeUtil.formatNormal(limit))
+                .ge("DATM", LocalDateTimeUtil.formatNormal(limit))
                 .eq("STATE", OrderState.WAIT_PAY.state())
                 .list();
         for (Order order : list) {
-            redisSupport.put(order.getId());
+            orderRedisSupport.put(order.getId());
         }
     }
 
@@ -130,24 +144,26 @@ public class AutoCreate {
         }).start();
     }
 
-    OrderParam buildOrderParam(int dcount) {
-        OrderParam vo = new OrderParam();
+    com.cqjtu.dpta.common.web.OrderParam buildOrderParam(int dcount) {
+        com.cqjtu.dpta.common.web.OrderParam vo = new com.cqjtu.dpta.common.web.OrderParam();
         vo.setAddress("重庆市南岸区重庆交通大学慧园b栋" + RandomUtil.randomInt(1100, 1160));
         vo.setPhone("1" + RandomUtil.randomNumbers(10));
         vo.setReceiver("用户_" + RandomUtil.randomInt(1000, 10000));
 
-        ArrayList<CommVo> comms = new ArrayList<>(dcount);
+        ArrayList<CommParam> comms = new ArrayList<>(dcount);
         vo.setShopId(3001L + RandomUtil.randomInt(4));
 
         for (int i = 1; i < dcount; i++) {
-            CommVo commVo = new CommVo();
-            commVo.setCount(RandomUtil.randomInt(1, 3));
-            commVo.setCommId(4001L + RandomUtil.randomInt(3));
+            CommParam commParam = new CommParam();
+            commParam.setCount(RandomUtil.randomInt(1, 3));
+            commParam.setCommId(4001L + RandomUtil.randomInt(3));
 //            commVo.setCommId(4002L);
-            comms.add(commVo);
+            comms.add(commParam);
         }
 
         vo.setComms(comms);
+
+        visitsService.add(vo.getShopId(), RandomUtil.randomInt(3) == 0 ? null : "user" + RandomUtil.randomInt(100, 999));
 
         return vo;
     }

@@ -9,5 +9,5 @@ import java.util.List;
  * date: 2021/4/13
  */
 public interface StatisService {
-    List<CommStatisVo> topComm(Integer num);
+    List<CommStatisVo> topComm(Long distrId, Integer num);
 }

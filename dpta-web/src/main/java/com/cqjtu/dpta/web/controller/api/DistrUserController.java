@@ -1,7 +1,6 @@
 package com.cqjtu.dpta.web.controller.api;
 
 import cn.hutool.core.util.PhoneUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cqjtu.dpta.api.DistrLevelService;
 import com.cqjtu.dpta.api.DistrService;
@@ -16,19 +15,11 @@ import com.cqjtu.dpta.common.web.LoginParam;
 import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrLevel;
 import com.cqjtu.dpta.dao.entity.DistrUser;
-import com.cqjtu.dpta.web.support.LoginSupport;
-import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.common.util.TokenUtils;
 import com.cqjtu.dpta.dao.entity.Resve;
-import com.cqjtu.dpta.web.support.BigUser;
-import com.cqjtu.dpta.common.web.LoginParam;
-import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.web.support.LoginSupport;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;

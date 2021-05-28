@@ -12,10 +12,6 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 //@Component
 @Slf4j
 public abstract class OrderEventListener extends KeyExpirationEventMessageListener {
-//    @Resource
-//    private OrderService orderService;
-//    @Resource
-//    private OrderIndexService orderIndexService;
 
     public OrderEventListener(RedisMessageListenerContainer listenerContainer) {
         super(listenerContainer);
@@ -24,7 +20,7 @@ public abstract class OrderEventListener extends KeyExpirationEventMessageListen
     @Override
     protected void doHandleMessage(Message message) {
         log.info("处理redis过期事件: key=" + message);
-        RedisSupport.consumer(message, id -> handle(id));
+        OrderRedisSupport.consumer(message, this::handle);
         super.doHandleMessage(message);
     }
 

@@ -33,4 +33,10 @@ public class Info {
         info.setId(TokenUtils.longId(token));
         return info;
     }
+
+    public static Info of(Long id) {
+        Info info = new Info();
+        info.setId(id);
+        return info;
+    }
 }

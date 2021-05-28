@@ -16,6 +16,8 @@ public class CommStatisVo {
 
     private String commName;
 
+    private GoodsVo goodsVo;
+
     private BigDecimal maxPrice;
 
     private BigDecimal minPrice;

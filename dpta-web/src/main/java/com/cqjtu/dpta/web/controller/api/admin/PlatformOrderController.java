@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.get.MultiGetRequest;
 import org.elasticsearch.search.aggregations.bucket.range.ParsedDateRange;
 import org.elasticsearch.search.aggregations.metrics.ParsedSum;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -95,7 +96,7 @@ public class PlatformOrderController extends StatisSupport {
      * @param keyword  关键字
      * @return
      */
-//    @Cacheable(cacheNames = "order")
+    @Cacheable(cacheNames = "order")
     @GetMapping
     public Result page(@PageableDefault(sort = {"datm"}, direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(value = "keyword", required = false) String keyword,

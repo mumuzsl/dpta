@@ -1,6 +1,7 @@
 package com.cqjtu.dpta.dao.mapper;
 
 import com.cqjtu.dpta.common.vo.CommStatisVo;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,9 +12,7 @@ import java.util.List;
 public interface StatisMapper {
     /**
      * 获取收入top榜前limit个商品数据
-     *
-     * @param limit
-     * @return
      */
-    List<CommStatisVo> topComm(Integer limit);
+    List<CommStatisVo> topComm(@Param("distrId") Long distrId,
+                               @Param("limit") Integer limit);
 }

@@ -15,6 +15,7 @@ import com.cqjtu.dpta.common.web.LoginParam;
 import lombok.extern.slf4j.Slf4j;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.ServiceResultEnum;
+import ltd.newbee.mall.config.DptaProperties;
 import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.entity.MallUser;
 import ltd.newbee.mall.service.NewBeeMallUserService;
@@ -43,11 +44,14 @@ public class PersonalController {
     private NewBeeMallUserService newBeeMallUserService;
     @Resource
     private RestTemplate restTemplate;
+    @Resource
+    private DptaProperties dptaProperties;
 
     @GetMapping("/personal")
     public String personalPage(HttpServletRequest request,
                                HttpSession httpSession) {
         request.setAttribute("path", "personal");
+        request.setAttribute("front_url", dptaProperties.getDistrFrontUrl());
         return "mall/personal";
     }
 
@@ -104,9 +108,10 @@ public class PersonalController {
             loginParam.setPassword(password);
             com.cqjtu.dpta.common.result.Result<Info> result = postForObject("/distr/login", loginParam, Info.class);
             response.addCookie(new Cookie("token", result.getData().getToken()));
-            log.info(result.getMessage());
+            httpSession.setAttribute("userId", result.getData().getToken());
+            log.info("订单管理系统登录" + result.getMessage());
         } catch (Exception e) {
-            log.error("登录失败");
+            log.error("订单管理系统登录失败");
         }
 
         //登录成功
@@ -123,7 +128,7 @@ public class PersonalController {
 
     <T> com.cqjtu.dpta.common.result.Result<T> postForObject(String path, Object request, Class<T> clazz) {
         String json = restTemplate
-                .postForObject("http://localhost:8081" + path,
+                .postForObject(dptaProperties.getUrl() + path,
                         request,
                         String.class);
         return JSON.parseObject(json, buildType(clazz));

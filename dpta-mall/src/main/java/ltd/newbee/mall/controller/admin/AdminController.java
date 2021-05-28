@@ -8,7 +8,14 @@
  */
 package ltd.newbee.mall.controller.admin;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.common.web.Info;
+import com.cqjtu.dpta.common.web.LoginParam;
+import lombok.extern.slf4j.Slf4j;
 import ltd.newbee.mall.common.ServiceResultEnum;
+import ltd.newbee.mall.config.DptaProperties;
 import ltd.newbee.mall.entity.AdminUser;
 import ltd.newbee.mall.service.AdminUserService;
 import org.springframework.stereotype.Controller;
@@ -18,17 +25,25 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
 
     @Resource
     private AdminUserService adminUserService;
+    @Resource
+    private RestTemplate restTemplate;
+    @Resource
+    private DptaProperties dptaProperties;
 
     @GetMapping({"/login"})
     public String login() {
@@ -44,6 +59,7 @@ public class AdminController {
     @GetMapping({"", "/", "/index", "/index.html"})
     public String index(HttpServletRequest request) {
         request.setAttribute("path", "index");
+        request.setAttribute("front_url", dptaProperties.getAdminFrontUrl());
         return "admin/index";
     }
 
@@ -51,7 +67,8 @@ public class AdminController {
     public String login(@RequestParam("userName") String userName,
                         @RequestParam("password") String password,
                         @RequestParam("verifyCode") String verifyCode,
-                        HttpSession session) {
+                        HttpSession session,
+                        HttpServletResponse response) {
         if (StringUtils.isEmpty(verifyCode)) {
             session.setAttribute("errorMsg", "验证码不能为空");
             return "admin/login";
@@ -61,10 +78,24 @@ public class AdminController {
             return "admin/login";
         }
         String kaptchaCode = session.getAttribute("verifyCode") + "";
+
 //        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
 //            session.setAttribute("errorMsg", "验证码错误");
 //            return "admin/login";
 //        }
+
+        try {
+            LoginParam loginParam = new LoginParam();
+            loginParam.setUsername(userName);
+            loginParam.setPassword(password);
+            com.cqjtu.dpta.common.result.Result<Info> result = postForObject("/admin/login", loginParam, Info.class);
+            response.addCookie(new Cookie("token", result.getData().getToken()));
+            session.setAttribute("token", result.getData().getToken());
+            log.info("订单管理系统登录" + result.getMessage());
+        } catch (Exception e) {
+            log.error("订单管理系统登录登录失败");
+        }
+
         AdminUser adminUser = adminUserService.login(userName, password);
         if (adminUser != null) {
             session.setAttribute("loginUser", adminUser.getNickName());
@@ -76,6 +107,18 @@ public class AdminController {
             session.setAttribute("errorMsg", "登录失败");
             return "admin/login";
         }
+    }
+
+    <T> TypeReference<Result<T>> buildType(Class<T> clazz) {
+        return new TypeReference<com.cqjtu.dpta.common.result.Result<T>>(clazz) {};
+    }
+
+    <T> com.cqjtu.dpta.common.result.Result<T> postForObject(String path, Object request, Class<T> clazz) {
+        String json = restTemplate
+                .postForObject(dptaProperties.getUrl() + path,
+                        request,
+                        String.class);
+        return JSON.parseObject(json, buildType(clazz));
     }
 
     @GetMapping("/profile")

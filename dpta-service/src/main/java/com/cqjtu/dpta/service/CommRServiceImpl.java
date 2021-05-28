@@ -2,20 +2,19 @@ package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cqjtu.dpta.api.CommRService;
 import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.PageResult;
+import com.cqjtu.dpta.common.vo.CommRVo;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.mapper.CommRMapper;
-import com.cqjtu.dpta.api.CommRService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import lombok.val;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
 import java.util.List;
 
 /**
@@ -76,7 +75,7 @@ public class CommRServiceImpl extends ServiceImpl<CommRMapper, CommR> implements
     }
 
     @Override
-    public List<CommR> getAllCommR() {
+    public List<CommRVo> getAllCommR() {
         return baseMapper.getAllCommR();
     }
 
