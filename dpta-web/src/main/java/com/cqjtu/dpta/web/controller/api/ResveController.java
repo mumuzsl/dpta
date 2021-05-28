@@ -8,6 +8,7 @@ import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.entity.ResveD;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,7 +66,7 @@ public class ResveController {
     }
 
     @GetMapping
-    public Result page(@PageableDefault Pageable pageable, Info info) {
+    public Result page(@PageableDefault(sort = {"create_tm"}, direction = Sort.Direction.DESC) Pageable pageable, Info info) {
         Page<ResveD> page = resveDService
                 .lambdaQuery()
                 .eq(ResveD::getDistrId, info.id())

@@ -97,6 +97,7 @@ public abstract class TokenUtils {
     }
 
     public static String getToken(HttpServletRequest request) {
+
         String token = TokenUtils.getHeader(request);
 
         if (token == null) {

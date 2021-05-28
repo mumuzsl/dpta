@@ -2,8 +2,10 @@ package com.cqjtu.dpta.api;
 
 import com.cqjtu.dpta.dao.entity.Resve;
 import com.cqjtu.dpta.api.support.CrudService;
+import com.cqjtu.dpta.dao.entity.ResveD;
 
 import java.math.BigDecimal;
+import java.util.function.Consumer;
 
 /**
  * <p>
@@ -15,6 +17,9 @@ import java.math.BigDecimal;
  */
 public interface ResveService extends CrudService<Resve> {
 
-    Boolean useResve (Long distrId,BigDecimal amount,int type);
-    Boolean useResve (Long distrId,BigDecimal amount,Long dealId);
+    Boolean useResve(Long distrId, BigDecimal amount, int type);
+
+    Boolean useResve(Long distrId, BigDecimal amount, int type, Consumer<ResveD> consumer);
+
+    Boolean useResve(Long distrId, BigDecimal amount, Long dealId);
 }
