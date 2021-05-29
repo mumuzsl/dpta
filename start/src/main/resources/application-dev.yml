@@ -48,5 +48,5 @@ elasticsearch:
 dpta:
   mall-url: http://localhost:8080
   auto-check: true
-#  auto-gen: true
-#  build-es: true
+  auto-gen: true
+  #  build-es: true

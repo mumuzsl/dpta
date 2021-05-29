@@ -32,7 +32,6 @@
                  group by tod.COMM_ID
              ) as t1
                  inner join t_paf_comm tpc on t1.COMM_ID = tpc.COMM_ID
-
         order by amount desc
         limit #{limit}
     </select>

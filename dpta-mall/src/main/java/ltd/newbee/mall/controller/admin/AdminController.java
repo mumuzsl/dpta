@@ -79,10 +79,10 @@ public class AdminController {
         }
         String kaptchaCode = session.getAttribute("verifyCode") + "";
 
-//        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
-//            session.setAttribute("errorMsg", "验证码错误");
-//            return "admin/login";
-//        }
+        if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
+            session.setAttribute("errorMsg", "验证码错误");
+            return "admin/login";
+        }
 
         try {
             LoginParam loginParam = new LoginParam();

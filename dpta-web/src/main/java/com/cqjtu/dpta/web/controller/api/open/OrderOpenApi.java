@@ -8,18 +8,18 @@ import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.web.OrderParam;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
+import com.cqjtu.dpta.dao.repository.OrderRejectRefund;
+import com.cqjtu.dpta.dao.repository.OrderRejectRefundRepository;
 import com.cqjtu.dpta.web.support.OrderEventListener;
 import com.cqjtu.dpta.web.support.OrderRedisSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * author: mumu
@@ -36,6 +36,8 @@ public class OrderOpenApi extends OrderEventListener {
     private OrderIndexService orderIndexService;
     @Resource
     private OrderRedisSupport orderRedisSupport;
+    @Resource
+    private OrderRejectRefundRepository orderRejectRefundRepository;
 
     public OrderOpenApi(RedisMessageListenerContainer listenerContainer) {
         super(listenerContainer);
@@ -51,6 +53,18 @@ public class OrderOpenApi extends OrderEventListener {
             orderIndexService.updateState(id, OrderState.OVRE_TIME_CLOSE);
             log.info("已取消订单: " + id);
         }
+    }
+
+    @GetMapping("refund/result")
+    public Result refundResult(@RequestParam Long orderId) {
+        Optional<OrderRejectRefund> orderRejectRefund = orderRejectRefundRepository.findByOrOrderId(orderId);
+        return Result.ok(orderRejectRefund);
+    }
+
+    @PostMapping("refund/reject")
+    public Result refundResult(@RequestBody OrderRejectRefund orderRejectRefund) {
+        orderService.reject(orderRejectRefund);
+        return Result.ok();
     }
 
     @PostMapping("close")

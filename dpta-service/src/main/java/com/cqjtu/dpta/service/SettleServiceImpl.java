@@ -10,12 +10,10 @@ import com.cqjtu.dpta.common.vo.SettleMVo;
 import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.SettleMMapper;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.text.Bidi;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -38,6 +36,7 @@ public class SettleServiceImpl implements SettleService {
      */
     @Override
     @Scheduled(cron = "0 0 23  * * ? ")
+//    @Scheduled(cron = "0/1 * * * * ? ")
     public Boolean dayVerify() {
         QueryWrapper<Order> queryWrapper = new QueryWrapper();
         queryWrapper.eq("state", Const.PAID);
@@ -45,13 +44,13 @@ public class SettleServiceImpl implements SettleService {
         List<Order> list = orderService.list(queryWrapper);
         for (Order order : list) {
             QueryWrapper<OrderD> queryWrapper1 = new QueryWrapper<>();
-            queryWrapper1.eq("order_id",order.getId());
+            queryWrapper1.eq("order_id", order.getId());
             // 获取订单的订单明细
             List<OrderD> list1 = orderDService.list(queryWrapper1);
             boolean flage = true;
             for (OrderD orderD : list1) {
                 // 根据退款规则判断是否超过预留时间
-                Long com = orderDService.outRefundTime(orderD.getCommId(),order.getDatm());
+                Long com = orderDService.outRefundTime(orderD.getCommId(), order.getDatm());
                 if (com == null) {
                     flage = false;
                     break;
@@ -72,8 +71,7 @@ public class SettleServiceImpl implements SettleService {
                         profit = orderD.getPrice().subtract(pafComm.getSuppPrice())
                                 .multiply(BigDecimal.valueOf(orderD.getCount()))
                                 .multiply(commR.getValue());
-                    }
-                    else if (commR.getType().equals("固定分润")) {
+                    } else if (commR.getType().equals("固定分润")) {
                         profit = commR.getValue().multiply(BigDecimal.valueOf(orderD.getCount()));
                     }
                     orderD.setProfit(profit);
@@ -86,8 +84,7 @@ public class SettleServiceImpl implements SettleService {
                 order.setState(Const.VERIFY);
                 order.setVerifyTm(LocalDateTime.now());
                 orderService.updateById(order);
-            }
-            else {
+            } else {
                 continue;
             }
         }
@@ -116,13 +113,14 @@ public class SettleServiceImpl implements SettleService {
      */
     @Override
     @Scheduled(cron = "0 30 23 28 * ? ")
+//    @Scheduled(cron = "0/5 * * * * ? ")
     public Boolean MonthSettle() {
         // 获取平台所有的分销商
         List<Distr> list = distrService.list();
         for (Distr distr : list) {
             // 获取该分销商所有处于已核销状态的订单
             List<Order> list1 = orderService.getOrderListByDistrId(distr.getDistrId());
-            if (list1.size()==0) continue;
+            if (list1.size() == 0) continue;
             BigDecimal base = new BigDecimal(0);
             BigDecimal amount = new BigDecimal(0);
             BigDecimal profit = new BigDecimal(0);
@@ -149,7 +147,7 @@ public class SettleServiceImpl implements SettleService {
             settleM.setPlaP(amount.subtract(base).subtract(profit));
             settleM.setSettleTm(LocalDateTime.now());
             settleMMapper.insert(settleM);
-            resveService.useResve(distr.getDistrId(),base.add(settleM.getComP()),Const.COMMISSION);
+            resveService.useResve(distr.getDistrId(), base.add(settleM.getComP()), Const.COMMISSION);
             // 分销商提升等级
             distrLevelService.levelUp(distr.getDistrId());
         }
@@ -164,14 +162,14 @@ public class SettleServiceImpl implements SettleService {
     @Override
     public PageResult getAll(PageQueryUtil pageUtil) {
         List<SettleMVo> list = settleMMapper.getAll();
-        PageResult pageResult = new PageResult(list,list.size(),pageUtil.getLimit(),pageUtil.getPage());
+        PageResult pageResult = new PageResult(list, list.size(), pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
 
     @Override
     public PageResult getByMonth(PageQueryUtil pageUtil, String month) {
         List<SettleMVo> list = settleMMapper.getByMonth(month);
-        PageResult pageResult = new PageResult(list,list.size(),pageUtil.getLimit(),pageUtil.getPage());
+        PageResult pageResult = new PageResult(list, list.size(), pageUtil.getLimit(), pageUtil.getPage());
         return pageResult;
     }
 }

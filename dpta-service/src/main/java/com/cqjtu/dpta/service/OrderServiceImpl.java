@@ -23,6 +23,8 @@ import com.cqjtu.dpta.dao.entity.SkuStock;
 import com.cqjtu.dpta.dao.entity.emus.DeletedEnum;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.dao.mapper.OrderMapper;
+import com.cqjtu.dpta.dao.repository.OrderRejectRefund;
+import com.cqjtu.dpta.dao.repository.OrderRejectRefundRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -55,7 +57,19 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     private SkuStockService skuStockService;
     @Resource
     private OrderIndexService orderIndexService;
+    @Resource
+    private OrderRejectRefundRepository orderRejectRefundRepository;
 
+    @Override
+    public void reject(OrderRejectRefund orderRejectRefund) {
+        orderRejectRefund.setUpdateTime(LocalDateTime.now());
+
+        orderRejectRefundRepository
+                .findByOrOrderId(orderRejectRefund.getOrderId())
+                .ifPresent(o -> orderRejectRefund.setId(o.getId()));
+
+        orderRejectRefundRepository.save(orderRejectRefund);
+    }
 
     @Override
     public boolean exists(Long id) {

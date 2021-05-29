@@ -112,4 +112,20 @@ public class GoodsController {
         goodsDetailVO.setGoodsCarouselList(goods.getGoodsCarousel().split(","));
         return Result.ok(goodsDetailVO);
     }
+
+    @GetMapping("/open/goods/{goodsId}")
+    @ResponseBody
+    public Result openDetail(@PathVariable("goodsId") Long goodsId) {
+        if (goodsId < 1) {
+            return ResultUtils.keyError();
+        }
+        NewBeeMallGoods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        if (goods == null) {
+            return Result.fail(ServiceResultEnum.GOODS_NOT_EXIST);
+        }
+        NewBeeMallGoodsDetailVO goodsDetailVO = new NewBeeMallGoodsDetailVO();
+        BeanUtil.copyProperties(goods, goodsDetailVO);
+        goodsDetailVO.setGoodsCarouselList(goods.getGoodsCarousel().split(","));
+        return Result.ok(goodsDetailVO);
+    }
 }

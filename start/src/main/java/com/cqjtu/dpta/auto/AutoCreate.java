@@ -51,7 +51,7 @@ public class AutoCreate {
 
     private void randDatm(Long id) {
         Order order = orderService.getById(id);
-        LocalDateTime localDateTime = LocalDateTime.now().minusDays(RandomUtil.randomInt(7));
+        LocalDateTime localDateTime = LocalDateTime.now().minusDays(RandomUtil.randomInt(365));
         order.setDatm(localDateTime);
         orderService.updateById(order);
         orderIndexService.update(id, orderIndex -> orderIndex.setDatm(localDateTime));

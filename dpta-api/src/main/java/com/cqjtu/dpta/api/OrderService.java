@@ -8,6 +8,7 @@ import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.dto.OrderStatisDto;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
+import com.cqjtu.dpta.dao.repository.OrderRejectRefund;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 
@@ -24,6 +25,8 @@ import java.util.Map;
  */
 
 public interface OrderService extends CrudService<Order> {
+    void reject(OrderRejectRefund orderRejectRefund);
+
     boolean exists(Long id);
 
     List<Order> getMonth(Long id, int year, int month);

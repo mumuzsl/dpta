@@ -2,16 +2,14 @@ package com.cqjtu.dpta.config;
 
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.cqjtu.dpta.auto.AutoCheck;
-import com.cqjtu.dpta.auto.AutoCreate;
-import com.cqjtu.dpta.auto.BuildEs;
-import com.cqjtu.dpta.common.config.DptaProperties;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.CertAlipayRequest;
 import com.alipay.api.DefaultAlipayClient;
+import com.cqjtu.dpta.auto.AutoCheck;
+import com.cqjtu.dpta.auto.AutoCreate;
+import com.cqjtu.dpta.auto.BuildEs;
+import com.cqjtu.dpta.common.config.DptaProperties;
 import com.cqjtu.dpta.common.vo.AliPayBean;
 import com.cqjtu.dpta.web.security.DefaultUserChecker;
 import com.cqjtu.dpta.web.security.UserChecker;
@@ -23,18 +21,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.templatemode.TemplateMode;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
