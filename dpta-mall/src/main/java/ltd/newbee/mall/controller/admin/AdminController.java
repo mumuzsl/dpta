@@ -18,6 +18,7 @@ import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.config.DptaProperties;
 import ltd.newbee.mall.entity.AdminUser;
 import ltd.newbee.mall.service.AdminUserService;
+import ltd.newbee.mall.support.RestSupport;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ import javax.servlet.http.HttpSession;
 @Slf4j
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends RestSupport {
 
     @Resource
     private AdminUserService adminUserService;
@@ -109,17 +110,7 @@ public class AdminController {
         }
     }
 
-    <T> TypeReference<Result<T>> buildType(Class<T> clazz) {
-        return new TypeReference<com.cqjtu.dpta.common.result.Result<T>>(clazz) {};
-    }
 
-    <T> com.cqjtu.dpta.common.result.Result<T> postForObject(String path, Object request, Class<T> clazz) {
-        String json = restTemplate
-                .postForObject(dptaProperties.getUrl() + path,
-                        request,
-                        String.class);
-        return JSON.parseObject(json, buildType(clazz));
-    }
 
     @GetMapping("/profile")
     public String profile(HttpServletRequest request) {

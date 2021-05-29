@@ -165,6 +165,7 @@ function putUpGoods() {
                             swal(r.message, {
                                 icon: "error",
                             });
+                            $("#jqGrid").trigger("reloadGrid");
                         }
                     }
                 });

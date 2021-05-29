@@ -19,6 +19,7 @@ import ltd.newbee.mall.entity.GoodsCategory;
 import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
+import ltd.newbee.mall.support.RestSupport;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.Result;
 import ltd.newbee.mall.util.ResultGenerator;
@@ -36,7 +37,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping("/admin")
-public class NewBeeMallGoodsController {
+public class NewBeeMallGoodsController extends RestSupport {
 
     @Resource
     private NewBeeMallGoodsService newBeeMallGoodsService;
@@ -292,7 +293,10 @@ public class NewBeeMallGoodsController {
             int count = 0;
             List<Long> list = new ArrayList<>();
             for (Long id : ids) {
-                PafComm pafComm =  restTemplate.getForObject("http://localhost:8081/platform/api/paf-comm/getById?pafCommId="+id,PafComm.class);
+//                com.cqjtu.dpta.common.result.Result<PafComm> result =  restTemplate.getForObject("http://localhost:8081/platform/api/paf-comm/getById?pafCommId="+id, com.cqjtu.dpta.common.result.Result.class);
+
+                com.cqjtu.dpta.common.result.Result<PafComm> result  = getForObject("/platform/api/paf-comm/getById?pafCommId=" + id, PafComm.class);
+                PafComm pafComm = result.getData();
                 if (pafComm.getRCommId() == null || pafComm.getRefundId()==null ||pafComm.getRCommId().equals(0L) || pafComm.getRefundId().equals(0L)) {
                     count++;
                     continue;
@@ -300,7 +304,7 @@ public class NewBeeMallGoodsController {
                 list.add(id);
             }
             if(count < ids.size()&&newBeeMallGoodsService.batchUpdateSellStatus(list.toArray(new Long[list.size()]),sellStatus)){
-                restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/changState/"+1,list,Boolean.class);
+                postForObject("/platform/api/paf-comm/changState/"+1,list,Boolean.class);
                 if(count == 0){
                     return ResultGenerator.genSuccessResult();
                 }else {
@@ -312,7 +316,7 @@ public class NewBeeMallGoodsController {
         }
 
         if (newBeeMallGoodsService.batchUpdateSellStatus(ids.toArray(new Long[ids.size()]), sellStatus)) {
-            restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/changState/"+0,ids,Boolean.class);
+            postForObject("/platform/api/paf-comm/changState/"+0,ids,Boolean.class);
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("下架失败");
