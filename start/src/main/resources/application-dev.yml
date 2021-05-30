@@ -27,9 +27,12 @@ server:
 #swagger:
 #  enable: true
 
-#logging:
-#  level:
-#    root: debug
+logging:
+  level:
+    #    root: debug
+    com.cqjtu.dpta.auto: debug
+    com.cqjtu.dpta.service: debug
+
 
 mybatis-plus:
   #  configuration:
@@ -48,5 +51,5 @@ elasticsearch:
 dpta:
   mall-url: http://localhost:8080
   auto-check: true
-  auto-gen: true
+#  auto-gen: true
   #  build-es: true

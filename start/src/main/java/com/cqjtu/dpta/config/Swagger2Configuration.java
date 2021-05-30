@@ -26,7 +26,7 @@ public class Swagger2Configuration {
                 .groupName("api")
                 .apiInfo(apiInfo())
                 .select()
-                .paths(PathSelectors.regex("/distr/.*"))
+                .paths(PathSelectors.regex("/.*"))
 //                .paths(Predicates.and(PathSelectors.regex("/api/.*")))
                 .build();
     }

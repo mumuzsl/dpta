@@ -45,25 +45,28 @@ public class AutoCreate {
 
     private int count = 0;
 
-    private void print(Object id) {
-        log.info("自动生成订单: " + id);
+    private void print(String message) {
+        if (log.isDebugEnabled()) {
+            log.debug(message);
+        }
     }
 
     private void randDatm(Long id) {
         Order order = orderService.getById(id);
-        LocalDateTime localDateTime = LocalDateTime.now().minusDays(RandomUtil.randomInt(365));
+        LocalDateTime localDateTime = LocalDateTime.now().minusDays(RandomUtil.randomInt(356));
         order.setDatm(localDateTime);
         orderService.updateById(order);
         orderIndexService.update(id, orderIndex -> orderIndex.setDatm(localDateTime));
     }
 
     @Scheduled(cron = "0/30 * * * * ?")
+//    @Scheduled(cron = "0/1 * * * * ?")
     private void testController() {
         try {
             if (count <= 0) {
                 Result<Long> add = orderOpenApi.add(buildOrderParam(3));
                 randDatm(add.getData());
-                print(add.getData());
+                print("自动生成订单: " + add.getData());
                 if (error) {
                     task();
                     error = false;
@@ -79,6 +82,7 @@ public class AutoCreate {
     }
 
     @Scheduled(cron = "0 0/1 * * * ?")
+//    @Scheduled(cron = "0/5 * * * * ?")
     private void payService() {
         Set<String> set = redisTemplate.keys("o_*");
         com.cqjtu.dpta.common.web.OrderParam orderParam = new com.cqjtu.dpta.common.web.OrderParam();
@@ -88,29 +92,29 @@ public class AutoCreate {
             Map<String, Object> map = new HashMap<>();
             map.put("order_id", ss);
             orderOpenApi.pay(map);
-            log.info("自动支付订单: " + ss);
+            print("自动支付订单: " + ss);
             if (RandomUtil.randomBoolean()) {
                 orderParam.setId(Long.parseLong(ss));
                 orderOpenApi.sendComm(orderParam);
-                log.info("自动发货: " + ss);
+                print("自动发货: " + ss);
                 switch (RandomUtil.randomInt(3)) {
                     case 0:
                         orderOpenApi.finish(map);
-                        log.info("自动完成订单: " + ss);
+                        print("自动完成订单: " + ss);
                         break;
                     case 1:
                         orderOpenApi.refund(map);
-                        log.info("自动申请退款: " + ss);
+                        print("自动申请退款: " + ss);
                         break;
                     case 2:
                         orderOpenApi.close(map);
-                        log.info("自动申请退款: " + ss);
+                        print("自动申请退款: " + ss);
                         break;
                 }
             }
             return;
         }
-        log.info("没有订单可支付");
+        print("没有订单可支付");
     }
 
 //    @Scheduled(cron = "0 0/1 * * * ?")
@@ -133,13 +137,12 @@ public class AutoCreate {
         }
     }
 
-
     private void task() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 help();
-                log.info("已将订单重新上传");
+                print("已将订单重新上传");
             }
         }).start();
     }

@@ -89,10 +89,10 @@
                 <div class="layui-col-xs12 layui-col-md3">
 
                     <div class="layui-card top-panel">
-                        <div class="layui-card-header">总顾客人数</div>
+                        <div class="layui-card-header">总分销商数</div>
                         <div class="layui-card-body">
                             <div class="layui-row layui-col-space5">
-                                <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${shopSum}">
+                                <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${distrSum}">
                                 </div>
                                 <div class="layui-col-xs3 layui-col-md3 top-panel-tips">
                                     比昨天 <a style="color: #1aa094">▲0.12</a><br>
@@ -121,7 +121,7 @@
                 <div class="layui-col-xs12 layui-col-md3">
 
                     <div class="layui-card top-panel">
-                        <div class="layui-card-header">总订单数</div>
+                        <div class="layui-card-header">商城总订单数</div>
                         <div class="layui-card-body">
                             <div class="layui-row layui-col-space5">
                                 <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${orderSum}">
@@ -138,7 +138,7 @@
                 <div class="layui-col-xs12 layui-col-md3">
 
                     <div class="layui-card top-panel">
-                        <div class="layui-card-header">总退款订单数</div>
+                        <div class="layui-card-header">商城总退款订单数</div>
                         <div class="layui-card-body">
                             <div class="layui-row layui-col-space5">
                                 <div class="layui-col-xs9 layui-col-md9 top-panel-number" th:text="${rOrderSum}">
@@ -185,9 +185,8 @@
                                 <thead>
                                 <tr>
                                     <th>产品名称</th>
-                                    <th>规格</th>
-                                    <th>价格</th>
-                                    <th>销售量</th>
+                                    <th>销售额</th>
+                                    <th>数量</th>
                                 </tr>
                                 </thead>
                                 <tbody id="tbdoy_result1"></tbody>
@@ -475,8 +474,8 @@
                                     name: '访问来源',
                                     type: 'pie',
                                     radius: '55%',
-                                    center: ['50%', '60%'],
-                                    roseType: 'radius',
+                                    // center: ['50%', '60%'],
+                                    // roseType: 'radius',
                                     data: values,
                                     emphasis: {
                                         itemStyle: {
@@ -593,7 +592,7 @@
             url: "/platform/api/paf-comm/show/store",    //请求发送到/admin/show处
             data: {},
             dataType: "json",        //返回数据形式为json
-            success : function(resp) {
+            success: function (resp) {
                 var data = resp.data
                 echartsMap.hideLoading();
                 echartsMap.setOption({
@@ -666,20 +665,30 @@
         var str_1 = "";
         var tbody_1 = window.document.getElementById("tbdoy_result1");
         $.ajax({
-            type: "post",
+            type: "get",
             async: true,            //异步请求（同步请求将会锁住浏览器，用户其他操作必须等待请求完成才可以执行）
-            url: "/platform/api/paf-comm/topComm",    //请求发送到/admin/show处
+            // url: "/platform/api/paf-comm/topComm",    //请求发送到/admin/show处
+            url: "/platform/api/statis/top",    //请求发送到/admin/show处
             data: {},
             dataType: "json",        //返回数据形式为json
-            success : function(resp) {
+            success: function (resp) {
                 var data = resp.data
+                // if (data) {
+                //     for (var i = 0; i < data[0].length; i++) {
+                //         str_1 += "<tr>" +
+                //             "<td>" + data[0][i] + "</td>" +
+                //             "<td>" + data[1][i] + "</td>" +
+                //             "<td>" + data[2][i] + "</td>" +
+                //             "<td>" + data[3][i] + "</td>" +
+                //             "</tr>";
+                //     }
+                //     tbody_1.innerHTML = str_1;
                 if (data) {
-                    for (var i = 0; i < data[0].length; i++) {
+                    for (var i = 0; i < data.length; i++) {
                         str_1 += "<tr>" +
-                            "<td>" + data[0][i] + "</td>" +
-                            "<td>" + data[1][i] + "</td>" +
-                            "<td>" + data[2][i] + "</td>" +
-                            "<td>" + data[3][i] + "</td>" +
+                            "<td>" + data[i].goodsVo.goodsName + "</td>" +
+                            "<td>" + data[i].amount + "</td>" +
+                            "<td>" + data[i].count + "</td>" +
                             "</tr>";
                     }
                     tbody_1.innerHTML = str_1;
@@ -701,7 +710,7 @@
             url: "/platform/api/paf-comm/topDistr",    //请求发送到/admin/show处
             data: {},
             dataType: "json",        //返回数据形式为json
-            success : function(resp) {
+            success: function (resp) {
                 var data = resp.data
                 if (data) {
                     for (var i = 0; i < data[0].length; i++) {
@@ -727,7 +736,7 @@
             url: "/platform/api/paf-comm/yuCe",    //请求发送到/admin/show处
             data: {},
             dataType: "json",        //返回数据形式为json
-            success : function(resp) {
+            success: function (resp) {
                 var data = resp.data
                 if (data) {
                     for (var i = 0; i < data[0].length; i++) {

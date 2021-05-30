@@ -13,9 +13,9 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-    user_id, nick_name, login_name, password_md5, introduce_sign, address, is_deleted, 
+        user_id, nick_name, login_name, password_md5, introduce_sign, address, is_deleted,
     locked_flag, create_time
-  </sql>
+    </sql>
 
     <select id="findMallUserList" parameterType="Map" resultMap="BaseResultMap">
         select
@@ -58,26 +58,32 @@
         where login_name = #{loginName} and password_md5 = #{password} and is_deleted = 0
     </select>
     <select id="oneDayPeopleSum" resultType="java.lang.Integer">
-      select  count(user_id)
-        from newbee_mall_db.tb_newbee_mall_user where create_time like concat(#{d},'%')
+        select count(user_id)
+        from newbee_mall_db.tb_newbee_mall_user
+        where create_time like concat(#{d}, '%')
     </select>
     <select id="shopSum" resultType="java.lang.Integer">
-        select count(*) from newbee_mall_db.tb_newbee_mall_user
+        select count(*)
+        from dpta.t_shop
+    </select>
+    <select id="distrSum" resultType="java.lang.Integer">
+        select count(*)
+        from tb_newbee_mall_user
     </select>
     <update id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    update newbee_mall_db.tb_newbee_mall_user set is_deleted = 1
-    where user_id = #{userId,jdbcType=BIGINT} and is_deleted = 0
-  </update>
+        update newbee_mall_db.tb_newbee_mall_user
+        set is_deleted = 1
+        where user_id = #{userId,jdbcType=BIGINT}
+          and is_deleted = 0
+    </update>
     <insert id="insert" parameterType="ltd.newbee.mall.entity.MallUser">
-    insert into newbee_mall_db.tb_newbee_mall_user (user_id, nick_name, login_name,
-      password_md5, introduce_sign, address, 
-      is_deleted, locked_flag, create_time
-      )
-    values (#{userId,jdbcType=BIGINT}, #{nickName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR}, 
-      #{passwordMd5,jdbcType=VARCHAR}, #{introduceSign,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, 
-      #{isDeleted,jdbcType=TINYINT}, #{lockedFlag,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
-      )
-  </insert>
+        insert into newbee_mall_db.tb_newbee_mall_user (user_id, nick_name, login_name,
+                                                        password_md5, introduce_sign, address,
+                                                        is_deleted, locked_flag, create_time)
+        values (#{userId,jdbcType=BIGINT}, #{nickName,jdbcType=VARCHAR}, #{loginName,jdbcType=VARCHAR},
+                #{passwordMd5,jdbcType=VARCHAR}, #{introduceSign,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR},
+                #{isDeleted,jdbcType=TINYINT}, #{lockedFlag,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP})
+    </insert>
     <insert id="insertSelective" parameterType="ltd.newbee.mall.entity.MallUser">
         insert into newbee_mall_db.tb_newbee_mall_user
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -170,17 +176,17 @@
         where user_id = #{userId,jdbcType=BIGINT}
     </update>
     <update id="updateByPrimaryKey" parameterType="ltd.newbee.mall.entity.MallUser">
-    update newbee_mall_db.tb_newbee_mall_user
-    set nick_name = #{nickName,jdbcType=VARCHAR},
-      login_name = #{loginName,jdbcType=VARCHAR},
-      password_md5 = #{passwordMd5,jdbcType=VARCHAR},
-      introduce_sign = #{introduceSign,jdbcType=VARCHAR},
-      address = #{address,jdbcType=VARCHAR},
-      is_deleted = #{isDeleted,jdbcType=TINYINT},
-      locked_flag = #{lockedFlag,jdbcType=TINYINT},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
-    where user_id = #{userId,jdbcType=BIGINT}
-  </update>
+        update newbee_mall_db.tb_newbee_mall_user
+        set nick_name      = #{nickName,jdbcType=VARCHAR},
+            login_name     = #{loginName,jdbcType=VARCHAR},
+            password_md5   = #{passwordMd5,jdbcType=VARCHAR},
+            introduce_sign = #{introduceSign,jdbcType=VARCHAR},
+            address        = #{address,jdbcType=VARCHAR},
+            is_deleted     = #{isDeleted,jdbcType=TINYINT},
+            locked_flag    = #{lockedFlag,jdbcType=TINYINT},
+            create_time    = #{createTime,jdbcType=TIMESTAMP}
+        where user_id = #{userId,jdbcType=BIGINT}
+    </update>
     <update id="lockUserBatch">
         update newbee_mall_db.tb_newbee_mall_user
         set locked_flag=#{lockStatus} where user_id in

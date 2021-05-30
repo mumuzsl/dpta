@@ -19,7 +19,6 @@ import ltd.newbee.mall.util.MD5Util;
 import ltd.newbee.mall.util.NewBeeMallUtils;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
@@ -56,7 +55,6 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
         }
         return ServiceResultEnum.DB_ERROR.getResult();
     }
-
 
 
     @Override
@@ -121,5 +119,10 @@ public class NewBeeMallUserServiceImpl implements NewBeeMallUserService {
     @Override
     public Integer shopSum() {
         return mallUserMapper.shopSum();
+    }
+
+    @Override
+    public Integer distrSum() {
+        return mallUserMapper.distrSum();
     }
 }

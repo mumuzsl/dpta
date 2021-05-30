@@ -14,7 +14,7 @@ import org.springframework.stereotype.Repository;
 public interface OrderIndexRepository extends ElasticsearchRepository<OrderIndex, Long> {
 
     @Query("{\"bool\":{\"must\":[{\"match\":{\"distrId\":\"?0\"}},{\"match\":{\"deleted\":\"?2\"}}," +
-            "{\"bool\":{\"should\":[{\"match\":{\"_id\":\"?1\"}},{\"match_phrase\":{\"receiver\":\"?1\"}},{\"nested\":{\"path\":\"details\",\"query\":{\"bool\":{\"should\":[{\"match_phrase\":{\"details.name\":\"?0\"}}]}}}},{\"match\":{\"phone\":\"?1\"}},{\"match_phrase\":{\"shopNm\":\"?1\"}}]}}]}}")
+            "{\"bool\":{\"should\":[{\"match\":{\"_id\":\"?1\"}},{\"match_phrase\":{\"receiver\":\"?1\"}},{\"nested\":{\"path\":\"details\",\"query\":{\"bool\":{\"should\":[{\"match_phrase\":{\"details.name\":\"?1\"}}]}}}},{\"match\":{\"phone\":\"?1\"}},{\"match_phrase\":{\"shopNm\":\"?1\"}}]}}]}}")
     Page<OrderIndex> searchByDistr(Long distrId, String keyword, Integer deleted, Pageable pageable);
 
     @Query("{\"bool\":{\"should\":[{\"match\":{\"_id\":\"?0\"}},{\"match\":{\"receiver\":\"?0\"}},{\"nested\":{\"path\":\"details\",\"query\":{\"bool\":{\"should\":[{\"match_phrase\":{\"details.name\":\"?0\"}}]}}}},{\"match\":{\"phone\":\"?0\"}},{\"match_phrase\":{\"shopNm\":\"?0\"}},{\"match_phrase\":{\"distrNm\":\"?0\"}}]}})")

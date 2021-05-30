@@ -5,24 +5,21 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.CommRService;
 import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.support.SettleService;
-import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.dao.entity.Shop;
-import com.cqjtu.dpta.dao.entity.ShopTop;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import io.swagger.models.auth.In;
+import com.cqjtu.dpta.dao.entity.PafComm;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -76,7 +73,7 @@ public class PafCommController {
 
     @PostMapping("modif")
     public Boolean modif(@RequestBody PafComm pafComm) {
-        boolean result = pafCommService.updateById(pafComm);
+        boolean result = pafCommService.saveOrUpdate(pafComm);
         return result;
     }
 

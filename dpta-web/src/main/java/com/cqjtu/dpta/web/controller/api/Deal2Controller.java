@@ -6,25 +6,23 @@ import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.dao.entity.DealD;
-import com.cqjtu.dpta.dao.entity.PayM;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * <p>
- * 交易明细表 前端控制器
- * </p>
- *
- * @author mumu
- * @since 2021-04-15
+ * author: mumu
+ * date: 2021/5/29
  */
 @RestController
-@RequestMapping("/api/deal")
-public class DealController {
+@RequestMapping("/distr/api/deal")
+public class Deal2Controller {
 
     @Resource
     private DealService dealService;
@@ -45,16 +43,4 @@ public class DealController {
         List<DealD> list = dealService.getDealDByDealId(id);
         return Result.ok(list);
     }
-
-    @PostMapping("add")
-    public Result add(@RequestBody Deal deal) {
-        boolean result = dealService.save(deal);
-        return Result.judge(result);
-    }
-
-    @GetMapping("getPayM")
-    public PayM getPayM(@RequestParam Long dealId) {
-        return dealService.payDeal(dealId);
-    }
-
 }

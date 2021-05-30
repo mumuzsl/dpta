@@ -23,7 +23,6 @@ import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.aggregations.metrics.ParsedSum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.SearchHits;
@@ -128,6 +127,12 @@ public class OrderController extends StatisSupport {
         return recent(day, query);
     }
 
+    @GetMapping("statis/date")
+    public Result date(Info info) {
+        return dateQuery(DateQuery.query.withQuery(queryBuilder).build());
+    }
+
+
     @GetMapping("statis/{year}/{month}")
     public Result statisByYearAndMonth(@RequestParam(value = "state", required = false) Integer state,
                                        @RequestParam(value = "start", required = false) String start,
@@ -175,7 +180,7 @@ public class OrderController extends StatisSupport {
      * @param keyword  关键字
      * @return
      */
-    @Cacheable(cacheNames = "order")
+//    @Cacheable(cacheNames = "order")
     @GetMapping
     public Result page(@PageableDefault(sort = {"datm"}, direction = Sort.Direction.DESC) Pageable pageable,
                        @RequestParam(value = "keyword", required = false) String keyword,

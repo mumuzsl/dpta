@@ -39,7 +39,7 @@ public class OrderData {
     @ExcelIgnore
     private BigDecimal baseP;
 
-    @ExcelProperty("总金额")
+    @ExcelProperty(value = "总金额", converter = MoneyConverter.class)
     private BigDecimal amount;
 
     @ExcelIgnore

@@ -30,7 +30,6 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -143,7 +142,7 @@ public class OrderController {
     @PostMapping("/paySuccess")
     @ResponseBody
     public Result paySuccess(@RequestBody PayM payM) {
-        Boolean b = restTemplate.postForObject(Constants.JU_URL+"/public/api/distrPay",payM,Boolean.class);
+        Boolean b = restTemplate.postForObject(Constants.JU_URL+"/open/api/distrPay",payM,Boolean.class);
         if (b) {
             String payResult = newBeeMallOrderService.paySuccess(payM.getDealId(), 2);
             if (ServiceResultEnum.SUCCESS.getResult().equals(payResult)) {

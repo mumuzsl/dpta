@@ -8,9 +8,6 @@
  */
 package ltd.newbee.mall.controller.admin;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.common.web.LoginParam;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +57,6 @@ public class AdminController extends RestSupport {
     @GetMapping({"", "/", "/index", "/index.html"})
     public String index(HttpServletRequest request) {
         request.setAttribute("path", "index");
-        request.setAttribute("front_url", dptaProperties.getAdminFrontUrl());
         return "admin/index";
     }
 

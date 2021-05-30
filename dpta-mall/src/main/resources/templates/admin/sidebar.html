@@ -4,7 +4,7 @@
 <aside th:fragment="sidebar-fragment(path)" class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a th:href="@{/admin/index}" class="brand-link">
-        <img th:src="@{/admin/dist/img/lexiang.jpg}" alt="ssm-cluster Logo"
+        <img th:src="@{/admin/dist/img/dpta.png}" alt="ssm-cluster Logo"
              class="brand-image img-circle elevation-3"
              style="opacity: .8">
         <span class="brand-text font-weight-light">DPTA</span>
@@ -118,7 +118,8 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="${front_url}" th:class="${path}=='all_orders'?'nav-link active':'nav-link'" target="_blank/">
+                    <a th:href="@{/admin/platform/order}"
+                       th:class="${path}=='splatform/order'?'nav-link active':'nav-link'" target="_blank/">
                         <i class="fa fa-money nav-icon" aria-hidden="true"></i>
                         <p>
                             平台订单管理
@@ -128,7 +129,7 @@
 
                 <li class="nav-header">授信管理</li>
                 <li class="nav-item">
-                    <a href="/admin/credit"  th:class="${path}=='credit'?'nav-link active':'nav-link'">
+                    <a href="/admin/credit" th:class="${path}=='credit'?'nav-link active':'nav-link'">
                         <i class="fa fa-money nav-icon" aria-hidden="true"></i>
                         <p>
                             授信列表
@@ -186,21 +187,21 @@
                         </p>
                     </a>
                 </li>
-<!--                <li class="nav-header">商家</li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a th:href=""-->
-<!--                        th:class="">-->
-<!--                        <i class="fa fa-archive nav-icon"></i>-->
-<!--                        <p>商家管理</p>-->
-<!--                    </a>-->
-<!--                </li>-->
-<!--                <li class="nav-item">-->
-<!--                    <a th:href=""-->
-<!--                        th:class="">-->
-<!--                        <i class="fa fa-money nav-icon"></i>-->
-<!--                        <p>分销配置</p>-->
-<!--                    </a>-->
-<!--                </li>-->
+                <!--                <li class="nav-header">商家</li>-->
+                <!--                <li class="nav-item">-->
+                <!--                    <a th:href=""-->
+                <!--                        th:class="">-->
+                <!--                        <i class="fa fa-archive nav-icon"></i>-->
+                <!--                        <p>商家管理</p>-->
+                <!--                    </a>-->
+                <!--                </li>-->
+                <!--                <li class="nav-item">-->
+                <!--                    <a th:href=""-->
+                <!--                        th:class="">-->
+                <!--                        <i class="fa fa-money nav-icon"></i>-->
+                <!--                        <p>分销配置</p>-->
+                <!--                    </a>-->
+                <!--                </li>-->
                 <li class="nav-header">系统管理</li>
                 <li class="nav-item">
                     <a th:href="@{/admin/profile}"

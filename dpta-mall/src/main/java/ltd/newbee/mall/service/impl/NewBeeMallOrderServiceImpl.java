@@ -26,6 +26,7 @@ import ltd.newbee.mall.entity.NewBeeMallOrder;
 import ltd.newbee.mall.entity.NewBeeMallOrderItem;
 import ltd.newbee.mall.entity.StockNumDTO;
 import ltd.newbee.mall.service.NewBeeMallOrderService;
+import ltd.newbee.mall.support.RestSupport;
 import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.NumberUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
@@ -38,7 +39,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -47,7 +47,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 
 @Service
-public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
+public class NewBeeMallOrderServiceImpl extends RestSupport implements NewBeeMallOrderService {
 
     @Resource
     private NewBeeMallOrderMapper newBeeMallOrderMapper;
@@ -195,6 +195,7 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
 
     @Resource
     RestTemplate restTemplate;
+
     @Override
     @Transactional
     public String saveOrder(NewBeeMallUserVO user, List<NewBeeMallShoppingCartItemVO> myShoppingCartItems) {
@@ -240,7 +241,7 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
 
                 Deal deal = new Deal();
                 deal.setDealId(Long.valueOf(orderNo));
-                DistrUser distrUser = restTemplate.getForObject("http://localhost:8081/distr/getByNm?name="+user.getLoginName(),DistrUser.class);
+                DistrUser distrUser = restTemplate.getForObject("http://localhost:8081/distr/getByNm?name=" + user.getLoginName(), DistrUser.class);
                 deal.setDistrId(distrUser.getDistrId());
 
                 //总价
@@ -258,7 +259,7 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
                 newBeeMallOrder.setExtraInfo(extraInfo);
                 //生成订单项并保存订单项纪录
                 if (newBeeMallOrderMapper.insertSelective(newBeeMallOrder) > 0) {
-                    URI uri = restTemplate.postForLocation("http://localhost:8081/api/deal/add",deal,Boolean.class);
+                    postForObject("/api/deal/add", deal, Boolean.class);
                     //生成所有的订单项快照，并保存至数据库
                     List<NewBeeMallOrderItem> newBeeMallOrderItems = new ArrayList<>();
                     for (NewBeeMallShoppingCartItemVO newBeeMallShoppingCartItemVO : myShoppingCartItems) {
@@ -274,7 +275,7 @@ public class NewBeeMallOrderServiceImpl implements NewBeeMallOrderService {
                         dealD.setCommId(newBeeMallShoppingCartItemVO.getGoodsId());
                         dealD.setCount(newBeeMallShoppingCartItemVO.getGoodsCount());
                         dealD.setPrice(new BigDecimal(newBeeMallShoppingCartItemVO.getSellingPrice()));
-                        URI uri1 = restTemplate.postForLocation("http://localhost:8081/api/dealD/add",dealD,Boolean.class);
+                        postForObject("/api/dealD/add", dealD, Boolean.class);
                     }
                     //保存至数据库
                     if (newBeeMallOrderItemMapper.insertBatch(newBeeMallOrderItems) > 0) {

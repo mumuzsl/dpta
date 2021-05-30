@@ -24,11 +24,7 @@ import ltd.newbee.mall.util.Result;
 import ltd.newbee.mall.util.ResultGenerator;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -51,7 +47,6 @@ public class PersonalController {
     public String personalPage(HttpServletRequest request,
                                HttpSession httpSession) {
         request.setAttribute("path", "personal");
-        request.setAttribute("front_url", dptaProperties.getDistrFrontUrl());
         return "mall/personal";
     }
 
@@ -185,5 +180,10 @@ public class PersonalController {
             Result result = ResultGenerator.genSuccessResult();
             return result;
         }
+    }
+
+    @RequestMapping("/distr/order")
+    public String platform() {
+        return "redirect:" + dptaProperties.getDistrFrontUrl();
     }
 }

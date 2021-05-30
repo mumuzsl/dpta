@@ -9,6 +9,7 @@
 package ltd.newbee.mall.controller.admin;
 
 import ltd.newbee.mall.common.ServiceResultEnum;
+import ltd.newbee.mall.config.DptaProperties;
 import ltd.newbee.mall.controller.vo.NewBeeMallOrderItemVO;
 import ltd.newbee.mall.entity.NewBeeMallOrder;
 import ltd.newbee.mall.service.NewBeeMallOrderService;
@@ -32,6 +33,8 @@ public class NewBeeMallOrderController {
 
     @Resource
     private NewBeeMallOrderService newBeeMallOrderService;
+    @Resource
+    private DptaProperties dptaProperties;
 
     @GetMapping("/orders")
     public String ordersPage(HttpServletRequest request) {
@@ -137,5 +140,9 @@ public class NewBeeMallOrderController {
         }
     }
 
+    @RequestMapping("/platform/order")
+    public String platform() {
+        return "redirect:" + dptaProperties.getAdminFrontUrl();
+    }
 
 }

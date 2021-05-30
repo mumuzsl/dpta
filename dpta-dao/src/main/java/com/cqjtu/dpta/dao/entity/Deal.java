@@ -1,9 +1,9 @@
 package com.cqjtu.dpta.dao.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -54,5 +54,10 @@ public class Deal implements Serializable {
      */
     private LocalDateTime createTime;
 
+
+    public String getStateStr() {
+        OrderState state = OrderState.valueOf(getState());
+        return state == null ? "" : state.label();
+    }
 
 }

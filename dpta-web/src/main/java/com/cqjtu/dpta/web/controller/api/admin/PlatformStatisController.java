@@ -5,7 +5,6 @@ import com.cqjtu.dpta.api.StatisService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.vo.CommStatisVo;
-import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.repository.VisitsRepository;
 import com.cqjtu.dpta.web.support.StatisSupport;
 import org.elasticsearch.action.get.MultiGetRequest;
@@ -80,8 +79,7 @@ public class PlatformStatisController extends StatisSupport {
     }
 
     @GetMapping("recent/person")
-    public Result person(@RequestParam(value = "day", required = false, defaultValue = "7") int day,
-                         Info info) {
+    public Result person(@RequestParam(value = "day", required = false, defaultValue = "7") int day) {
         List<Object> data = new ArrayList<>(day + 1);
         String[] cols = {"date", "访问人次", "访问人数"};
         data.add(cols);

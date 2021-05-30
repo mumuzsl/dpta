@@ -39,6 +39,7 @@ public interface MallUserMapper {
 
     /**
      * 返回某一天新用户的人数
+     *
      * @param d
      * @return
      */
@@ -48,4 +49,6 @@ public interface MallUserMapper {
      * 返回总店铺数
      */
     Integer shopSum();
+
+    Integer distrSum();
 }

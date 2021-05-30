@@ -154,12 +154,12 @@
 }
 
 #nav .banner_x .logo {
-    width: 240px;
+    width: 60px;
     text-indent: -10000px;
-    background: url(../image/lexianglvyou.png) no-repeat;
+    background: url(../image/dpta.png) no-repeat;
     background-size: 100%;
     background-position: center;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 #nav .banner_x .icon-search {

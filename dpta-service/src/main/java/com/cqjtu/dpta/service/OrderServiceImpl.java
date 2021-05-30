@@ -25,6 +25,7 @@ import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.dao.mapper.OrderMapper;
 import com.cqjtu.dpta.dao.repository.OrderRejectRefund;
 import com.cqjtu.dpta.dao.repository.OrderRejectRefundRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
@@ -47,6 +48,7 @@ import java.util.function.BiConsumer;
  * @since 2021-04-06
  */
 @Service
+@Slf4j
 public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements OrderService {
 
     @Resource
@@ -160,9 +162,14 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     }
 
     private Order changeState(Long id, OrderState orderState) {
-        Order order = baseMapper.selectById(id);
-        order.setState(orderState.state());
+        if (log.isDebugEnabled()) {
+            log.debug(id + "-" + orderState);
+        }
 
+        Order order = baseMapper.selectById(id);
+        DptaUtils.notNull(order, "订单不存在: " + id);
+
+        order.setState(orderState.state());
         return order;
     }
 
@@ -206,6 +213,16 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
 
     @Override
     public int handClose(Long id) {
+        return closeOrder(id, OrderState.HAND_CLOSE);
+    }
+
+    @Override
+    public int overTimeClose(Long id) {
+        return closeOrder(id, OrderState.OVRE_TIME_CLOSE);
+    }
+
+    @Override
+    public int closeOrder(Long id, OrderState state) {
         Order order = baseMapper.selectById(id);
         DptaUtils.notNull(order, "订单不存在");
 
@@ -220,27 +237,13 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
                 break;
             case STOCK_FINISH:
             default:
-                throw new BadRequestException("不符合订单取消条件" + id);
+                if (log.isDebugEnabled()) {
+                    log.debug("不符合订单取消条件-" + id + "-" + order.getState());
+                }
+                return 0;
         }
 
-        order.setState(OrderState.HAND_CLOSE.state());
-        return baseMapper.updateById(order);
-    }
-
-    @Override
-    public int overTimeClose(Long id) {
-        return closeOrder(id, OrderState.OVRE_TIME_CLOSE);
-    }
-
-    @Override
-    public int closeOrder(Long id, OrderState orderState) {
-        Order order = baseMapper.selectById(id);
-        if (order.getState() > 0) {
-            return 0;
-        }
-        order.setState(orderState.state());
-        freeStock(id);
-
+        order.setState(state.state());
         return baseMapper.updateById(order);
     }
 

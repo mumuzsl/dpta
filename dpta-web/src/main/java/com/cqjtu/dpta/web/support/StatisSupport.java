@@ -30,7 +30,9 @@ import org.springframework.data.elasticsearch.core.query.Query;
 import javax.annotation.Resource;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * author: mumu
@@ -172,4 +174,43 @@ public class StatisSupport {
                     .filter(QueryBuilders
                             .rangeQuery("state")
                             .gte("1"));
+
+    public static class DateQuery {
+        public static NativeSearchQueryBuilder query = new NativeSearchQueryBuilder()
+                .addAggregation(
+                        AggregationBuilders
+                                .dateHistogram("date")
+                                .field("datm")
+                                .calendarInterval(DateHistogramInterval.MONTH)
+                                .format("yyyy-MM")
+                                .minDocCount(1)
+                                .keyed(true)
+                );
+    }
+
+    public Result dateQuery(NativeSearchQuery query) {
+        SearchHits<MultiGetRequest.Item> hits = search(query);
+
+        ParsedDateHistogram date = hits.getAggregations().get("date");
+
+        List<? extends Histogram.Bucket> buckets = date.getBuckets();
+
+        Map<String, List<Object>> map = new HashMap<>();
+
+        for (Histogram.Bucket bucket : buckets) {
+            String s = bucket.getKeyAsString();
+            String year = s.substring(0, 4);
+            String month = s.substring(5);
+
+            if (map.get(year) == null) {
+                ArrayList<Object> list = new ArrayList<>();
+                list.add(month);
+                map.put(year, list);
+            } else {
+                map.get(year).add(month);
+            }
+        }
+
+        return Result.ok(map);
+    }
 }

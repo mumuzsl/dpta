@@ -31,6 +31,7 @@ public class PayController {
     // 支付宝同步通知路径，也就是当付款完毕后跳转到本项目的页面，可以不是公网地址
     private final String RETURN_URL = "http://localhost:8081/distr/api/alipay/notify?";
 
+
     @Resource
     AlipayClient alipayClient;
 
