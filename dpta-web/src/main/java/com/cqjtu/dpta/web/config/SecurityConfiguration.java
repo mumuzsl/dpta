@@ -46,13 +46,15 @@ public class SecurityConfiguration {
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/oauth2/**")
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new MyAuthenticationEntryPoint()))
                 .with(OAuth2AuthorizationServerConfigurer.authorizationServer(),
                         authorizationServer ->
                                 authorizationServer.tokenEndpoint(tokenEndpoint
                                         -> tokenEndpoint.accessTokenRequestConverter(new PasswordAuthenticationConverter())
-                                        .accessTokenResponseHandler(new MyAuthenticationSuccessHandler())
+                                        // .accessTokenResponseHandler(new MyAuthenticationSuccessHandler())
                                         .errorResponseHandler(new MyAuthenticationFailureHandler())
-                                ))
+                                )
+                )
                 .csrf(AbstractHttpConfigurer::disable);
 
 
@@ -70,7 +72,8 @@ public class SecurityConfiguration {
     @Order(2)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/distr/**")
+                // .securityMatcher("/distr/**")
+                .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new MyAuthenticationEntryPoint()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/public").permitAll()
                         .anyRequest().authenticated()

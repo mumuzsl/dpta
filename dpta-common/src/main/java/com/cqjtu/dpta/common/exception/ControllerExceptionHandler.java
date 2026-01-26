@@ -4,6 +4,7 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.cqjtu.dpta.common.redis.RedisDisabledException;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +20,12 @@ public class ControllerExceptionHandler {
     @ResponseBody
     public Result handleRedisDisabledException(RedisDisabledException e) {
         return Result.fail(e.getMessage());
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseBody
+    public Result handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        return Result.fail("不支持当前请求方法");
     }
 
     @ExceptionHandler(Exception.class)
