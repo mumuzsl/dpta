@@ -1,10 +1,10 @@
 package com.cqjtu.dpta.web.support;
 
 import cn.hutool.core.util.StrUtil;
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.core.RedisTemplate;
 
-import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;

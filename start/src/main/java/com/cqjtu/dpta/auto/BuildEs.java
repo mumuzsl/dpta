@@ -6,12 +6,11 @@ import com.cqjtu.dpta.api.OrderIndexService;
 import com.cqjtu.dpta.api.OrderService;
 import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.repository.OrderIndexRepository;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-
-import javax.annotation.Resource;
 
 /**
  * author: mumu

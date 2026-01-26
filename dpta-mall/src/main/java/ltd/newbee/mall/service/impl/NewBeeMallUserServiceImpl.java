@@ -8,22 +8,18 @@
  */
 package ltd.newbee.mall.service.impl;
 
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpSession;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.dao.MallUserMapper;
 import ltd.newbee.mall.entity.MallUser;
 import ltd.newbee.mall.service.NewBeeMallUserService;
-import ltd.newbee.mall.util.BeanUtil;
-import ltd.newbee.mall.util.MD5Util;
-import ltd.newbee.mall.util.NewBeeMallUtils;
-import ltd.newbee.mall.util.PageQueryUtil;
-import ltd.newbee.mall.util.PageResult;
+import ltd.newbee.mall.util.*;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service

@@ -10,6 +10,8 @@ package ltd.newbee.mall.controller.mall;
 
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.ResultUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.common.ServiceResultEnum;
@@ -22,14 +24,8 @@ import ltd.newbee.mall.util.BeanUtil;
 import ltd.newbee.mall.util.PageQueryUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Controller

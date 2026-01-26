@@ -27,4 +27,8 @@ public abstract class AbstractUserDetailsService implements UserDetailsService {
     protected List<GrantedAuthority> getAuthorities() {
         return authorities;
     }
+
+    public boolean support(String clientId, String grantType) {
+        return true;
+    }
 }

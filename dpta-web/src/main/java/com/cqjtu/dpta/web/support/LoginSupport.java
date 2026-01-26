@@ -5,15 +5,14 @@ import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.TokenUtils;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.common.web.LoginParam;
-import com.cqjtu.dpta.dao.repository.SessionRepository;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.StringUtils;
 
-import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletResponse;
 import java.util.function.Consumer;
 
 /**
@@ -23,9 +22,6 @@ import java.util.function.Consumer;
 public abstract class LoginSupport {
     @Resource
     private PasswordEncoder passwordEncoder;
-    @Resource
-    private SessionRepository sessionRepository;
-
 
     public Result postLogout(HttpServletResponse response) {
         TokenUtils.clearHeader(response);

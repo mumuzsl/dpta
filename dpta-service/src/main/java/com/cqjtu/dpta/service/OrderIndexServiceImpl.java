@@ -11,12 +11,12 @@ import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.dao.repository.CommIndex;
 import com.cqjtu.dpta.dao.repository.OrderIndex;
 import com.cqjtu.dpta.dao.repository.OrderIndexRepository;
+import jakarta.annotation.Resource;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

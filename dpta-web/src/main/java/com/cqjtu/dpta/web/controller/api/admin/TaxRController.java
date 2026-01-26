@@ -2,15 +2,14 @@ package com.cqjtu.dpta.web.controller.api.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.TaxRService;
+import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.dao.entity.TaxR;
-import com.cqjtu.dpta.common.result.Result;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 

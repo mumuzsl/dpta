@@ -1,19 +1,15 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.DistrAppService;
-import com.cqjtu.dpta.common.util.ResultUtils;
-import com.cqjtu.dpta.dao.entity.Credit;
-import com.cqjtu.dpta.dao.entity.CreditD;
-import com.cqjtu.dpta.dao.entity.DistrApp;
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.common.util.ResultUtils;
+import com.cqjtu.dpta.dao.entity.DistrApp;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

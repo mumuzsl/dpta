@@ -11,10 +11,10 @@ import com.cqjtu.dpta.common.vo.CommRVo;
 import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.mapper.CommRMapper;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -55,7 +55,7 @@ public class CommRServiceImpl extends ServiceImpl<CommRMapper, CommR> implements
         for (Long id : ids) {
             QueryWrapper<PafComm> wrapper = new QueryWrapper<>();
             wrapper.eq("r_comm_id",id);
-            int count = pafCommService.count(wrapper);
+            long count = pafCommService.count(wrapper);
             if (count == 0) {
                 CommR commR = baseMapper.selectById(id);
                 commR.setDeleted(1);

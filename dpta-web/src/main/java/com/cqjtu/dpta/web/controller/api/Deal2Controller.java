@@ -6,6 +6,7 @@ import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.dao.entity.DealD;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

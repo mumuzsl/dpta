@@ -8,7 +8,6 @@ import com.cqjtu.dpta.web.filter.OptionsRequestFilter;
 import com.cqjtu.dpta.web.filter.TokenFilter;
 import com.cqjtu.dpta.web.security.InfoHandlerMethodArgumentResolver;
 import com.cqjtu.dpta.web.security.UniqueUserHandlerMethodArgumentResolver;
-import com.cqjtu.dpta.web.support.AdminInterceptor;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.server.ErrorPageRegistry;
@@ -26,7 +25,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.Resource;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,7 +58,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return registrationBean;
     }
 
-    @Bean
+    // @Bean
     public FilterRegistrationBean<TokenFilter> tokenFilterFilterRegistrationBean() {
         FilterRegistrationBean<TokenFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new TokenFilter());
@@ -79,8 +77,8 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         return registrationBean;
     }
 
-    @Resource
-    private AdminInterceptor adminInterceptor;
+    // @Resource
+    // private AdminInterceptor adminInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

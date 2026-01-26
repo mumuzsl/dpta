@@ -7,10 +7,9 @@ import com.cqjtu.dpta.common.exception.BadRequestException;
 import com.cqjtu.dpta.dao.entity.Sku;
 import com.cqjtu.dpta.dao.entity.SkuStock;
 import com.cqjtu.dpta.dao.mapper.SkuStockMapper;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 
 /**
  * <p>

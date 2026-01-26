@@ -4,10 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.5.10</version>
+    </parent>
+
     <groupId>com.cqjtu</groupId>
     <artifactId>dpta</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+
+
 
     <modules>
         <module>start</module>
@@ -20,15 +28,16 @@
     </modules>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
         <swagger.version>2.7.0</swagger.version>
 
         <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
         <spring.cloud.version>Hoxton.SR11</spring.cloud.version>
         <dubbo.version>2.7.8</dubbo.version>
+        <mybatis-plus.version>3.5.15</mybatis-plus.version>
+        <druid.version>1.2.27</druid.version>
     </properties>
 
     <repositories>
@@ -42,9 +51,9 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>${mybatis-plus.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -111,8 +120,8 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
-                <version>1.2.6</version>
-                <type>jar</type>
+                <version>${druid.version}</version>
+                <scope>compile</scope>
             </dependency>
 
             <!--            <dependency>-->
@@ -124,28 +133,4 @@
 
         </dependencies>
     </dependencyManagement>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${spring-boot.version}</version>
-                <configuration>
-                    <fork>true</fork>
-                    <addResources>true</addResources>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

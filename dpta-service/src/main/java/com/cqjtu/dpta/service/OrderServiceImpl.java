@@ -2,11 +2,7 @@ package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqjtu.dpta.api.OrderDService;
-import com.cqjtu.dpta.api.OrderIndexService;
-import com.cqjtu.dpta.api.OrderService;
-import com.cqjtu.dpta.api.ShpCommService;
-import com.cqjtu.dpta.api.SkuStockService;
+import com.cqjtu.dpta.api.*;
 import com.cqjtu.dpta.common.exception.BadRequestException;
 import com.cqjtu.dpta.common.extension.SearchPage;
 import com.cqjtu.dpta.common.lang.Const;
@@ -25,13 +21,14 @@ import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.dao.mapper.OrderMapper;
 import com.cqjtu.dpta.dao.repository.OrderRejectRefund;
 import com.cqjtu.dpta.dao.repository.OrderRejectRefundRepository;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -58,6 +55,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, Order> implements
     @Resource
     private SkuStockService skuStockService;
     @Resource
+    @Lazy
     private OrderIndexService orderIndexService;
     @Resource
     private OrderRejectRefundRepository orderRejectRefundRepository;

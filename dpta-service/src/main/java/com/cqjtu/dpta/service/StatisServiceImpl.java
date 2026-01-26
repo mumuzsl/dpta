@@ -5,9 +5,9 @@ import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.StatisService;
 import com.cqjtu.dpta.common.vo.CommStatisVo;
 import com.cqjtu.dpta.dao.mapper.StatisMapper;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

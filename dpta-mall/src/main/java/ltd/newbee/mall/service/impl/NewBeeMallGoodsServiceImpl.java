@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.service.impl;
 
+import jakarta.annotation.Resource;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallSearchGoodsVO;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
@@ -19,7 +20,6 @@ import ltd.newbee.mall.util.PageResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

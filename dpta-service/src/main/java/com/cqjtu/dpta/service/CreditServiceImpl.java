@@ -14,10 +14,10 @@ import com.cqjtu.dpta.dao.entity.Credit;
 import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.mapper.CreditMapper;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;

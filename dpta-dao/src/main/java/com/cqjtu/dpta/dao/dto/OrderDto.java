@@ -2,9 +2,7 @@ package com.cqjtu.dpta.dao.dto;
 
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.StrUtil;
-import com.alibaba.fastjson.annotation.JSONField;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
-import com.cqjtu.dpta.dao.support.IdSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -33,7 +31,6 @@ public class OrderDto {
      * 编码
      */
     @Id
-    @JSONField(serializeUsing = IdSerialize.class)
     private Long id;
 
     private Long distrId;

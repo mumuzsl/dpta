@@ -10,12 +10,12 @@ import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.entity.Credit;
 import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.web.support.ControllerUtils;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.Optional;

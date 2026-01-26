@@ -3,13 +3,12 @@ package com.cqjtu.dpta.web.support;
 
 import com.cqjtu.dpta.common.redis.RedisUtils;
 import com.cqjtu.dpta.common.redis.RedisWapper;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 用于统计

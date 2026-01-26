@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.dao.mapper;
 
-import com.cqjtu.dpta.dao.entity.User;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cqjtu.dpta.dao.entity.User;
 
 /**
  * <p>

@@ -6,24 +6,19 @@ import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.api.CreditService;
 import com.cqjtu.dpta.api.DealService;
 import com.cqjtu.dpta.common.lang.Const;
+import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.dao.entity.Credit;
-import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.dao.entity.Deal;
-import com.cqjtu.dpta.dao.entity.RefundR;
-import io.swagger.annotations.ApiParam;
-import net.bytebuddy.asm.Advice;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

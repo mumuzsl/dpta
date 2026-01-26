@@ -5,10 +5,10 @@ import com.cqjtu.dpta.api.VisitsService;
 import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.dao.repository.Visits;
 import com.cqjtu.dpta.dao.repository.VisitsRepository;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**

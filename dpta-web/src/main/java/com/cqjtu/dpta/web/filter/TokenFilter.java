@@ -5,25 +5,20 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.TokenUtils;
-import com.cqjtu.dpta.dao.repository.SessionRepository;
-import org.springframework.stereotype.Component;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.annotation.Resource;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * author: mumu
  * date: 2021/4/30
  */
-@Component
+// @Component
 public class TokenFilter extends OncePerRequestFilter {
-    @Resource
-    private SessionRepository sessionRepository;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

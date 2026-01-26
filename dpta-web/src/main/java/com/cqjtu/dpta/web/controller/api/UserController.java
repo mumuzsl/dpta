@@ -2,14 +2,13 @@ package com.cqjtu.dpta.web.controller.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.api.UserService;
-import com.cqjtu.dpta.dao.entity.User;
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.dao.entity.User;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

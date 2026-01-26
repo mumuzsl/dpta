@@ -7,16 +7,17 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: 132135138zsl
-    url: jdbc:mysql://localhost:3306/dpta?serverTimezone=Asia/Shanghai
-  redis:
-    host: 124.70.47.130
-    password: 132135138zsl
-  jpa:
-    show-sql: true
+    password: Ht62628816
+    url: jdbc:mysql://192.168.1.220:3306/dpta?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
   data:
+    redis:
+      database: 12
+      host: 192.168.1.208
+      password: Ht@62628816
     mongodb:
       uri: mongodb://mumu:132135138zsl@localhost/dpta
+  jpa:
+    show-sql: true
 
 server:
   port: 8081
@@ -29,9 +30,10 @@ server:
 
 logging:
   level:
+    org.springframework.security: trace
     #    root: debug
-    com.cqjtu.dpta.auto: debug
-    com.cqjtu.dpta.service: debug
+#    com.cqjtu.dpta.auto: debug
+#    com.cqjtu.dpta.service: debug
 
 
 mybatis-plus:

@@ -12,17 +12,16 @@ import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.web.Info;
-import org.springframework.stereotype.Controller;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
+// @Controller
 @RequestMapping("/distr/api/alipay")
 public class PayController {
 

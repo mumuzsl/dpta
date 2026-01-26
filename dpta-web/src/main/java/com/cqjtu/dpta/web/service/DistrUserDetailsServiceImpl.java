@@ -4,12 +4,13 @@ import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.DistrUserService;
 import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.web.support.BigUser;
+import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 /**
  * author: mumu
@@ -38,7 +39,12 @@ public class DistrUserDetailsServiceImpl extends AbstractUserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("username not exists"));
         distrUser.setLastLoginTime(LocalDateTime.now());
         distrUserService.updateById(distrUser);
-        return new BigUser(distrUser.getDistrId(), distrUser.getUsername(), distrUser.getPassword(), getAuthorities());
+        return new BigUser(distrUser.getDistrId(), distrUser.getUsername(), distrUser.getPassword(), Collections.emptyList());
+    }
+
+    @Override
+    public boolean support(String clientId, String grantType) {
+        return "distr_user".equals(clientId) && "password".equals(grantType);
     }
 
 }

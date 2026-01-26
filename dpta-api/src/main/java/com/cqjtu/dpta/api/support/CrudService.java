@@ -59,7 +59,11 @@ public interface CrudService<T> extends IService<T> {
         }
         ArrayList<OrderItem> orderItems = new ArrayList<OrderItem>(1);
         for (Sort.Order order : sort) {
-            orderItems.add(new OrderItem(order.getProperty(), order.getDirection().isAscending()));
+            if (order.getDirection() == Sort.Direction.DESC) {
+                orderItems.add(OrderItem.desc(order.getProperty()));
+            } else if (order.getDirection() == Sort.Direction.ASC) {
+                orderItems.add(OrderItem.asc(order.getProperty()));
+            }
         }
         page.addOrder(orderItems);
         return page;

@@ -7,18 +7,16 @@ import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.ShopService;
 import com.cqjtu.dpta.common.lang.Const;
-import com.cqjtu.dpta.common.util.ResultUtils;
-import com.cqjtu.dpta.common.util.Status;
-import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.common.result.Result;
+import com.cqjtu.dpta.common.util.ResultUtils;
+import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.Shop;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

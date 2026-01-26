@@ -8,7 +8,9 @@
  */
 package ltd.newbee.mall.controller.common;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.ErrorAttributes;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -20,7 +22,6 @@ import org.springframework.web.context.request.ServletWebRequest;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @Controller
@@ -63,7 +64,6 @@ public class ErrorPageController implements ErrorController {
         return new ResponseEntity<Map<String, Object>>(body, status);
     }
 
-    @Override
     public String getErrorPath() {
         return ERROR_PATH;
     }
@@ -79,7 +79,7 @@ public class ErrorPageController implements ErrorController {
 
     protected Map<String, Object> getErrorAttributes(HttpServletRequest request, boolean includeStackTrace) {
         WebRequest webRequest = new ServletWebRequest(request);
-        return this.errorAttributes.getErrorAttributes(webRequest, includeStackTrace);
+        return this.errorAttributes.getErrorAttributes(webRequest, ErrorAttributeOptions.defaults());
     }
 
     private HttpStatus getStatus(HttpServletRequest request) {

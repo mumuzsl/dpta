@@ -1,6 +1,5 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,24 +7,22 @@ import com.cqjtu.dpta.api.CommRService;
 import com.cqjtu.dpta.api.PafCommService;
 import com.cqjtu.dpta.api.ShpCommService;
 import com.cqjtu.dpta.common.lang.Const;
+import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.ResultUtils;
 import com.cqjtu.dpta.common.util.Status;
 import com.cqjtu.dpta.dao.entity.CommR;
-import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.ShpComm;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-
-import javax.annotation.Resource;
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

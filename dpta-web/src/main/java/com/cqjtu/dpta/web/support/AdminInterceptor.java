@@ -2,20 +2,18 @@ package com.cqjtu.dpta.web.support;
 
 import com.cqjtu.dpta.api.UserService;
 import com.cqjtu.dpta.common.util.TokenUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * author: mumu
  * date: 2021/4/15
  */
 @Component
-public class AdminInterceptor extends HandlerInterceptorAdapter {
+public class AdminInterceptor implements HandlerInterceptor {
     @Resource
     private UserService userService;
 
@@ -26,8 +24,4 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
         return token != null && userService.getById(TokenUtils.longId(token)) != null;
     }
 
-    @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        super.postHandle(request, response, handler, modelAndView);
-    }
 }

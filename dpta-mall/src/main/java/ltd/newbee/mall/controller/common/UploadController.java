@@ -8,6 +8,7 @@
  */
 package ltd.newbee.mall.controller.common;
 
+import jakarta.servlet.http.HttpServletRequest;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.util.NewBeeMallUtils;
 import ltd.newbee.mall.util.Result;
@@ -23,17 +24,12 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @Controller
 @RequestMapping("/admin")

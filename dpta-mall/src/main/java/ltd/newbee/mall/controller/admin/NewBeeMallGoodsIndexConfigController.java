@@ -8,6 +8,8 @@
  */
 package ltd.newbee.mall.controller.admin;
 
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import ltd.newbee.mall.common.IndexConfigTypeEnum;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.entity.IndexConfig;
@@ -19,8 +21,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.Objects;
 

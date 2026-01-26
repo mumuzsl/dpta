@@ -17,14 +17,14 @@ import com.cqjtu.dpta.dao.entity.DistrLevel;
 import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.dao.entity.Resve;
 import com.cqjtu.dpta.web.support.LoginSupport;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

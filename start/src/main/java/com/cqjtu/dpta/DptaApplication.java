@@ -1,5 +1,6 @@
 package com.cqjtu.dpta;
 
+import cn.hutool.extra.spring.EnableSpringUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -10,6 +11,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @date 2021/3/3 22:28
  */
 @SpringBootApplication(scanBasePackages = "com.cqjtu.dpta")
+@EnableSpringUtil
 @EnableScheduling
 public class DptaApplication {
     public static void main(String[] args) {

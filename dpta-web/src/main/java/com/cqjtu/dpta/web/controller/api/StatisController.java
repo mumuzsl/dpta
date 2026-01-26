@@ -8,13 +8,13 @@ import com.cqjtu.dpta.common.vo.CommStatisVo;
 import com.cqjtu.dpta.common.vo.StatisVo;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.repository.VisitsRepository;
+import jakarta.annotation.Resource;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 

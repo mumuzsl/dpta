@@ -9,10 +9,10 @@ import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.common.vo.SettleMVo;
 import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.SettleMMapper;
+import jakarta.annotation.Resource;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;

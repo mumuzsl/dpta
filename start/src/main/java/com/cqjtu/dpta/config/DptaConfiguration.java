@@ -62,7 +62,7 @@ public class DptaConfiguration {
         return new DefaultUserChecker();
     }
 
-    @Bean
+    // @Bean
     public AlipayClient getClient(AliPayBean aliPayBean) throws AlipayApiException {
         CertAlipayRequest certAlipayRequest = new CertAlipayRequest();
         certAlipayRequest.setServerUrl(aliPayBean.getServerUrl());  //gateway:支付宝网关（固定）https://openapi.alipay.com/gateway.do

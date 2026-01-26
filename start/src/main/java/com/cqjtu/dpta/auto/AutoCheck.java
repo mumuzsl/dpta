@@ -5,10 +5,10 @@ import com.cqjtu.dpta.api.OrderService;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.web.controller.api.open.OrderOpenApi;
 import com.cqjtu.dpta.web.support.OrderRedisSupport;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
 /**

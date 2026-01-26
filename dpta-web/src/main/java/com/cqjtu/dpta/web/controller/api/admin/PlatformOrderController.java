@@ -12,26 +12,14 @@ import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.dao.entity.OrderD;
 import com.cqjtu.dpta.web.security.CheckParam;
 import com.cqjtu.dpta.web.support.StatisSupport;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
-import org.elasticsearch.action.get.MultiGetRequest;
-import org.elasticsearch.search.aggregations.bucket.range.ParsedDateRange;
-import org.elasticsearch.search.aggregations.metrics.ParsedSum;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.elasticsearch.core.SearchHits;
-import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * author: mumu
@@ -48,48 +36,49 @@ public class PlatformOrderController extends StatisSupport {
     @Resource
     private OrderDService orderDService;
 
-    @GetMapping("statis/amount")
-    public Result amount() {
-        NativeSearchQuery query = statisQueryBuilder().withQuery(queryBuilder).build();
-
-        SearchHits<MultiGetRequest.Item> hits = elasticsearchOperations.search(query, MultiGetRequest.Item.class, IndexCoordinates.of("order"));
-
-        Map<String, Object> map = new HashMap<>();
-        map.put("month", post(hits, "month"));
-        map.put("day", post(hits, "day"));
-
-        ParsedSum allAmount = hits.getAggregations().get("all_amount");
-        map.put("all", allAmount.getValue());
-
-        return Result.ok(map);
-    }
-
-    @GetMapping("statis/count")
-    public Result count() {
-        NativeSearchQuery query = statisQueryBuilder().build();
-
-        SearchHits<MultiGetRequest.Item> hits = elasticsearchOperations.search(query, MultiGetRequest.Item.class, IndexCoordinates.of("order"));
-        Map<String, Object> map = new HashMap<>();
-
-        ParsedDateRange month = hits.getAggregations().get(statisName("month"));
-        ParsedDateRange day = hits.getAggregations().get(statisName("day"));
-
-        map.put("month", month.getBuckets().get(0).getDocCount());
-        map.put("day", day.getBuckets().get(0).getDocCount());
-        map.put("all", hits.getTotalHits());
-
-        return Result.ok(map);
-    }
-
-    @GetMapping("statis/date")
-    public Result date() {
-        return dateQuery(DateQuery.query.build());
-    }
-
-    @GetMapping("statis/recent")
-    public Result recent(@RequestParam(name = "day", required = false, defaultValue = "7") Integer day) {
-        return recent(day, build());
-    }
+    // todo
+    // @GetMapping("statis/amount")
+    // public Result amount() {
+    //     NativeSearchQuery query = statisQueryBuilder().withQuery(queryBuilder).build();
+    //
+    //     SearchHits<MultiGetRequest.Item> hits = elasticsearchOperations.search(query, MultiGetRequest.Item.class, IndexCoordinates.of("order"));
+    //
+    //     Map<String, Object> map = new HashMap<>();
+    //     map.put("month", post(hits, "month"));
+    //     map.put("day", post(hits, "day"));
+    //
+    //     ParsedSum allAmount = hits.getAggregations().get("all_amount");
+    //     map.put("all", allAmount.getValue());
+    //
+    //     return Result.ok(map);
+    // }
+    //
+    // @GetMapping("statis/count")
+    // public Result count() {
+    //     NativeSearchQuery query = statisQueryBuilder().build();
+    //
+    //     SearchHits<MultiGetRequest.Item> hits = elasticsearchOperations.search(query, MultiGetRequest.Item.class, IndexCoordinates.of("order"));
+    //     Map<String, Object> map = new HashMap<>();
+    //
+    //     ParsedDateRange month = hits.getAggregations().get(statisName("month"));
+    //     ParsedDateRange day = hits.getAggregations().get(statisName("day"));
+    //
+    //     map.put("month", month.getBuckets().get(0).getDocCount());
+    //     map.put("day", day.getBuckets().get(0).getDocCount());
+    //     map.put("all", hits.getTotalHits());
+    //
+    //     return Result.ok(map);
+    // }
+    //
+    // @GetMapping("statis/date")
+    // public Result date() {
+    //     return dateQuery(DateQuery.query.build());
+    // }
+    //
+    // @GetMapping("statis/recent")
+    // public Result recent(@RequestParam(name = "day", required = false, defaultValue = "7") Integer day) {
+    //     return recent(day, build());
+    // }
 
 
     /**

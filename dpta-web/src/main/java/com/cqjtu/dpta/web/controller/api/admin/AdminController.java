@@ -7,16 +7,11 @@ import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.common.web.LoginParam;
 import com.cqjtu.dpta.dao.entity.User;
 import com.cqjtu.dpta.web.support.LoginSupport;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * author: mumu

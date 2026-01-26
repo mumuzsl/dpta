@@ -12,6 +12,8 @@ import com.cqjtu.dpta.dao.entity.CommR;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.RefundR;
 import com.cqjtu.dpta.dao.entity.Supp;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallCategoryLevelEnum;
 import ltd.newbee.mall.common.ServiceResultEnum;
@@ -29,10 +31,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.sql.Array;
 import java.util.*;
 
 @Controller

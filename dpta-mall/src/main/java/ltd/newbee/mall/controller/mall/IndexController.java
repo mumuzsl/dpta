@@ -8,7 +8,8 @@
  */
 package ltd.newbee.mall.controller.mall;
 
-import com.cqjtu.dpta.common.result.Result;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.IndexConfigTypeEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallIndexCarouselVO;
@@ -20,12 +21,7 @@ import ltd.newbee.mall.service.NewBeeMallIndexConfigService;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller

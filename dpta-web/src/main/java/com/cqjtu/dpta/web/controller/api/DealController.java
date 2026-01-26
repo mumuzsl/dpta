@@ -7,11 +7,11 @@ import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.entity.Deal;
 import com.cqjtu.dpta.dao.entity.DealD;
 import com.cqjtu.dpta.dao.entity.PayM;
+import jakarta.annotation.Resource;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
 
 /**

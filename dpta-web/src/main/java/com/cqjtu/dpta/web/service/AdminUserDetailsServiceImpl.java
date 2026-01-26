@@ -3,12 +3,12 @@ package com.cqjtu.dpta.web.service;
 import com.cqjtu.dpta.api.UserService;
 import com.cqjtu.dpta.dao.entity.User;
 import com.cqjtu.dpta.web.support.BigUser;
+import jakarta.annotation.Resource;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
+import java.util.Collections;
 
 /**
  * author: mumu
@@ -33,6 +33,11 @@ public class AdminUserDetailsServiceImpl extends AbstractUserDetailsService {
                 .eq(User::getUsername, username)
                 .oneOpt()
                 .orElseThrow(() -> new UsernameNotFoundException("username not exists"));
-        return new BigUser(user.getId(), user.getUsername(), user.getPasswd(), getAuthorities());
+        return new BigUser(user.getId(), user.getUsername(), user.getPasswd(), Collections.emptyList());
+    }
+
+    @Override
+    public boolean support(String clientId, String grantType) {
+        return "admin".equals(clientId) && "password".equals(grantType);
     }
 }

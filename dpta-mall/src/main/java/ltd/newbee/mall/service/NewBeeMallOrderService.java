@@ -15,11 +15,7 @@ import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.entity.NewBeeMallOrder;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
-import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
-import javax.xml.crypto.Data;
-import java.util.Date;
 import java.util.List;
 
 public interface NewBeeMallOrderService {

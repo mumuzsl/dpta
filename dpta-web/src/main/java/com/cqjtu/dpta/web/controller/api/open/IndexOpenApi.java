@@ -4,13 +4,12 @@ import com.cqjtu.dpta.api.DistrUserService;
 import com.cqjtu.dpta.api.UserService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.TokenUtils;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * author: mumu
