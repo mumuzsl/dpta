@@ -28,17 +28,17 @@ server:
 #swagger:
 #  enable: true
 
-logging:
-  level:
-    org.springframework.security: trace
+#logging:
+#  level:
+#    org.springframework.security: trace
     #    root: debug
 #    com.cqjtu.dpta.auto: debug
 #    com.cqjtu.dpta.service: debug
 
 
 mybatis-plus:
-  #  configuration:
-  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration:
+      log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
       logic-delete-field: deleted  # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)

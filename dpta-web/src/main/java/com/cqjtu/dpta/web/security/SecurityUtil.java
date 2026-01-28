@@ -1,6 +1,5 @@
 package com.cqjtu.dpta.web.security;
 
-import com.auth0.jwt.JWT;
 import com.cqjtu.dpta.web.support.BigUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -13,6 +12,17 @@ import java.util.Optional;
  * date: 2021/4/26
  */
 public abstract class SecurityUtil {
+    public static BigUser getUser() {
+        SecurityContext context = SecurityContextHolder.getContext();
+        return Optional
+                .of(context)
+                .map(SecurityContext::getAuthentication)
+                .map(Authentication::getPrincipal)
+                .filter(BigUser.class::isInstance)
+                .map(BigUser.class::cast)
+                .orElse(null);
+    }
+
     public static Optional<BigUser> bigUserOpt() {
         SecurityContext context = SecurityContextHolder.getContext();
         return Optional

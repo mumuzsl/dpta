@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.common.NewBeeMallCategoryLevelEnum;
 import ltd.newbee.mall.common.ServiceResultEnum;
+import ltd.newbee.mall.entity.Goods;
 import ltd.newbee.mall.entity.GoodsCategory;
-import ltd.newbee.mall.entity.NewBeeMallGoods;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.support.RestSupport;
@@ -83,19 +83,19 @@ public class NewBeeMallGoodsController extends RestSupport {
     @GetMapping("/goods/edit/{goodsId}")
     public String edit(HttpServletRequest request, @PathVariable("goodsId") Long goodsId) {
         request.setAttribute("path", "edit");
-        NewBeeMallGoods newBeeMallGoods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        Goods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
         PafComm pafComm = restTemplate.getForObject("http://localhost:8081/platform/api/paf-comm/getById?pafCommId="+goodsId,PafComm.class);
-        if (newBeeMallGoods == null) {
+        if (goods == null) {
             return "error/error_400";
         }
         // 获取所有供应商
         List<Supp> supp = restTemplate.getForObject("http://localhost:8081/api/data/supp/all",List.class);
         List<CommR> commRs = restTemplate.getForObject("http://localhost:8081/platform/api/paf-comm-rule/getEnableR",List.class);
         List<RefundR> refundRs = restTemplate.getForObject("http://localhost:8081/platform/api/refund-rule/getEnableR",List.class);
-        if (newBeeMallGoods.getGoodsCategoryId() > 0) {
-            if (newBeeMallGoods.getGoodsCategoryId() != null || newBeeMallGoods.getGoodsCategoryId() > 0) {
+        if (goods.getGoodsCategoryId() > 0) {
+            if (goods.getGoodsCategoryId() != null || goods.getGoodsCategoryId() > 0) {
                 //有分类字段则查询相关分类数据返回给前端以供分类的三级联动显示
-                GoodsCategory currentGoodsCategory = newBeeMallCategoryService.getGoodsCategoryById(newBeeMallGoods.getGoodsCategoryId());
+                GoodsCategory currentGoodsCategory = newBeeMallCategoryService.getGoodsCategoryById(goods.getGoodsCategoryId());
                 //商品表中存储的分类id字段为三级分类的id，不为三级分类则是错误数据
                 if (currentGoodsCategory != null && currentGoodsCategory.getCategoryLevel() == NewBeeMallCategoryLevelEnum.LEVEL_THREE.getLevel()) {
                     //查询所有的一级分类
@@ -122,7 +122,7 @@ public class NewBeeMallGoodsController extends RestSupport {
                 }
             }
         }
-        if (newBeeMallGoods.getGoodsCategoryId() == 0) {
+        if (goods.getGoodsCategoryId() == 0) {
             //查询所有的一级分类
             List<GoodsCategory> firstLevelCategories = newBeeMallCategoryService.selectByLevelAndParentIdsAndNumber(Collections.singletonList(0L), NewBeeMallCategoryLevelEnum.LEVEL_ONE.getLevel());
             if (!CollectionUtils.isEmpty(firstLevelCategories)) {
@@ -146,7 +146,7 @@ public class NewBeeMallGoodsController extends RestSupport {
         request.setAttribute("suppers",supp);
         request.setAttribute("commRs",commRs);
         request.setAttribute("refundRs",refundRs);
-        request.setAttribute("goods", newBeeMallGoods);
+        request.setAttribute("goods", goods);
         request.setAttribute("path", "goods-edit");
         return "admin/newbee_mall_goods_edit";
     }
@@ -169,33 +169,33 @@ public class NewBeeMallGoodsController extends RestSupport {
      */
     @RequestMapping(value = "/goods/save", method = RequestMethod.POST)
     @ResponseBody
-    public Result save(@RequestBody NewBeeMallGoods newBeeMallGoods) {
-        if (StringUtils.isEmpty(newBeeMallGoods.getGoodsName())
-                || StringUtils.isEmpty(newBeeMallGoods.getGoodsIntro())
-                || StringUtils.isEmpty(newBeeMallGoods.getTag())
-                || Objects.isNull(newBeeMallGoods.getOriginalPrice())
-                || Objects.isNull(newBeeMallGoods.getGoodsCategoryId())
-                || Objects.isNull(newBeeMallGoods.getSellingPrice())
-                || Objects.isNull(newBeeMallGoods.getStockNum())
-                || Objects.isNull(newBeeMallGoods.getGoodsSellStatus())
-                || StringUtils.isEmpty(newBeeMallGoods.getGoodsCoverImg())
-                || StringUtils.isEmpty(newBeeMallGoods.getGoodsDetailContent())) {
+    public Result save(@RequestBody Goods goods) {
+        if (StringUtils.isEmpty(goods.getGoodsName())
+                || StringUtils.isEmpty(goods.getGoodsIntro())
+                || StringUtils.isEmpty(goods.getTag())
+                || Objects.isNull(goods.getOriginalPrice())
+                || Objects.isNull(goods.getGoodsCategoryId())
+                || Objects.isNull(goods.getSellingPrice())
+                || Objects.isNull(goods.getStockNum())
+                || Objects.isNull(goods.getGoodsSellStatus())
+                || StringUtils.isEmpty(goods.getGoodsCoverImg())
+                || StringUtils.isEmpty(goods.getGoodsDetailContent())) {
             return ResultGenerator.genFailResult("参数异常！");
         }
         PafComm pafComm = new PafComm();
-        pafComm.setCommId(newBeeMallGoods.getGoodsId());
-        pafComm.setState(newBeeMallGoods.getGoodsSellStatus().intValue());
-        pafComm.setCategoryId(newBeeMallGoods.getGoodsCategoryId());
-        pafComm.setCommD(newBeeMallGoods.getGoodsIntro());
-        pafComm.setCommNm(newBeeMallGoods.getGoodsName());
-        pafComm.setImgUrl(newBeeMallGoods.getGoodsCoverImg());
-        pafComm.setSuppId(newBeeMallGoods.getSuppId());
-        pafComm.setSuppPrice(new BigDecimal(newBeeMallGoods.getSellingPrice()));
-        pafComm.setRefundId(newBeeMallGoods.getRefundId());
-        pafComm.setRCommId(newBeeMallGoods.getrCommId());
+        pafComm.setCommId(goods.getGoodsId());
+        pafComm.setState(goods.getGoodsSellStatus().intValue());
+        pafComm.setCategoryId(goods.getGoodsCategoryId());
+        pafComm.setCommD(goods.getGoodsIntro());
+        pafComm.setCommNm(goods.getGoodsName());
+        pafComm.setImgUrl(goods.getGoodsCoverImg());
+        pafComm.setSuppId(goods.getSuppId());
+        pafComm.setSuppPrice(new BigDecimal(goods.getSellingPrice()));
+        pafComm.setRefundId(goods.getRefundId());
+        pafComm.setRCommId(goods.getrCommId());
 
         Boolean bol = restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/add",pafComm,Boolean.class);
-        String result = newBeeMallGoodsService.saveNewBeeMallGoods(newBeeMallGoods);
+        String result = newBeeMallGoodsService.saveNewBeeMallGoods(goods);
         if (ServiceResultEnum.SUCCESS.getResult().equals(result) && bol == true) {
             return ResultGenerator.genSuccessResult();
         } else {
@@ -209,34 +209,34 @@ public class NewBeeMallGoodsController extends RestSupport {
      */
     @RequestMapping(value = "/goods/update", method = RequestMethod.POST)
     @ResponseBody
-    public Result update(@RequestBody NewBeeMallGoods newBeeMallGoods) {
-        if (Objects.isNull(newBeeMallGoods.getGoodsId())
-                || StringUtils.isEmpty(newBeeMallGoods.getGoodsName())
-                || StringUtils.isEmpty(newBeeMallGoods.getGoodsIntro())
-                || StringUtils.isEmpty(newBeeMallGoods.getTag())
-                || Objects.isNull(newBeeMallGoods.getOriginalPrice())
-                || Objects.isNull(newBeeMallGoods.getSellingPrice())
-                || Objects.isNull(newBeeMallGoods.getGoodsCategoryId())
-                || Objects.isNull(newBeeMallGoods.getStockNum())
-                || Objects.isNull(newBeeMallGoods.getGoodsSellStatus())
-                || StringUtils.isEmpty(newBeeMallGoods.getGoodsCoverImg())
-                || StringUtils.isEmpty(newBeeMallGoods.getGoodsDetailContent())) {
+    public Result update(@RequestBody Goods goods) {
+        if (Objects.isNull(goods.getGoodsId())
+                || StringUtils.isEmpty(goods.getGoodsName())
+                || StringUtils.isEmpty(goods.getGoodsIntro())
+                || StringUtils.isEmpty(goods.getTag())
+                || Objects.isNull(goods.getOriginalPrice())
+                || Objects.isNull(goods.getSellingPrice())
+                || Objects.isNull(goods.getGoodsCategoryId())
+                || Objects.isNull(goods.getStockNum())
+                || Objects.isNull(goods.getGoodsSellStatus())
+                || StringUtils.isEmpty(goods.getGoodsCoverImg())
+                || StringUtils.isEmpty(goods.getGoodsDetailContent())) {
             return ResultGenerator.genFailResult("参数异常！");
         }
         PafComm pafComm = new PafComm();
-        pafComm.setCommId(newBeeMallGoods.getGoodsId());
-        pafComm.setState(newBeeMallGoods.getGoodsSellStatus().intValue());
-        pafComm.setCategoryId(newBeeMallGoods.getGoodsCategoryId());
-        pafComm.setCommD(newBeeMallGoods.getGoodsIntro());
-        pafComm.setCommNm(newBeeMallGoods.getGoodsName());
-        pafComm.setImgUrl(newBeeMallGoods.getGoodsCoverImg());
-        pafComm.setSuppId(newBeeMallGoods.getSuppId());
-        pafComm.setSuppPrice(new BigDecimal(newBeeMallGoods.getSellingPrice()));
-        pafComm.setRefundId(newBeeMallGoods.getRefundId());
-        pafComm.setRCommId(newBeeMallGoods.getrCommId());
+        pafComm.setCommId(goods.getGoodsId());
+        pafComm.setState(goods.getGoodsSellStatus().intValue());
+        pafComm.setCategoryId(goods.getGoodsCategoryId());
+        pafComm.setCommD(goods.getGoodsIntro());
+        pafComm.setCommNm(goods.getGoodsName());
+        pafComm.setImgUrl(goods.getGoodsCoverImg());
+        pafComm.setSuppId(goods.getSuppId());
+        pafComm.setSuppPrice(new BigDecimal(goods.getSellingPrice()));
+        pafComm.setRefundId(goods.getRefundId());
+        pafComm.setRCommId(goods.getrCommId());
 
         Boolean bol = restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/modif",pafComm,Boolean.class);
-        String result = newBeeMallGoodsService.updateNewBeeMallGoods(newBeeMallGoods);
+        String result = newBeeMallGoodsService.updateNewBeeMallGoods(goods);
         if (ServiceResultEnum.SUCCESS.getResult().equals(result) && bol == true) {
             return ResultGenerator.genSuccessResult();
         } else {
@@ -269,7 +269,7 @@ public class NewBeeMallGoodsController extends RestSupport {
     @GetMapping("/goods/info/{id}")
     @ResponseBody
     public Result info(@PathVariable("id") Long id) {
-        NewBeeMallGoods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(id);
+        Goods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(id);
         if (goods == null) {
             return ResultGenerator.genFailResult(ServiceResultEnum.DATA_NOT_EXIST.getResult());
         }

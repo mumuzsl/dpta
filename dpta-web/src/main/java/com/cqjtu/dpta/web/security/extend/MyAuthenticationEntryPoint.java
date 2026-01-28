@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.oauth2.server.resource.InvalidBearerTokenException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 
 import java.io.IOException;
@@ -21,7 +22,8 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         Result<Object> result = Result.fail();
         result.message(authException.getLocalizedMessage());
-        if (authException instanceof InsufficientAuthenticationException e) {
+        if (authException instanceof InsufficientAuthenticationException ||
+                authException instanceof InvalidBearerTokenException e) {
             result.message("认证信息无效");
         }
         response.setStatus(HttpStatus.UNAUTHORIZED.value());

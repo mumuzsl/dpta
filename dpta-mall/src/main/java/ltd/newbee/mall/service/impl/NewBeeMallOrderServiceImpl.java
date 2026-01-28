@@ -18,7 +18,7 @@ import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
 import ltd.newbee.mall.dao.NewBeeMallOrderItemMapper;
 import ltd.newbee.mall.dao.NewBeeMallOrderMapper;
 import ltd.newbee.mall.dao.NewBeeMallShoppingCartItemMapper;
-import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.Goods;
 import ltd.newbee.mall.entity.NewBeeMallOrder;
 import ltd.newbee.mall.entity.NewBeeMallOrderItem;
 import ltd.newbee.mall.entity.StockNumDTO;
@@ -197,16 +197,16 @@ public class NewBeeMallOrderServiceImpl extends RestSupport implements NewBeeMal
     public String saveOrder(NewBeeMallUserVO user, List<NewBeeMallShoppingCartItemVO> myShoppingCartItems) {
         List<Long> itemIdList = myShoppingCartItems.stream().map(NewBeeMallShoppingCartItemVO::getCartItemId).collect(Collectors.toList());
         List<Long> goodsIds = myShoppingCartItems.stream().map(NewBeeMallShoppingCartItemVO::getGoodsId).collect(Collectors.toList());
-        List<NewBeeMallGoods> newBeeMallGoods = newBeeMallGoodsMapper.selectByPrimaryKeys(goodsIds);
+        List<Goods> goods = newBeeMallGoodsMapper.selectByPrimaryKeys(goodsIds);
         //检查是否包含已下架商品
-        List<NewBeeMallGoods> goodsListNotSelling = newBeeMallGoods.stream()
+        List<Goods> goodsListNotSelling = goods.stream()
                 .filter(newBeeMallGoodsTemp -> newBeeMallGoodsTemp.getGoodsSellStatus() != Constants.SELL_STATUS_UP)
                 .collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(goodsListNotSelling)) {
             //goodsListNotSelling 对象非空则表示有下架商品
             NewBeeMallException.fail(goodsListNotSelling.get(0).getGoodsName() + "已下架，无法生成订单");
         }
-        Map<Long, NewBeeMallGoods> newBeeMallGoodsMap = newBeeMallGoods.stream().collect(Collectors.toMap(NewBeeMallGoods::getGoodsId, Function.identity(), (entity1, entity2) -> entity1));
+        Map<Long, Goods> newBeeMallGoodsMap = goods.stream().collect(Collectors.toMap(Goods::getGoodsId, Function.identity(), (entity1, entity2) -> entity1));
         //判断商品库存
         for (NewBeeMallShoppingCartItemVO shoppingCartItemVO : myShoppingCartItems) {
             //查出的商品中不存在购物车中的这条关联商品数据，直接返回错误提醒
@@ -219,7 +219,7 @@ public class NewBeeMallOrderServiceImpl extends RestSupport implements NewBeeMal
             }
         }
         //删除购物项
-        if (!CollectionUtils.isEmpty(itemIdList) && !CollectionUtils.isEmpty(goodsIds) && !CollectionUtils.isEmpty(newBeeMallGoods)) {
+        if (!CollectionUtils.isEmpty(itemIdList) && !CollectionUtils.isEmpty(goodsIds) && !CollectionUtils.isEmpty(goods)) {
             if (newBeeMallShoppingCartItemMapper.deleteBatch(itemIdList) > 0) {
                 List<StockNumDTO> stockNumDTOS = BeanUtil.copyList(myShoppingCartItems, StockNumDTO.class);
                 int updateStockNumResult = newBeeMallGoodsMapper.updateStockNum(stockNumDTOS);

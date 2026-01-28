@@ -16,6 +16,8 @@ import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrLevel;
 import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.dao.entity.Resve;
+import com.cqjtu.dpta.web.security.SecurityUtil;
+import com.cqjtu.dpta.web.support.BigUser;
 import com.cqjtu.dpta.web.support.LoginSupport;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.Cookie;
@@ -76,15 +78,18 @@ public class DistrUserController extends LoginSupport {
     }
 
     @GetMapping("info")
-    public Result info(String token) {
-        String subject = TokenUtils.subject(token);
+    public Result info() {
+        BigUser bigUser = SecurityUtil.getUser();
 
-        DistrUser distrUser = distrUserService.getById(subject);
+        DistrUser distrUser = distrUserService.getById(bigUser.getId());
         if (distrUser == null) {
             return Result.fail("用户不存在");
         }
 
         Distr distr = distrService.getById(distrUser.getDistrId());
+        if (distr == null) {
+            return Result.fail("分销商不存在");
+        }
 
         Info info = new Info();
         info.setAvatar(distr.getDistrNm());

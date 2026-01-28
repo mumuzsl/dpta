@@ -8,7 +8,7 @@
  */
 package ltd.newbee.mall.service;
 
-import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.Goods;
 import ltd.newbee.mall.util.PageQueryUtil;
 import ltd.newbee.mall.util.PageResult;
 
@@ -29,7 +29,7 @@ public interface NewBeeMallGoodsService {
      * @param goods
      * @return
      */
-    String saveNewBeeMallGoods(NewBeeMallGoods goods);
+    String saveNewBeeMallGoods(Goods goods);
 
     Boolean deleteByPrimaryKey(Long[] goodsId);
     Boolean deleteBatch(Long[] ids);
@@ -37,10 +37,10 @@ public interface NewBeeMallGoodsService {
     /**
      * 批量新增商品数据
      *
-     * @param newBeeMallGoodsList
+     * @param goodsList
      * @return
      */
-    void batchSaveNewBeeMallGoods(List<NewBeeMallGoods> newBeeMallGoodsList);
+    void batchSaveNewBeeMallGoods(List<Goods> goodsList);
 
     /**
      * 修改商品信息
@@ -48,7 +48,7 @@ public interface NewBeeMallGoodsService {
      * @param goods
      * @return
      */
-    String updateNewBeeMallGoods(NewBeeMallGoods goods);
+    String updateNewBeeMallGoods(Goods goods);
 
     /**
      * 获取商品详情
@@ -56,7 +56,7 @@ public interface NewBeeMallGoodsService {
      * @param id
      * @return
      */
-    NewBeeMallGoods getNewBeeMallGoodsById(Long id);
+    Goods getNewBeeMallGoodsById(Long id);
 
     /**
      * 批量修改销售状态(上架下架)

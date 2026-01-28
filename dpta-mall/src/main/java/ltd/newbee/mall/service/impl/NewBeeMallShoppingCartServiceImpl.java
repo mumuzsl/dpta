@@ -13,7 +13,7 @@ import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallShoppingCartItemVO;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
 import ltd.newbee.mall.dao.NewBeeMallShoppingCartItemMapper;
-import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.Goods;
 import ltd.newbee.mall.entity.NewBeeMallShoppingCartItem;
 import ltd.newbee.mall.service.NewBeeMallShoppingCartService;
 import ltd.newbee.mall.util.BeanUtil;
@@ -21,11 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -49,9 +45,9 @@ public class NewBeeMallShoppingCartServiceImpl implements NewBeeMallShoppingCart
             temp.setGoodsCount(newBeeMallShoppingCartItem.getGoodsCount());
             return updateNewBeeMallCartItem(temp);
         }
-        NewBeeMallGoods newBeeMallGoods = newBeeMallGoodsMapper.selectByPrimaryKey(newBeeMallShoppingCartItem.getGoodsId());
+        Goods goods = newBeeMallGoodsMapper.selectByPrimaryKey(newBeeMallShoppingCartItem.getGoodsId());
         //商品为空
-        if (newBeeMallGoods == null) {
+        if (goods == null) {
             return ServiceResultEnum.GOODS_NOT_EXIST.getResult();
         }
         int totalItem = newBeeMallShoppingCartItemMapper.selectCountByUserId(newBeeMallShoppingCartItem.getUserId()) + 1;
@@ -109,24 +105,24 @@ public class NewBeeMallShoppingCartServiceImpl implements NewBeeMallShoppingCart
         if (!CollectionUtils.isEmpty(newBeeMallShoppingCartItems)) {
             //查询商品信息并做数据转换
             List<Long> newBeeMallGoodsIds = newBeeMallShoppingCartItems.stream().map(NewBeeMallShoppingCartItem::getGoodsId).collect(Collectors.toList());
-            List<NewBeeMallGoods> newBeeMallGoods = newBeeMallGoodsMapper.selectByPrimaryKeys(newBeeMallGoodsIds);
-            Map<Long, NewBeeMallGoods> newBeeMallGoodsMap = new HashMap<>();
-            if (!CollectionUtils.isEmpty(newBeeMallGoods)) {
-                newBeeMallGoodsMap = newBeeMallGoods.stream().collect(Collectors.toMap(NewBeeMallGoods::getGoodsId, Function.identity(), (entity1, entity2) -> entity1));
+            List<Goods> goods = newBeeMallGoodsMapper.selectByPrimaryKeys(newBeeMallGoodsIds);
+            Map<Long, Goods> newBeeMallGoodsMap = new HashMap<>();
+            if (!CollectionUtils.isEmpty(goods)) {
+                newBeeMallGoodsMap = goods.stream().collect(Collectors.toMap(Goods::getGoodsId, Function.identity(), (entity1, entity2) -> entity1));
             }
             for (NewBeeMallShoppingCartItem newBeeMallShoppingCartItem : newBeeMallShoppingCartItems) {
                 NewBeeMallShoppingCartItemVO newBeeMallShoppingCartItemVO = new NewBeeMallShoppingCartItemVO();
                 BeanUtil.copyProperties(newBeeMallShoppingCartItem, newBeeMallShoppingCartItemVO);
                 if (newBeeMallGoodsMap.containsKey(newBeeMallShoppingCartItem.getGoodsId())) {
-                    NewBeeMallGoods newBeeMallGoodsTemp = newBeeMallGoodsMap.get(newBeeMallShoppingCartItem.getGoodsId());
-                    newBeeMallShoppingCartItemVO.setGoodsCoverImg(newBeeMallGoodsTemp.getGoodsCoverImg());
-                    String goodsName = newBeeMallGoodsTemp.getGoodsName();
+                    Goods goodsTemp = newBeeMallGoodsMap.get(newBeeMallShoppingCartItem.getGoodsId());
+                    newBeeMallShoppingCartItemVO.setGoodsCoverImg(goodsTemp.getGoodsCoverImg());
+                    String goodsName = goodsTemp.getGoodsName();
                     // 字符串过长导致文字超出的问题
                     if (goodsName.length() > 28) {
                         goodsName = goodsName.substring(0, 28) + "...";
                     }
                     newBeeMallShoppingCartItemVO.setGoodsName(goodsName);
-                    newBeeMallShoppingCartItemVO.setSellingPrice(newBeeMallGoodsTemp.getSellingPrice());
+                    newBeeMallShoppingCartItemVO.setSellingPrice(goodsTemp.getSellingPrice());
                     newBeeMallShoppingCartItemVOS.add(newBeeMallShoppingCartItemVO);
                 }
             }

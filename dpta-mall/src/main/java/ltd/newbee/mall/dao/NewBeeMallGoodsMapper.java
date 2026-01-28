@@ -8,7 +8,7 @@
  */
 package ltd.newbee.mall.dao;
 
-import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.Goods;
 import ltd.newbee.mall.entity.StockNumDTO;
 import ltd.newbee.mall.util.PageQueryUtil;
 import org.apache.ibatis.annotations.Param;
@@ -18,29 +18,29 @@ import java.util.List;
 public interface NewBeeMallGoodsMapper {
     Boolean deleteByPrimaryKey(Long[] goodsId);
 
-    int insert(NewBeeMallGoods record);
+    int insert(Goods record);
 
-    int insertSelective(NewBeeMallGoods record);
+    int insertSelective(Goods record);
 
-    NewBeeMallGoods selectByPrimaryKey(Long goodsId);
+    Goods selectByPrimaryKey(Long goodsId);
 
-    int updateByPrimaryKeySelective(NewBeeMallGoods record);
+    int updateByPrimaryKeySelective(Goods record);
 
-    int updateByPrimaryKeyWithBLOBs(NewBeeMallGoods record);
+    int updateByPrimaryKeyWithBLOBs(Goods record);
 
-    int updateByPrimaryKey(NewBeeMallGoods record);
+    int updateByPrimaryKey(Goods record);
 
-    List<NewBeeMallGoods> findNewBeeMallGoodsList(PageQueryUtil pageUtil);
+    List<Goods> findNewBeeMallGoodsList(PageQueryUtil pageUtil);
 
     int getTotalNewBeeMallGoods(PageQueryUtil pageUtil);
 
-    List<NewBeeMallGoods> selectByPrimaryKeys(List<Long> goodsIds);
+    List<Goods> selectByPrimaryKeys(List<Long> goodsIds);
 
-    List<NewBeeMallGoods> findNewBeeMallGoodsListBySearch(PageQueryUtil pageUtil);
+    List<Goods> findNewBeeMallGoodsListBySearch(PageQueryUtil pageUtil);
 
     int getTotalNewBeeMallGoodsBySearch(PageQueryUtil pageUtil);
 
-    int batchInsert(@Param("newBeeMallGoodsList") List<NewBeeMallGoods> newBeeMallGoodsList);
+    int batchInsert(@Param("newBeeMallGoodsList") List<Goods> goodsList);
 
     int updateStockNum(@Param("stockNumDTOS") List<StockNumDTO> stockNumDTOS);
 

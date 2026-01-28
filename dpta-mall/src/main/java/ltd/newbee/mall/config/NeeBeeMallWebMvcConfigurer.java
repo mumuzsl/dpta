@@ -8,7 +8,7 @@
  */
 package ltd.newbee.mall.config;
 
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
 import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.interceptor.AdminLoginInterceptor;
 import ltd.newbee.mall.interceptor.NewBeeMallCartNumberInterceptor;

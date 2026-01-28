@@ -17,7 +17,7 @@ import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallGoodsDetailVO;
 import ltd.newbee.mall.controller.vo.SearchPageCategoryVO;
-import ltd.newbee.mall.entity.NewBeeMallGoods;
+import ltd.newbee.mall.entity.Goods;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.service.NewBeeMallGoodsService;
 import ltd.newbee.mall.util.BeanUtil;
@@ -76,7 +76,7 @@ public class GoodsController {
         if (goodsId < 1) {
             return "error/error_5xx";
         }
-        NewBeeMallGoods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        Goods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
         if (goods == null) {
             NewBeeMallException.fail(ServiceResultEnum.GOODS_NOT_EXIST.getResult());
         }
@@ -96,7 +96,7 @@ public class GoodsController {
         if (goodsId < 1) {
             return ResultUtils.keyError();
         }
-        NewBeeMallGoods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        Goods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
         if (goods == null) {
             return Result.fail(ServiceResultEnum.GOODS_NOT_EXIST);
         }
@@ -115,7 +115,7 @@ public class GoodsController {
         if (goodsId < 1) {
             return ResultUtils.keyError();
         }
-        NewBeeMallGoods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
+        Goods goods = newBeeMallGoodsService.getNewBeeMallGoodsById(goodsId);
         if (goods == null) {
             return Result.fail(ServiceResultEnum.GOODS_NOT_EXIST);
         }

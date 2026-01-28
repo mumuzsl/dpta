@@ -7,7 +7,9 @@ import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -46,17 +48,17 @@ public class SecurityConfiguration {
     @Order(1)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
         http.securityMatcher("/oauth2/**")
+                .cors(Customizer.withDefaults())     // 关键：让 Security 使用下面的 CorsConfigurationSource
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new MyAuthenticationEntryPoint()))
                 .with(OAuth2AuthorizationServerConfigurer.authorizationServer(),
                         authorizationServer ->
                                 authorizationServer.tokenEndpoint(tokenEndpoint
                                         -> tokenEndpoint.accessTokenRequestConverter(new PasswordAuthenticationConverter())
-                                        // .accessTokenResponseHandler(new MyAuthenticationSuccessHandler())
+                                        .accessTokenResponseHandler(new MyAuthenticationSuccessHandler())
                                         .errorResponseHandler(new MyAuthenticationFailureHandler())
                                 )
                 )
                 .csrf(AbstractHttpConfigurer::disable);
-
 
         DefaultSecurityFilterChain securityFilterChain = http.build();
 
@@ -72,17 +74,20 @@ public class SecurityConfiguration {
     @Order(2)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                // .securityMatcher("/distr/**")
+                .cors(Customizer.withDefaults())     // 关键：让 Security 使用下面的 CorsConfigurationSource
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new MyAuthenticationEntryPoint()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/public").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 预检请求必须放行
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .oauth2ResourceServer(oauth2 -> oauth2.opaqueToken(opaque ->
-                        opaque.introspector(myOpaqueTokenIntrospector)
-                ));
+                .oauth2ResourceServer(oauth2 ->
+                        oauth2.opaqueToken(opaque ->
+                                        opaque.introspector(myOpaqueTokenIntrospector)
+                                )
+                                .authenticationEntryPoint(new MyAuthenticationEntryPoint())
+                );
 
         return http.build();
     }

@@ -112,7 +112,7 @@
         tod.COMM_ID as detail_comm_id,
         gi.goods_name as detail_goods_name,
         gi.goods_cover_img as detail_goods_cover_img
-        from t_order_d tod inner join newbee_mall_db.tb_newbee_mall_goods_info gi
+        from t_order_d tod inner join t_goods gi
         on tod.COMM_ID = gi.goods_id and tod.ORDER_ID = #{orderId}
     </select>
 
