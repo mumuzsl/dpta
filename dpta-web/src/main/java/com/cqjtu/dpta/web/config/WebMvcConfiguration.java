@@ -118,7 +118,7 @@ public class WebMvcConfiguration implements WebMvcConfigurer {
         converters.add(0, converter);
     }
 
-    @Bean
+    // @Bean
     public ErrorPageRegistrar errorPageRegistrar() {
         return new ErrorPageRegistrarImpl();
     }

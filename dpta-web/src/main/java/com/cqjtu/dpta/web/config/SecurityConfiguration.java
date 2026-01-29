@@ -74,10 +74,13 @@ public class SecurityConfiguration {
     @Order(2)
     public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
         http
+                .securityMatcher("/api/**", "/distr/**")
                 .cors(Customizer.withDefaults())     // 关键：让 Security 使用下面的 CorsConfigurationSource
                 .exceptionHandling(exceptionHandling -> exceptionHandling.authenticationEntryPoint(new MyAuthenticationEntryPoint()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // 预检请求必须放行
+                        .requestMatchers(HttpMethod.OPTIONS).permitAll() // 预检请求必须放行
+                        // .requestMatchers("/error/**").permitAll() // 预检请求必须放行
+                        // .requestMatchers("/authorized", "/authorized/**").permitAll() // 预检请求必须放行
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)
@@ -98,12 +101,11 @@ public class SecurityConfiguration {
                 .clientId("admin")
                 .clientSecret(passwordEncoder().encode("admin"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                // .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                // .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS) // 支持客户端凭证模式
                 .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                // .redirectUri("http://127.0.0.1:8080/login/oauth2/code/my-client-oidc")
-                .redirectUri("/authorized")
+                .redirectUri("http://127.0.0.1:8081/callback")
                 .scope(OidcScopes.OPENID)
                 .scope("read")
                 .scope("write")
@@ -118,12 +120,11 @@ public class SecurityConfiguration {
                 .clientId("distr_user")
                 .clientSecret(passwordEncoder().encode("distr_user"))
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-                // .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                // .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS) // 支持客户端凭证模式
                 .authorizationGrantType(AuthorizationGrantType.PASSWORD)
-                // .redirectUri("http://127.0.0.1:8080/login/oauth2/code/my-client-oidc")
-                .redirectUri("/authorized")
+                .redirectUri("/error")
                 .scope(OidcScopes.OPENID)
                 .scope("read")
                 .scope("write")

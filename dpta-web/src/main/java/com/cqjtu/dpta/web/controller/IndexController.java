@@ -9,6 +9,7 @@ import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.web.support.excel.LocalDateTimeConverter;
 import com.cqjtu.dpta.web.support.excel.OrderData;
 import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 /**
  * author: mumu
@@ -30,6 +32,14 @@ public class IndexController {
 
     @Resource
     private OrderService orderService;
+
+    @GetMapping("/callback")
+    public void callback(HttpServletResponse response, HttpServletRequest request) throws IOException {
+        Map<String, String[]> parameterMap = request.getParameterMap();
+        System.out.println(parameterMap);
+
+        response.sendRedirect("https://www.baidu.com");
+    }
 
     @GetMapping("/distr/api/download/excel")
     public void distrDownload(@RequestParam(required = false) String filename,
