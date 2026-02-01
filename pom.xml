@@ -12,7 +12,6 @@
     <modules>
         <module>start</module>
         <module>dpta-web</module>
-        <module>dpta-dao</module>
         <module>dpta-service</module>
         <module>dpta-api</module>
         <module>dpta-common</module>

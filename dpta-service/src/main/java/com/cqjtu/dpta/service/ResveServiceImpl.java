@@ -1,12 +1,12 @@
 package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqjtu.dpta.api.ResveDService;
-import com.cqjtu.dpta.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.dao.entity.Resve;
 import com.cqjtu.dpta.dao.entity.ResveD;
 import com.cqjtu.dpta.dao.mapper.ResveMapper;
+import com.cqjtu.dpta.service.api.ResveDService;
+import com.cqjtu.dpta.service.api.ResveService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

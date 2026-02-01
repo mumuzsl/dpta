@@ -1,9 +1,9 @@
 package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqjtu.dpta.api.SuppService;
 import com.cqjtu.dpta.dao.entity.Supp;
 import com.cqjtu.dpta.dao.mapper.SuppMapper;
+import com.cqjtu.dpta.service.api.SuppService;
 import org.springframework.stereotype.Service;
 
 /**

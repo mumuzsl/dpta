@@ -1,10 +1,10 @@
 package com.cqjtu.dpta.service;
 
-import com.cqjtu.dpta.api.ShopService;
-import com.cqjtu.dpta.api.VisitsService;
 import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.dao.repository.Visits;
 import com.cqjtu.dpta.dao.repository.VisitsRepository;
+import com.cqjtu.dpta.service.api.ShopService;
+import com.cqjtu.dpta.service.api.VisitsService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

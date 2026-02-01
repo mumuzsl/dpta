@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.web.support;
 
-import com.cqjtu.dpta.api.DistrUserService;
-import com.cqjtu.dpta.api.OrderService;
+import com.cqjtu.dpta.service.api.DistrUserService;
+import com.cqjtu.dpta.service.api.OrderService;
 import com.cqjtu.dpta.web.security.MinUser;
 import com.cqjtu.dpta.web.security.UserCheckException;
 import com.cqjtu.dpta.web.security.UserChecker;

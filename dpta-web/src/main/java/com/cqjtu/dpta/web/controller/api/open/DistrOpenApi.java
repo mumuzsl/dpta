@@ -1,11 +1,11 @@
 package com.cqjtu.dpta.web.controller.api.open;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.*;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
-import com.cqjtu.dpta.common.vo.DistrVo;
+import com.cqjtu.dpta.dao.common.vo.DistrVo;
 import com.cqjtu.dpta.dao.entity.*;
+import com.cqjtu.dpta.service.api.*;
 import com.cqjtu.dpta.web.support.ControllerUtils;
 import com.cqjtu.dpta.web.support.Options;
 import com.cqjtu.dpta.web.support.OptionsUtils;

@@ -8,8 +8,8 @@
  */
 package ltd.newbee.mall.controller.mall;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.TypeReference;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.common.web.LoginParam;
 import jakarta.annotation.Resource;

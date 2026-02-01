@@ -2,11 +2,11 @@ package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqjtu.dpta.api.CreditDService;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.dao.entity.CreditD;
 import com.cqjtu.dpta.dao.mapper.CreditDMapper;
+import com.cqjtu.dpta.service.api.CreditDService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

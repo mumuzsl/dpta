@@ -1,8 +1,8 @@
 package com.cqjtu.dpta.web.controller.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cqjtu.dpta.api.ResveDService;
-import com.cqjtu.dpta.api.ResveService;
+import com.cqjtu.dpta.service.api.ResveDService;
+import com.cqjtu.dpta.service.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;

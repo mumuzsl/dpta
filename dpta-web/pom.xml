@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>com.cqjtu</groupId>
-            <artifactId>dpta-api</artifactId>
+            <artifactId>dpta-service</artifactId>
             <version>${project.version}</version>
         </dependency>
 

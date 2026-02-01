@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cqjtu.dpta.dao.mapper.StatisMapper">
+    <resultMap id="CommVo" type="com.cqjtu.dpta.dao.common.vo.CommStatisVo">
+        <result column="comm_name" property="commName"/>
+        <result column="comm_id" property="commId"/>
+        <result column="max_price" property="maxPrice"/>
+        <result column="min_price" property="minPrice"/>
+        <result column="avg_price" property="avgPrice"/>
+        <result column="count" property="count"/>
+        <result column="amount" property="amount"/>
+    </resultMap>
+
+    <select id="topComm" resultMap="CommVo">
+        select tpc.COMM_NM comm_name,
+               t1.COMM_ID,
+               max_price,
+               min_price,
+               avg_price,
+               count,
+               amount
+        from (
+                 select tod.COMM_ID,
+                        avg(tod.PRICE)             avg_price,
+                        max(tod.PRICE)             max_price,
+                        min(tod.PRICE)             min_price,
+                        sum(tod.COUNT)             count,
+                        sum(tod.COUNT * tod.PRICE) amount
+                 from t_shop ts
+                          inner join t_order t on ts.SHOP_ID = t.SHOP_ID and ts.DISTR_ID = #{distrId}
+                          inner join t_order_d tod on tod.ORDER_ID = t.ID and t.STATE > 0
+                 group by tod.COMM_ID
+             ) as t1
+                 inner join t_paf_comm tpc on t1.COMM_ID = tpc.COMM_ID
+        order by amount desc
+        limit #{limit}
+    </select>
+
+    <select id="getCommVo" resultMap="CommVo">
+        select tpc.COMM_NM comm_name,
+               t1.COMM_ID,
+               max_price,
+               min_price,
+               avg_price,
+               count,
+               amount
+        from (
+                 select COMM_ID,
+                        avg(PRICE)         avg_price,
+                        max(PRICE)         max_price,
+                        min(PRICE)         min_price,
+                        sum(COUNT)         count,
+                        sum(COUNT * PRICE) amount
+                 from t_order_d
+                 group by COMM_ID
+             ) as t1
+                 inner join t_paf_comm tpc on t1.COMM_ID = tpc.COMM_ID
+    </select>
+
+</mapper>

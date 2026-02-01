@@ -1,11 +1,11 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
-import com.cqjtu.dpta.api.UserService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.TokenUtils;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.common.web.LoginParam;
 import com.cqjtu.dpta.dao.entity.User;
+import com.cqjtu.dpta.service.api.UserService;
 import com.cqjtu.dpta.web.support.LoginSupport;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;

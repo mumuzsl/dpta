@@ -1,9 +1,9 @@
 package com.cqjtu.dpta.service;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cqjtu.dpta.dao.entity.Sku;
 import com.cqjtu.dpta.dao.mapper.SkuMapper;
-import com.cqjtu.dpta.api.SkuService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cqjtu.dpta.service.api.SkuService;
 import org.springframework.stereotype.Service;
 
 /**

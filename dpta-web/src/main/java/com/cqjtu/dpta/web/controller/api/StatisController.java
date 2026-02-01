@@ -1,11 +1,11 @@
 package com.cqjtu.dpta.web.controller.api;
 
-import com.cqjtu.dpta.api.PafCommService;
-import com.cqjtu.dpta.api.StatisService;
+import com.cqjtu.dpta.service.api.PafCommService;
+import com.cqjtu.dpta.service.api.StatisService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.DptaUtils;
-import com.cqjtu.dpta.common.vo.CommStatisVo;
-import com.cqjtu.dpta.common.vo.StatisVo;
+import com.cqjtu.dpta.dao.common.vo.CommStatisVo;
+import com.cqjtu.dpta.dao.common.vo.StatisVo;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.repository.VisitsRepository;
 import jakarta.annotation.Resource;

@@ -17,11 +17,6 @@
             <artifactId>dpta-web</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.cqjtu</groupId>
-            <artifactId>dpta-service</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
 
         <dependency>

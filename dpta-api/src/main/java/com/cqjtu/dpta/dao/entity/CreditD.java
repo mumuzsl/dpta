@@ -1,0 +1,71 @@
+package com.cqjtu.dpta.dao.entity;
+
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
+/**
+ * <p>
+ * 授信明细表
+ * </p>
+ *
+ * @author mumu
+ * @since 2021-04-13
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("t_credit_d")
+public class CreditD implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 流水编码
+     */
+    @TableId("D_CRE_ID")
+    private Long dCreId;
+
+    /**
+     * 授信编码
+     */
+    @TableField("CREDIT_ID")
+    private Long creditId;
+
+    /**
+     * 类型（1：使用授信付款；2：还款）
+     */
+    @TableField("TYPE")
+    private Integer type;
+
+    /**
+     * 金额
+     */
+    @TableField("AMOUNT")
+    private BigDecimal amount;
+
+    /**
+     * 订单编码
+     */
+    @TableField("DEAl_ID")
+    private Long dealId;
+
+    /**
+     * 创建日期
+     */
+    @TableField("CREATE_TM")
+    private LocalDateTime createTm;
+
+    /**
+     * 已用金额
+     */
+    @TableField("USED_AMOUNT")
+    private BigDecimal usedAmount;
+
+
+}

@@ -1,10 +1,10 @@
 package com.cqjtu.dpta.service;
 
-import com.cqjtu.dpta.api.OrderDService;
-import com.cqjtu.dpta.api.PafCommService;
-import com.cqjtu.dpta.api.StatisService;
-import com.cqjtu.dpta.common.vo.CommStatisVo;
+import com.cqjtu.dpta.dao.common.vo.CommStatisVo;
 import com.cqjtu.dpta.dao.mapper.StatisMapper;
+import com.cqjtu.dpta.service.api.OrderDService;
+import com.cqjtu.dpta.service.api.PafCommService;
+import com.cqjtu.dpta.service.api.StatisService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

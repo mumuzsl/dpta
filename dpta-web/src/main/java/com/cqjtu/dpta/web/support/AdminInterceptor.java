@@ -1,6 +1,6 @@
 package com.cqjtu.dpta.web.support;
 
-import com.cqjtu.dpta.api.UserService;
+import com.cqjtu.dpta.service.api.UserService;
 import com.cqjtu.dpta.common.util.TokenUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;

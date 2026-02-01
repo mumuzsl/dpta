@@ -10,7 +10,7 @@ import com.cqjtu.dpta.auto.AutoCheck;
 import com.cqjtu.dpta.auto.AutoCreate;
 import com.cqjtu.dpta.auto.BuildEs;
 import com.cqjtu.dpta.common.config.DptaProperties;
-import com.cqjtu.dpta.common.vo.AliPayBean;
+import com.cqjtu.dpta.dao.common.vo.AliPayBean;
 import com.cqjtu.dpta.web.security.DefaultUserChecker;
 import com.cqjtu.dpta.web.security.UserChecker;
 import com.cqjtu.dpta.web.support.OrderRedisSupport;

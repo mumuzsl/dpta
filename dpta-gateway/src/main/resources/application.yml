@@ -4,13 +4,21 @@ server:
 spring:
   application:
     name: dpta-gateway
-
   cloud:
-    gateway:
-      routes:
-        - id: baidu_route
-          uri: https://www.baidu.com
-          predicates:
-            - Path=/baidu/**
-          filters:
-            - StripPrefix=1
+    nacos:
+      username: nacos
+      password: nacos
+      discovery:
+        server-addr: 192.168.237.142:8848
+        namespace: public
+      config:
+        server-addr: 192.168.237.142:8848
+        namespace: public
+  config:
+    import:
+#      - optional:nacos:application-dev.yml
+      - optional:nacos:${spring.application.name}-dev.yml
+
+logging:
+  level:
+    org.springframework.cloud.gateway: trace

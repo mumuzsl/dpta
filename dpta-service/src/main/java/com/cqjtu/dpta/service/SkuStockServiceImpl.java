@@ -1,12 +1,12 @@
 package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqjtu.dpta.api.SkuService;
-import com.cqjtu.dpta.api.SkuStockService;
 import com.cqjtu.dpta.common.exception.BadRequestException;
 import com.cqjtu.dpta.dao.entity.Sku;
 import com.cqjtu.dpta.dao.entity.SkuStock;
 import com.cqjtu.dpta.dao.mapper.SkuStockMapper;
+import com.cqjtu.dpta.service.api.SkuService;
+import com.cqjtu.dpta.service.api.SkuStockService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

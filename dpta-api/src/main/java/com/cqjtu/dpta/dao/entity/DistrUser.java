@@ -1,0 +1,60 @@
+package com.cqjtu.dpta.dao.entity;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+/**
+ * <p>
+ *
+ * </p>
+ *
+ * @author mumu
+ * @since 2021-04-15
+ */
+@Data
+@EqualsAndHashCode(callSuper = false)
+@TableName("t_distr_user")
+public class DistrUser implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * 分销商id
+     */
+    @TableId
+    private Long distrId;
+
+    /**
+     * 用户名
+     */
+    private String username;
+
+    /**
+     * 密码
+     */
+    private String password;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+
+    /**
+     * 更新时间
+     */
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
+
+    /**
+     * 上次登录时间
+     */
+    private LocalDateTime lastLoginTime;
+}

@@ -1,6 +1,6 @@
 package com.cqjtu.dpta.web.service;
 
-import com.cqjtu.dpta.api.UserService;
+import com.cqjtu.dpta.service.api.UserService;
 import com.cqjtu.dpta.dao.entity.User;
 import com.cqjtu.dpta.web.support.BigUser;
 import jakarta.annotation.Resource;

@@ -2,10 +2,10 @@ package com.cqjtu.dpta.web.controller.api;
 
 import cn.hutool.core.util.PhoneUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.cqjtu.dpta.api.DistrLevelService;
-import com.cqjtu.dpta.api.DistrService;
-import com.cqjtu.dpta.api.DistrUserService;
-import com.cqjtu.dpta.api.ResveService;
+import com.cqjtu.dpta.service.api.DistrLevelService;
+import com.cqjtu.dpta.service.api.DistrService;
+import com.cqjtu.dpta.service.api.DistrUserService;
+import com.cqjtu.dpta.service.api.ResveService;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;

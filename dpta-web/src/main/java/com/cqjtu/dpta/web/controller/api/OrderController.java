@@ -3,22 +3,21 @@ package com.cqjtu.dpta.web.controller.api;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.OrderDService;
-import com.cqjtu.dpta.api.OrderIndexService;
-import com.cqjtu.dpta.api.OrderService;
-import com.cqjtu.dpta.api.ShopService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
-import com.cqjtu.dpta.dao.dto.OrderDto;
-import com.cqjtu.dpta.dao.dto.OrderStatisDto;
+import com.cqjtu.dpta.dto.OrderDto;
+import com.cqjtu.dpta.dto.OrderStatisDto;
 import com.cqjtu.dpta.dao.entity.OrderD;
 import com.cqjtu.dpta.dao.entity.emus.DeletedEnum;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.dao.repository.OrderIndexRepository;
+import com.cqjtu.dpta.service.api.OrderDService;
+import com.cqjtu.dpta.service.api.OrderIndexService;
+import com.cqjtu.dpta.service.api.OrderService;
+import com.cqjtu.dpta.service.api.ShopService;
 import com.cqjtu.dpta.web.support.StatisSupport;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -175,7 +174,7 @@ public class OrderController extends StatisSupport {
                        @RequestParam(value = "states", required = false) List<Integer> states,
                        Info info) {
         IPage<OrderDto> page = null;
-        if (StringUtils.isBlank(keyword)) {
+        if (StrUtil.isBlank(keyword)) {
             if (states != null && !states.isEmpty()) {
                 page = orderService.pageOrderDtoByStates(pageable, info.id(), states);
             } else {

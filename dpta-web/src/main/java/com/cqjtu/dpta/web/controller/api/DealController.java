@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.web.controller.api;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cqjtu.dpta.api.DealService;
+import com.cqjtu.dpta.service.api.DealService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
 import com.cqjtu.dpta.dao.entity.Deal;

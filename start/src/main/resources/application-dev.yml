@@ -7,13 +7,13 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Ht62628816
-    url: jdbc:mysql://192.168.1.220:3306/dpta?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
+    password: Ht@62628816
+    url: jdbc:mysql://192.168.237.142:3306/dpta?characterEncoding=UTF-8&useUnicode=true&useSSL=false&tinyInt1isBit=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Shanghai
   data:
     redis:
       database: 12
-      host: 192.168.1.208
-      password: Ht@62628816
+      host: 192.168.237.142
+      password: ''
     mongodb:
       uri: mongodb://mumu:132135138zsl@localhost/dpta
   jpa:

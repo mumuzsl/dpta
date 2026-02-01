@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.web.controller.api.open;
 
-import com.cqjtu.dpta.api.DistrUserService;
-import com.cqjtu.dpta.api.UserService;
+import com.cqjtu.dpta.service.api.DistrUserService;
+import com.cqjtu.dpta.service.api.UserService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.TokenUtils;
 import jakarta.annotation.Resource;

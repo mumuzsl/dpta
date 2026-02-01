@@ -1,10 +1,10 @@
 package com.cqjtu.dpta.service;
 
-import com.cqjtu.dpta.common.vo.GoodsVo;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cqjtu.dpta.dao.common.vo.GoodsVo;
 import com.cqjtu.dpta.dao.entity.*;
 import com.cqjtu.dpta.dao.mapper.PafCommMapper;
-import com.cqjtu.dpta.api.PafCommService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cqjtu.dpta.service.api.PafCommService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;

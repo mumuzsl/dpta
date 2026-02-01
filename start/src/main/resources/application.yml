@@ -1,3 +1,19 @@
 spring:
-  profiles:
-    active: dev
+#  profiles:
+#    active: dev
+  application:
+    name: dpta
+  cloud:
+    nacos:
+      username: nacos
+      password: nacos
+      discovery:
+        server-addr: 192.168.237.142:8848
+        namespace: public
+      config:
+        server-addr: 192.168.237.142:8848
+        namespace: public
+  config:
+    import:
+      #      - optional:nacos:application-dev.yml
+      - optional:nacos:${spring.application.name}-dev.yml

@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.web.service;
 
-import com.cqjtu.dpta.api.DistrService;
-import com.cqjtu.dpta.api.DistrUserService;
+import com.cqjtu.dpta.service.api.DistrService;
+import com.cqjtu.dpta.service.api.DistrUserService;
 import com.cqjtu.dpta.dao.entity.DistrUser;
 import com.cqjtu.dpta.web.support.BigUser;
 import jakarta.annotation.Resource;

@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.auto;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
-import com.cqjtu.dpta.api.OrderService;
+import com.cqjtu.dpta.service.api.OrderService;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
 import com.cqjtu.dpta.web.controller.api.open.OrderOpenApi;
 import com.cqjtu.dpta.web.support.OrderRedisSupport;

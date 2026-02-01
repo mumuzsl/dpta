@@ -2,13 +2,13 @@ package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.cqjtu.dpta.api.DistrLevelService;
-import com.cqjtu.dpta.api.DistrService;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.common.util.PageResult;
 import com.cqjtu.dpta.dao.entity.Distr;
 import com.cqjtu.dpta.dao.entity.DistrLevel;
 import com.cqjtu.dpta.dao.mapper.DistrLevelMapper;
+import com.cqjtu.dpta.service.api.DistrLevelService;
+import com.cqjtu.dpta.service.api.DistrService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 

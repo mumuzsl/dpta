@@ -1,12 +1,12 @@
 package com.cqjtu.dpta.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cqjtu.dpta.common.lang.Const;
 import com.cqjtu.dpta.dao.entity.PafComm;
 import com.cqjtu.dpta.dao.entity.Shop;
 import com.cqjtu.dpta.dao.mapper.ShopMapper;
-import com.cqjtu.dpta.api.ShopService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cqjtu.dpta.service.api.ShopService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 

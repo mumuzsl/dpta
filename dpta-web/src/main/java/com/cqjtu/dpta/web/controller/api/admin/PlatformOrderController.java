@@ -1,19 +1,19 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.OrderDService;
-import com.cqjtu.dpta.api.OrderIndexService;
-import com.cqjtu.dpta.api.OrderService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.result.ResultCodeEnum;
-import com.cqjtu.dpta.dao.dto.OrderDto;
 import com.cqjtu.dpta.dao.entity.Order;
 import com.cqjtu.dpta.dao.entity.OrderD;
+import com.cqjtu.dpta.dto.OrderDto;
+import com.cqjtu.dpta.service.api.OrderDService;
+import com.cqjtu.dpta.service.api.OrderIndexService;
+import com.cqjtu.dpta.service.api.OrderService;
 import com.cqjtu.dpta.web.security.CheckParam;
 import com.cqjtu.dpta.web.support.StatisSupport;
 import jakarta.annotation.Resource;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -95,7 +95,7 @@ public class PlatformOrderController extends StatisSupport {
                        @RequestParam(value = "state", required = false) Integer state,
                        @RequestParam(value = "states", required = false) List<Integer> states) {
         IPage<OrderDto> page = null;
-        if (StringUtils.isBlank(keyword)) {
+        if (StrUtil.isBlank(keyword)) {
             if (states != null && !states.isEmpty()) {
                 page = orderService.pageOrderDtoByStatesAll(pageable, null, states, null);
             } else {

@@ -192,7 +192,7 @@ public class NewBeeMallGoodsController extends RestSupport {
         pafComm.setSuppId(goods.getSuppId());
         pafComm.setSuppPrice(new BigDecimal(goods.getSellingPrice()));
         pafComm.setRefundId(goods.getRefundId());
-        pafComm.setRCommId(goods.getrCommId());
+        pafComm.setRCommId(goods.getRCommId());
 
         Boolean bol = restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/add",pafComm,Boolean.class);
         String result = newBeeMallGoodsService.saveNewBeeMallGoods(goods);
@@ -233,7 +233,7 @@ public class NewBeeMallGoodsController extends RestSupport {
         pafComm.setSuppId(goods.getSuppId());
         pafComm.setSuppPrice(new BigDecimal(goods.getSellingPrice()));
         pafComm.setRefundId(goods.getRefundId());
-        pafComm.setRCommId(goods.getrCommId());
+        pafComm.setRCommId(goods.getRCommId());
 
         Boolean bol = restTemplate.postForObject("http://localhost:8081/platform/api/paf-comm/modif",pafComm,Boolean.class);
         String result = newBeeMallGoodsService.updateNewBeeMallGoods(goods);

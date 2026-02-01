@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.web.controller.api;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.SuppService;
+import com.cqjtu.dpta.service.api.SuppService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.Supp;
 import jakarta.annotation.Resource;

@@ -1,0 +1,20 @@
+package com.cqjtu.dpta.dao.mapper;
+
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.cqjtu.dpta.dao.entity.ResveD;
+
+/**
+ * <p>
+ * 预备金明细表 Mapper 接口
+ * </p>
+ *
+ * @author mumu
+ * @since 2021-04-06
+ */
+public interface ResveDMapper extends BaseMapper<ResveD> {
+    /**
+     * 获取插入时的ID
+     * @return
+     */
+    public Long getInsertId();
+}

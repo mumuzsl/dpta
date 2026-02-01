@@ -1,7 +1,7 @@
 package com.cqjtu.dpta;
 
-import com.cqjtu.dpta.api.OrderDService;
-import com.cqjtu.dpta.api.PafCommService;
+import com.cqjtu.dpta.service.api.OrderDService;
+import com.cqjtu.dpta.service.api.PafCommService;
 import com.cqjtu.dpta.dao.mapper.CommRMapper;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;

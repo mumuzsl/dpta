@@ -1,15 +1,15 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.CommRService;
-import com.cqjtu.dpta.api.PafCommService;
-import com.cqjtu.dpta.api.support.SettleService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.PafComm;
+import com.cqjtu.dpta.service.api.CommRService;
+import com.cqjtu.dpta.service.api.PafCommService;
+import com.cqjtu.dpta.service.api.support.SettleService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.ui.Model;
@@ -58,7 +58,7 @@ public class PafCommController {
                          @RequestParam(value = "type", required = false, defaultValue = "") String type) {
         QueryWrapper<PafComm> queryWrapper = new QueryWrapper<>();
         queryWrapper.like(COLUMNS[0], keyword);
-        if (!StringUtils.isBlank(type)) {
+        if (!StrUtil.isBlank(type)) {
             queryWrapper.like(COLUMNS[1], type);
         }
         IPage<PafComm> page = pafCommService.page(pageable, queryWrapper);

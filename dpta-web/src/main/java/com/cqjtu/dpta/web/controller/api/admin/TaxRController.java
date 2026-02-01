@@ -1,7 +1,7 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.cqjtu.dpta.api.TaxRService;
+import com.cqjtu.dpta.service.api.TaxRService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.PageQueryUtil;
 import com.cqjtu.dpta.dao.entity.TaxR;

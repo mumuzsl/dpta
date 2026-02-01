@@ -1,6 +1,6 @@
 package com.cqjtu.dpta.web.controller.api;
 
-import com.cqjtu.dpta.api.DealDService;
+import com.cqjtu.dpta.service.api.DealDService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.dao.entity.DealD;
 import jakarta.annotation.Resource;

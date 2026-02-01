@@ -1,10 +1,10 @@
 package com.cqjtu.dpta.web.controller.api.admin;
 
-import com.cqjtu.dpta.api.PafCommService;
-import com.cqjtu.dpta.api.StatisService;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.util.DptaUtils;
 import com.cqjtu.dpta.dao.repository.VisitsRepository;
+import com.cqjtu.dpta.service.api.PafCommService;
+import com.cqjtu.dpta.service.api.StatisService;
 import com.cqjtu.dpta.web.support.StatisSupport;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
