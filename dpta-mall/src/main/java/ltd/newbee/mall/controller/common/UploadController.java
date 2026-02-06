@@ -8,8 +8,8 @@
  */
 package ltd.newbee.mall.controller.common;
 
+import common.Constants;
 import jakarta.servlet.http.HttpServletRequest;
-import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.util.NewBeeMallUtils;
 import ltd.newbee.mall.util.Result;
 import ltd.newbee.mall.util.ResultGenerator;

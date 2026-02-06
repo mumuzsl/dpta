@@ -8,10 +8,10 @@
  */
 package ltd.newbee.mall.service.impl;
 
+import common.Constants;
+import common.ServiceResultEnum;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
-import ltd.newbee.mall.common.Constants;
-import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.dao.MallUserMapper;
 import ltd.newbee.mall.entity.MallUser;

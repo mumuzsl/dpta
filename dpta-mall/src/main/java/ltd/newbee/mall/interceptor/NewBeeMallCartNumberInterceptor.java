@@ -8,9 +8,9 @@
  */
 package ltd.newbee.mall.interceptor;
 
+import common.Constants;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ltd.newbee.mall.common.Constants;
 import ltd.newbee.mall.controller.vo.NewBeeMallUserVO;
 import ltd.newbee.mall.dao.NewBeeMallShoppingCartItemMapper;
 import org.springframework.beans.factory.annotation.Autowired;

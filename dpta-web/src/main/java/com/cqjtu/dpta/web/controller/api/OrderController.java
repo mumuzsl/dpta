@@ -5,12 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.cqjtu.dpta.common.result.Result;
 import com.cqjtu.dpta.common.web.Info;
-import com.cqjtu.dpta.dto.OrderDto;
-import com.cqjtu.dpta.dto.OrderStatisDto;
 import com.cqjtu.dpta.dao.entity.OrderD;
 import com.cqjtu.dpta.dao.entity.emus.DeletedEnum;
 import com.cqjtu.dpta.dao.entity.emus.OrderState;
+import com.cqjtu.dpta.dao.mapper.OrderMapper;
 import com.cqjtu.dpta.dao.repository.OrderIndexRepository;
+import com.cqjtu.dpta.dto.OrderDto;
+import com.cqjtu.dpta.dto.OrderStatisDto;
 import com.cqjtu.dpta.service.api.OrderDService;
 import com.cqjtu.dpta.service.api.OrderIndexService;
 import com.cqjtu.dpta.service.api.OrderService;
@@ -18,6 +19,7 @@ import com.cqjtu.dpta.service.api.ShopService;
 import com.cqjtu.dpta.web.support.StatisSupport;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
+import ltd.newbee.mall.common.NewBeeMallOrderStatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,9 +27,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * <p>
@@ -43,6 +46,8 @@ public class OrderController extends StatisSupport {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private OrderMapper orderMapper;
     @Resource
     private OrderIndexService orderIndexService;
     @Resource
@@ -104,15 +109,49 @@ public class OrderController extends StatisSupport {
     //
     //     return Result.ok(map);
     // }
-    //
-    //
-    // @GetMapping("statis/recent")
-    // public Result recent(@RequestParam(name = "day", required = false, defaultValue = "7") Integer day,
-    //                      Info info) {
-    //     NativeSearchQuery query = build(QueryBuilders.matchQuery("distrId", info.id()));
-    //     return recent(day, query);
-    // }
-    //
+
+
+    @GetMapping("statis/recent")
+    public Result recent(@RequestParam(name = "day", required = false, defaultValue = "7") Integer day,
+                         Info info) {
+        List<OrderStatisDto> orderStatisDtos = orderMapper.queryStatis(LocalDate.now().minusDays(day));
+
+        Map<LocalDate, List<OrderStatisDto>> statisDtoMap = orderStatisDtos.stream().collect(Collectors.groupingBy(OrderStatisDto::getDay, Collectors.toList()));
+
+        List<List<Object>> data = new ArrayList<>();
+        Map<NewBeeMallOrderStatusEnum, Integer> indexMap = new HashMap<>();
+        for (int i = 0; i < NewBeeMallOrderStatusEnum.values().length; i++) {
+            indexMap.put(NewBeeMallOrderStatusEnum.values()[i], i);
+        }
+        data.add(indexMap.entrySet().stream()
+                .sorted(Comparator.comparing(Map.Entry::getValue))
+                .map(Map.Entry::getKey)
+                .map(NewBeeMallOrderStatusEnum::getName)
+                .collect(Collectors.toList()));
+
+
+        Map<Integer, Integer> statusIndexMap = indexMap.entrySet().stream().collect(Collectors.toMap(e -> e.getKey().getOrderStatus(), Map.Entry::getValue));
+
+        LocalDate now = LocalDate.now();
+        for (int i = day; i >= 0; i--) {
+            LocalDate cur = now.minusDays(i);
+            List<Object> collect = Stream.of(NewBeeMallOrderStatusEnum.values()).map(o -> 0).collect(Collectors.toList());
+            collect.add(0, cur);
+            List<OrderStatisDto> list = statisDtoMap.get(cur);
+            if (list != null) {
+                for (OrderStatisDto dto : list) {
+                    Integer index = statusIndexMap.get(dto.getState());
+                    collect.set(index, dto.getCount());
+                }
+            }
+            data.add(collect);
+        }
+
+        return Result.ok(data);
+        // NativeSearchQuery query = build(QueryBuilders.matchQuery("distrId", info.id()));
+        // return recent(day, query);
+    }
+
     // @GetMapping("statis/date")
     // public Result date(Info info) {
     //     return dateQuery(DateQuery.query.withQuery(queryBuilder).build());

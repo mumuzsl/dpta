@@ -8,9 +8,9 @@
  */
 package ltd.newbee.mall.controller.admin;
 
+import common.ServiceResultEnum;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.config.DptaProperties;
 import ltd.newbee.mall.controller.vo.NewBeeMallOrderItemVO;
 import ltd.newbee.mall.entity.NewBeeMallOrder;

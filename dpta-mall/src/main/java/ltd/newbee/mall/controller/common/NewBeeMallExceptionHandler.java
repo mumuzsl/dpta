@@ -8,8 +8,8 @@
  */
 package ltd.newbee.mall.controller.common;
 
+import common.NewBeeMallException;
 import jakarta.servlet.http.HttpServletRequest;
-import ltd.newbee.mall.common.NewBeeMallException;
 import ltd.newbee.mall.util.Result;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

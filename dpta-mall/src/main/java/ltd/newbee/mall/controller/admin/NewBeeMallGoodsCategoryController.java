@@ -8,10 +8,10 @@
  */
 package ltd.newbee.mall.controller.admin;
 
+import common.NewBeeMallCategoryLevelEnum;
+import common.ServiceResultEnum;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
-import ltd.newbee.mall.common.NewBeeMallCategoryLevelEnum;
-import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.entity.GoodsCategory;
 import ltd.newbee.mall.service.NewBeeMallCategoryService;
 import ltd.newbee.mall.util.PageQueryUtil;

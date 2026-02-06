@@ -10,6 +10,7 @@ import com.cqjtu.dpta.dto.OrderDto;
 import com.cqjtu.dpta.dto.OrderStatisDto;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -101,4 +102,5 @@ public interface OrderMapper extends BaseMapper<Order> {
      */
     List<Order> getOrderListByDistrId(@Param("distr_id") Long distr_id, @Param("state") Integer state);
 
+    List<OrderStatisDto> queryStatis(@Param("day")LocalDate day);
 }

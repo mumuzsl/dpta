@@ -298,4 +298,17 @@
           AND state = #{state}
     </select>
 
+    <select id="queryStatis" resultType="com.cqjtu.dpta.dto.OrderStatisDto">
+        SELECT
+        DATE(DATM) AS day,  -- 提取日期，如 '2023-10-01'
+        state,
+        COUNT(*) AS count                     -- 统计数量
+        FROM
+        t_order
+        <where>
+            DATM &gt;= #{day}
+        </where>
+        GROUP BY
+        DATE(DATM), state           -- 按日期分组
+    </select>
 </mapper>

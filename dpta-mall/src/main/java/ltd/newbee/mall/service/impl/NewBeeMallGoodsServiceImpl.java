@@ -8,8 +8,8 @@
  */
 package ltd.newbee.mall.service.impl;
 
+import common.ServiceResultEnum;
 import jakarta.annotation.Resource;
-import ltd.newbee.mall.common.ServiceResultEnum;
 import ltd.newbee.mall.controller.vo.NewBeeMallSearchGoodsVO;
 import ltd.newbee.mall.dao.NewBeeMallGoodsMapper;
 import ltd.newbee.mall.entity.Goods;
